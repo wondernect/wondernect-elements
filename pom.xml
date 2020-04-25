@@ -23,6 +23,22 @@
         <module>common</module>
         <module>context</module>
         <module>authorize-context</module>
+        <module>algorithm</module>
+        <module>rdb-common</module>
+        <module>rdb</module>
+        <module>redis</module>
+        <module>elasticsearch</module>
+        <module>easyoffice</module>
+        <module>file-client</module>
+        <module>http-client</module>
+        <module>mail-client</module>
+        <module>sms-client</module>
+        <module>i18n</module>
+        <module>log</module>
+        <module>swagger-api</module>
+        <module>itext</module>
+        <module>thymeleaf</module>
+        <module>rabbitmq</module>
     </modules>
 
     <build>

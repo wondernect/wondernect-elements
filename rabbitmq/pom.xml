@@ -10,31 +10,17 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>rabbitmq</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>rabbitmq</name>
     <url>http://www.example.com</url>
 
     <dependencies>
-        <!-- web -->
+        <!-- rabbitmq -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- context -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- common -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>common</artifactId>
-            <version>${project.version}</version>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
         <!-- property-source -->

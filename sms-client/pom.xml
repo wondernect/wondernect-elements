@@ -10,10 +10,10 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>sms-client</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>sms-client</name>
     <url>http://www.example.com</url>
 
     <dependencies>
@@ -23,17 +23,22 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- context -->
+        <!-- aliyun短信服务 -->
         <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>1.1.0</version>
         </dependency>
 
-        <!-- common -->
+        <!-- http-client -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>http-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

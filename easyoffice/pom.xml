@@ -10,10 +10,10 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>easyoffice</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>easyoffice</name>
     <url>http://www.example.com</url>
 
     <dependencies>
@@ -23,24 +23,34 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- context -->
+        <!-- easy excel util -->
         <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-web</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-annotation</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
         <!-- common -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- property-source -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>property-source</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -10,10 +10,10 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>itext</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>itext</name>
     <url>http://www.example.com</url>
 
     <dependencies>
@@ -23,11 +23,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- context -->
+        <!-- flying-saucer-pdf -->
         <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf-itext5</artifactId>
+            <version>9.1.16</version>
         </dependency>
 
         <!-- common -->
@@ -42,6 +42,12 @@
             <groupId>com.wondernect.elements</groupId>
             <artifactId>property-source</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!-- servlet-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
         <!-- 单元测试相关 -->

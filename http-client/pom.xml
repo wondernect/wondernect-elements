@@ -10,10 +10,10 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>http-client</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>http-client</name>
     <url>http://www.example.com</url>
 
     <dependencies>
@@ -23,11 +23,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- context -->
+        <!-- okhttp3 -->
         <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.11.0</version>
         </dependency>
 
         <!-- common -->

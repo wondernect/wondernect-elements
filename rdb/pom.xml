@@ -10,30 +10,30 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>rdb</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>rdb</name>
     <url>http://www.example.com</url>
 
     <dependencies>
-        <!-- web -->
+        <!-- data jpa -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- context -->
+        <!-- algorithm -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
+            <artifactId>algorithm</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-        <!-- common -->
+        <!-- rdb-common -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>rdb-common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -42,6 +42,21 @@
             <groupId>com.wondernect.elements</groupId>
             <artifactId>property-source</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!--queryDSL-->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
 
         <!-- 单元测试相关 -->

@@ -10,10 +10,10 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>i18n</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>i18n</name>
     <url>http://www.example.com</url>
 
     <dependencies>
@@ -21,13 +21,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- context -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- common -->

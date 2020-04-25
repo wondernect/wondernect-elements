@@ -10,24 +10,17 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>thymeleaf</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>thymeleaf</name>
     <url>http://www.example.com</url>
 
     <dependencies>
-        <!-- web -->
+        <!-- spring-boot-starter-thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- context -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <!-- common -->

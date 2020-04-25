@@ -10,26 +10,13 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>rdb-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>rdb-common</name>
     <url>http://www.example.com</url>
 
     <dependencies>
-        <!-- web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- context -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- common -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
@@ -37,11 +24,17 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- property-source -->
+        <!-- validator -->
         <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>property-source</artifactId>
-            <version>${project.version}</version>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.11.Final</version>
         </dependency>
 
         <!-- 单元测试相关 -->
