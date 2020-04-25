@@ -21,6 +21,7 @@
     <modules>
         <module>property-source</module>
         <module>common</module>
+        <module>context</module>
     </modules>
 
     <build>
