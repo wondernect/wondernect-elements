@@ -1,5 +1,6 @@
 package com.wondernect.elements.rdb.config;
 
+import com.wondernect.elements.property.source.WondernectPropertySourceFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Component
 @Primary
-@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.elements.rdb")
 public class RDBConfigProperties implements Serializable {
 

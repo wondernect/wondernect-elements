@@ -25,9 +25,9 @@ public class WondernectPropertySourceFactory extends DefaultPropertySourceFactor
     public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
         if (resource.getResource().exists()) {
             if (name == null || "".equals(name)) {
-                logger.warn("property source read error(配置文件名称为空):{}, {}", name, resource);
                 name = resource.getResource().getFilename();
             }
+            logger.info("property source read:{}, {}", name, resource);
             if (name.endsWith(".yml") || name.endsWith(".yaml")) {
                 Properties propertiesFromYaml = loadYml(resource);
                 return new PropertiesPropertySource(name, propertiesFromYaml);
@@ -38,7 +38,6 @@ public class WondernectPropertySourceFactory extends DefaultPropertySourceFactor
             if (name == null || "".equals(name)) {
                 name = "unknown";
             }
-            logger.error("property source read error(配置对应文件不存在):{}, {}", name, resource);
             return new PropertiesPropertySource(name, new Properties());
         }
     }

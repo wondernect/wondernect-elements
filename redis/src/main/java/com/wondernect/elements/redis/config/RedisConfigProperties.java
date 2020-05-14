@@ -1,5 +1,6 @@
 package com.wondernect.elements.redis.config;
 
+import com.wondernect.elements.property.source.WondernectPropertySourceFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
@@ -14,7 +15,7 @@ import java.io.Serializable;
  */
 @Component
 @Primary
-@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.elements.redis")
 public class RedisConfigProperties implements Serializable {
 
