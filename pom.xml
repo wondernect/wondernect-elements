@@ -39,6 +39,7 @@
         <module>itext</module>
         <module>thymeleaf</module>
         <module>rabbitmq</module>
+        <module>generator</module>
     </modules>
 
     <build>

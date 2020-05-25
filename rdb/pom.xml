@@ -30,6 +30,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- generator -->
+        <dependency>
+            <groupId>com.wondernect.elements</groupId>
+            <artifactId>generator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- rdb-common -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
