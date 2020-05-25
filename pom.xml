@@ -24,6 +24,7 @@
         <module>context</module>
         <module>authorize-context</module>
         <module>algorithm</module>
+        <module>generator</module>
         <module>rdb-common</module>
         <module>rdb</module>
         <module>redis</module>
@@ -39,7 +40,6 @@
         <module>itext</module>
         <module>thymeleaf</module>
         <module>rabbitmq</module>
-        <module>generator</module>
     </modules>
 
     <build>
