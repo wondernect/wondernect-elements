@@ -48,7 +48,7 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
     @PostConstruct
     public void initJPAQueryFactory() {
         jpaQueryFactory = new JPAQueryFactory(entityManager);
-        logger.info("RDB JPAQueryFactory init success");
+        logger.info("{} JPAQueryFactory init success", getClass().getSimpleName());
     }
 
     public JPAQueryFactory getJpaQueryFactory() {
