@@ -1,10 +1,11 @@
 package com.wondernect.elements.http.client.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.wondernect.elements.common.utils.ESJSONObjectUtils;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.http.client.HttpClient;
 import com.wondernect.elements.http.client.util.HttpClientUtil;
 import okhttp3.*;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,21 +37,30 @@ public class IHttpClient implements HttpClient {
 
     public String postForJson(String url, Map<String, String> headers, Map<String, String> urlParams, Map<String, String> bodyParams) {
         Request.Builder builder = HttpClientUtil.generatorBuilder(headers);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(bodyParams));
+        RequestBody requestBody = null;
+        if (MapUtils.isNotEmpty(bodyParams)) {
+            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), ESJSONObjectUtils.jsonObjectToJsonString(bodyParams));
+        }
         Request request = builder.post(requestBody).url(HttpClientUtil.generatorUrl(url, urlParams)).build();
         return executeRequest(request);
     }
 
     public String putForJson(String url, Map<String, String> headers, Map<String, String> urlParams, Map<String, String> bodyParams) {
         Request.Builder builder = HttpClientUtil.generatorBuilder(headers);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(bodyParams));
+        RequestBody requestBody = null;
+        if (MapUtils.isNotEmpty(bodyParams)) {
+            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), ESJSONObjectUtils.jsonObjectToJsonString(bodyParams));
+        }
         Request request = builder.put(requestBody).url(HttpClientUtil.generatorUrl(url, urlParams)).build();
         return executeRequest(request);
     }
 
     public String deleteForJson(String url, Map<String, String> headers, Map<String, String> urlParams, Map<String, String> bodyParams) {
         Request.Builder builder = HttpClientUtil.generatorBuilder(headers);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(bodyParams));
+        RequestBody requestBody = null;
+        if (MapUtils.isNotEmpty(bodyParams)) {
+            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), ESJSONObjectUtils.jsonObjectToJsonString(bodyParams));
+        }
         Request request = builder.delete(requestBody).url(HttpClientUtil.generatorUrl(url, urlParams)).build();
         return executeRequest(request);
     }
