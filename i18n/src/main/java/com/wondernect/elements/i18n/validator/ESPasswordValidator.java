@@ -27,22 +27,22 @@ public class ESPasswordValidator implements ConstraintValidator<ESPassword, Stri
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         if (ESStringUtils.isBlank(s)) {
             constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate("密码不能为空");
+            constraintValidatorContext.buildConstraintViolationWithTemplate("密码不能为空").addConstraintViolation();
             return false;
         }
         if (min <= 0 || max <= 0 || max < min) {
             constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate("密码长度设置最大最小值非法");
+            constraintValidatorContext.buildConstraintViolationWithTemplate("密码长度设置最大最小值非法").addConstraintViolation();
             return false;
         }
         if (s.length() < min || s.length() > max) {
             constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate("密码长度必须在" + min + "与" + max + "之间");
+            constraintValidatorContext.buildConstraintViolationWithTemplate("密码长度必须在" + min + "与" + max + "之间").addConstraintViolation();
             return false;
         }
         if (strong && !ESRegexUtils.match(passwordRegexPattern, s)) {
             constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate("密码强度不符合规则要求,请检查修改后重试");
+            constraintValidatorContext.buildConstraintViolationWithTemplate("密码强度不符合规则要求,请检查修改后重试").addConstraintViolation();
             return false;
         }
         return true;
