@@ -27,7 +27,7 @@
         <commons-collections4.version>4.1</commons-collections4.version>
         <commons-codec.version>1.10</commons-codec.version>
         <lombok.version>1.16.18</lombok.version>
-        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
         <joda-time.version>2.9.9</joda-time.version>
         <guava.version>19.0</guava.version>
     </properties>
