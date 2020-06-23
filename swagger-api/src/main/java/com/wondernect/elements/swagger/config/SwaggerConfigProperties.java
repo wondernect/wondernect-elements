@@ -26,8 +26,6 @@ public class SwaggerConfigProperties implements Serializable {
 
     private boolean enable = true;
 
-    private String basePackage;
-
     private String pathRegex;
 
     private String title = "swagger api doc";
@@ -50,14 +48,6 @@ public class SwaggerConfigProperties implements Serializable {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    public String getBasePackage() {
-        return basePackage;
-    }
-
-    public void setBasePackage(String basePackage) {
-        this.basePackage = basePackage;
     }
 
     public String getPathRegex() {

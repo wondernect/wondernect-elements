@@ -1,6 +1,7 @@
 package com.wondernect.elements.swagger.config;
 
 import com.wondernect.elements.common.utils.ESStringUtils;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,7 @@ public class SwaggerConfig {
                 .enable(swaggerConfigProperties.isEnable())
                 .apiInfo(apiInfo())
                 .select()
-                .apis(ESStringUtils.isBlank(swaggerConfigProperties.getBasePackage()) ? RequestHandlerSelectors.any() : RequestHandlerSelectors.basePackage(swaggerConfigProperties.getBasePackage()))
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(ESStringUtils.isBlank(swaggerConfigProperties.getPathRegex()) ? PathSelectors.any() : PathSelectors.regex(swaggerConfigProperties.getPathRegex()))
                 .build()
                 .securitySchemes(securitySchemes())
