@@ -40,6 +40,7 @@
         <module>itext</module>
         <module>thymeleaf</module>
         <module>rabbitmq</module>
+        <module>boot-application</module>
     </modules>
 
     <build>
