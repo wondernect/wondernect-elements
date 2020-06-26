@@ -31,7 +31,5 @@ public abstract class BaseIDDao<T extends BaseIDModel<ID>, ID extends Serializab
         return super.saveAll(entityList);
     }
 
-    protected ID generateIdentifier() {
-        return null;
-    }
+    public abstract ID generateIdentifier();
 }

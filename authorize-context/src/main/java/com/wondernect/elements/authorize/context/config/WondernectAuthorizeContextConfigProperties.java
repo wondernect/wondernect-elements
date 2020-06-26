@@ -27,6 +27,8 @@ public class WondernectAuthorizeContextConfigProperties implements Serializable 
 
     private boolean enable = false; // 是否启用
 
+    private String appPropertyName = "APPID"; // 应用标识
+
     private String expiresTokenPropertyName = "Authorization"; // 头部认证信息标识
 
     private String unlimitedTokenPropertyName = "Authorization"; // 头部认证信息标识
@@ -43,6 +45,14 @@ public class WondernectAuthorizeContextConfigProperties implements Serializable 
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public String getAppPropertyName() {
+        return appPropertyName;
+    }
+
+    public void setAppPropertyName(String appPropertyName) {
+        this.appPropertyName = appPropertyName;
     }
 
     public String getExpiresTokenPropertyName() {

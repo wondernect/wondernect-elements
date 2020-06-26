@@ -17,7 +17,7 @@ public abstract class BaseLongDao<T extends BaseLongModel> extends BaseIDDao<T, 
     private SnowFlakeAlgorithm snowFlakeAlgorithm;
 
     @Override
-    protected Long generateIdentifier() {
+    public Long generateIdentifier() {
         return snowFlakeAlgorithm.getSnowflake().nextId();
     }
 }

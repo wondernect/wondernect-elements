@@ -11,6 +11,7 @@ import lombok.Setter;
 public enum BusinessError {
 
     SUCCESS("SUCCESS", "成功"),
+    AUTHORIZE_APPID_IS_NULL("AUTHORIZE_APPID_IS_NULL", "头部应用id不能为空"),
     AUTHORIZE_HEADER_IS_NULL("AUTHORIZE_HEADER_IS_NULL", "头部认证信息为空"),
     AUTHORIZE_TYPE_IS_INVALID("AUTHORIZE_TYPE_IS_INVALID", "认证类型有误"),
     AUTHORIZE_TOKEN_INVALID("AUTHORIZE_TOKEN_INVALID", "认证令牌有误或已过期，请重新获取"),

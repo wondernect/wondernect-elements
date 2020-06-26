@@ -1,6 +1,7 @@
 package com.wondernect.elements.rdb.base.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wondernect.elements.rdb.context.WondernectEntityListener;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import javax.persistence.MappedSuperclass;
  * Description: 基础数据模型
  */
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(value = {AuditingEntityListener.class, WondernectEntityListener.class})
 public abstract class BaseModel extends BaseRDBModel {
 
     @CreatedDate
@@ -51,4 +52,16 @@ public abstract class BaseModel extends BaseRDBModel {
     @Setter
     @ApiModelProperty(notes = "更新用户")
     private String updateUser;
+
+    @JsonProperty("create_app")
+    @Getter
+    @Setter
+    @ApiModelProperty(notes = "创建应用")
+    private String createApp;
+
+    @JsonProperty("update_App")
+    @Getter
+    @Setter
+    @ApiModelProperty(notes = "更新应用")
+    private String updateApp;
 }

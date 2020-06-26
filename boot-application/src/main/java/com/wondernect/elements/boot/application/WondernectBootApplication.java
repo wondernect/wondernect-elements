@@ -39,7 +39,10 @@ public abstract class WondernectBootApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        initAfterBootFinished();
         applicationContext.publishEvent(new WondernectBootEvent(this, WondernectBootEventType.BOOT));
         System.out.println("service start success at port " + wondernectBootConfigProperties.getPort() + " .....");
     }
+
+    public abstract void initAfterBootFinished();
 }

@@ -58,8 +58,7 @@ public class SwaggerConfig {
 
     private List<ApiKey> securitySchemes() {
         List<ApiKey> apiKeyList = new ArrayList<>();
-        apiKeyList.add(new ApiKey("code", "code", "header"));
-        apiKeyList.add(new ApiKey("token", "token", "header"));
+        apiKeyList.add(new ApiKey("APPID", "APPID", "header"));
         apiKeyList.add(new ApiKey("Authorization", "Authorization", "header"));
         return apiKeyList;
     }
@@ -69,8 +68,7 @@ public class SwaggerConfig {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "global access");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        securityReferenceList.add(new SecurityReference("code", authorizationScopes));
-        securityReferenceList.add(new SecurityReference("token", authorizationScopes));
+        securityReferenceList.add(new SecurityReference("APPID", authorizationScopes));
         securityReferenceList.add(new SecurityReference("Authorization", authorizationScopes));
 
         List<SecurityContext> securityContextList = new ArrayList<>();

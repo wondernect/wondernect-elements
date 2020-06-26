@@ -27,17 +27,17 @@ public class FileClientConfigProperties implements Serializable {
 
     private List<String> validImageFileExts = Arrays.asList("png", "jpg", "jpeg", "gif", "bmp", "wbmp"); // 合法的图片格式
 
-    private String fastdfsFileServer = "http://127.0.0.1"; // fastdfs文件服务器地址,eg:http://example.com
+    private String fastdfsFileServer; // fastdfs文件服务器地址,eg:http://example.com
 
     private boolean localFileUserDirEnable = true; // 本地上传文件路径是否与项目在同一级目录,false则表示用户localFileSavePath要写完整路径
 
-    private String localFileSavePath = "local_upload_file"; // 本地文件上传方式保存路径
+    private String localFileSavePath; // 本地文件上传默认保存根路径
 
-    private String localFileServer = "http://127.0.0.1/file"; // 本地文件服务器地址,用于构造文件下载地址
+    private String localFileServer; // 本地文件访问服务器地址
 
-    private int localThumbImageWidth = 150; // 本地文件缩略图宽度
+    private int localThumbImageWidth = 150; // 本地文件默认缩略图宽度
 
-    private int localThumbImageHeight = 150; // 本地文件缩略图高度
+    private int localThumbImageHeight = 150; // 本地文件默认缩略图高度
 
     public long getLimitUploadSize() {
         return limitUploadSize;

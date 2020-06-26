@@ -33,4 +33,8 @@ public class AuthorizeData implements Serializable {
     @JsonProperty("role")
     @ApiModelProperty(notes = "角色标识")
     private String role;
+
+    @JsonProperty("app_id")
+    @ApiModelProperty(notes = "应用标识")
+    private String appId;
 }

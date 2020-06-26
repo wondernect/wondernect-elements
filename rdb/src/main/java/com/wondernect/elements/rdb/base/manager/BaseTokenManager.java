@@ -1,8 +1,6 @@
 package com.wondernect.elements.rdb.base.manager;
 
-import com.wondernect.elements.rdb.base.dao.BaseTokenDao;
 import com.wondernect.elements.rdb.base.model.BaseTokenModel;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Copyright (C), 2017-2019, wondernect.com
@@ -13,14 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class BaseTokenManager<T extends BaseTokenModel> extends BaseManager<T, String> {
 
-    @Autowired
-    private BaseTokenDao<T> baseTokenDao;
-
     public void deleteByToken(String token) {
-        baseTokenDao.deleteByToken(token);
+        super.deleteById(token);
     }
 
     public T findByToken(String token) {
-        return baseTokenDao.findByToken(token);
+        return super.findById(token);
     }
 }

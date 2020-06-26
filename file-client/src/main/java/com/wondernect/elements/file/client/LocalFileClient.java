@@ -19,26 +19,26 @@ public interface LocalFileClient {
      * 上传文件
      * Map<String, String> metaData - 备注文件相关信息
      */
-    FileUploadResult uploadFile(MultipartFile fileMedia, Map<String, String> metaData);
+    FileUploadResult uploadFile(MultipartFile fileMedia, String subFileSavePath, Map<String, String> metaData);
 
     /**
      * 上传文件
      */
-    FileUploadResult uploadFile(InputStream inputStream, String fileExt, String customFileName);
+    FileUploadResult uploadFile(InputStream inputStream, String subFileSavePath, String fileExt, String customFileName);
 
     /**
      * 上传并生成缩略图图片
      * Map<String, String> metaData - 备注文件相关信息
      * 支持的图片格式包括"JPG", "JPEG", "PNG", "GIF", "BMP", "WBMP"
      */
-    FileUploadResult uploadImageAndCreateThumbImage(MultipartFile fileMedia, Map<String, String> metaData);
+    FileUploadResult uploadImageAndCreateThumbImage(MultipartFile fileMedia, String subFileSavePath, Map<String, String> metaData);
 
     /**
      * 上传并生成缩略图图片
      * Map<String, String> metaData - 备注文件相关信息
      * 支持的图片格式包括"JPG", "JPEG", "PNG", "GIF", "BMP", "WBMP"
      */
-    FileUploadResult uploadImageAndCreateThumbImage(InputStream inputStream, String fileExt, String customFileName);
+    FileUploadResult uploadImageAndCreateThumbImage(InputStream inputStream, String subFileSavePath, String fileExt, String customFileName);
 
     /**
      * 删除文件(删除原图或缩略图,需要用户依次传入地址)
@@ -48,10 +48,10 @@ public interface LocalFileClient {
     /**
      * 获取文件下载完整url
      */
-    String getFileDownloadUrl(String filePath);
+    String getFileDownloadUrl(String filePath, String subFileSavePath);
 
     /**
      * 获取图片缩略图下载完整url
      */
-    String getImageThumbUrl(String filePath);
+    String getImageThumbUrl(String filePath, String subFileSavePath);
 }

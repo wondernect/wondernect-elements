@@ -33,6 +33,8 @@ public class DefaultLocalFileClient implements LocalFileClient {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultLocalFileClient.class);
 
+    private static final String THUMB_FILE_PATH_NAME = "thumb";
+
     @Autowired
     private FileClientConfigProperties fileClientConfigProperties;
 
@@ -40,74 +42,114 @@ public class DefaultLocalFileClient implements LocalFileClient {
     private SnowFlakeAlgorithm snowFlakeAlgorithm;
 
     @Override
-    public FileUploadResult uploadFile(MultipartFile fileMedia, Map<String, String> metaData) {
+    public FileUploadResult uploadFile(MultipartFile fileMedia, String subFileSavePath, Map<String, String> metaData) {
         String localFilePath;
-        if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
-            if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
-                localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+        String thumbLocalFilePath;
+        if (ESStringUtils.isNotBlank(subFileSavePath)) {
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + subFileSavePath;
+                }
             } else {
-                localFilePath = ESSystemUtils.getUserDir();
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
             }
         } else {
-            localFilePath = fileClientConfigProperties.getLocalFileSavePath();
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir();
+                }
+            } else {
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath();
+            }
         }
+        thumbLocalFilePath = localFilePath + File.separator + THUMB_FILE_PATH_NAME;
         if (!ESFileUtils.exist(localFilePath)) {
             logger.info("LocalFile本地文件保存路径不存在,开始创建");
-            if (!ESFileUtils.createFilePath(localFilePath)) {
+            if (!ESFileUtils.createFilePath(localFilePath) || !ESFileUtils.createFilePath(thumbLocalFilePath)) {
                 return new FileUploadResult(null, 0L, null, null, null, null, false, "文件上传目录创建失败");
             }
         }
-        return uploadLocalFile(fileMedia, metaData, localFilePath, String.valueOf(snowFlakeAlgorithm.getSnowflake().nextId()), false);
+        return uploadLocalFile(fileMedia, metaData, localFilePath, thumbLocalFilePath, String.valueOf(snowFlakeAlgorithm.getSnowflake().nextId()), false);
     }
 
     @Override
-    public FileUploadResult uploadFile(InputStream inputStream, String fileExt, String customFileName) {
+    public FileUploadResult uploadFile(InputStream inputStream, String subFileSavePath, String fileExt, String customFileName) {
         if (ESObjectUtils.isNull(inputStream)) {
             logger.error("LocalFile上传文件失败:{}", "上传文件为空");
             return new FileUploadResult(null, 0L, null, null, null, null, false, "上传文件为空");
         }
         String localFilePath;
-        if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
-            if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
-                localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+        if (ESStringUtils.isNotBlank(subFileSavePath)) {
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + subFileSavePath;
+                }
             } else {
-                localFilePath = ESSystemUtils.getUserDir();
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
             }
         } else {
-            localFilePath = fileClientConfigProperties.getLocalFileSavePath();
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir();
+                }
+            } else {
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath();
+            }
         }
+        String thumbLocalFilePath = localFilePath + File.separator + THUMB_FILE_PATH_NAME;
         if (!ESFileUtils.exist(localFilePath)) {
             logger.info("LocalFile本地文件保存路径不存在,开始创建");
-            if (!ESFileUtils.createFilePath(localFilePath)) {
+            if (!ESFileUtils.createFilePath(localFilePath) || !ESFileUtils.createFilePath(thumbLocalFilePath)) {
                 return null;
             }
         }
-        return uploadLocalFile(inputStream, null, 0, fileExt, null, localFilePath, customFileName, false);
+        return uploadLocalFile(inputStream, null, 0, fileExt, null, localFilePath, thumbLocalFilePath, customFileName, false);
     }
 
     @Override
-    public FileUploadResult uploadImageAndCreateThumbImage(MultipartFile fileMedia, Map<String, String> metaData) {
+    public FileUploadResult uploadImageAndCreateThumbImage(MultipartFile fileMedia, String subFileSavePath, Map<String, String> metaData) {
         String localFilePath;
-        if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
-            if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
-                localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+        if (ESStringUtils.isNotBlank(subFileSavePath)) {
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + subFileSavePath;
+                }
             } else {
-                localFilePath = ESSystemUtils.getUserDir();
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
             }
         } else {
-            localFilePath = fileClientConfigProperties.getLocalFileSavePath();
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir();
+                }
+            } else {
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath();
+            }
         }
+        String thumbLocalFilePath = localFilePath + File.separator + THUMB_FILE_PATH_NAME;
         if (!ESFileUtils.exist(localFilePath)) {
             logger.info("LocalFile本地文件保存路径不存在,开始创建");
-            if (!ESFileUtils.createFilePath(localFilePath)) {
+            if (!ESFileUtils.createFilePath(localFilePath) || !ESFileUtils.createFilePath(thumbLocalFilePath)) {
                 return new FileUploadResult(null, 0L, null, null, null, null, false, "文件上传目录创建失败");
             }
         }
-        return uploadLocalFile(fileMedia, metaData, localFilePath, String.valueOf(snowFlakeAlgorithm.getSnowflake().nextId()), true);
+        return uploadLocalFile(fileMedia, metaData, localFilePath, thumbLocalFilePath, String.valueOf(snowFlakeAlgorithm.getSnowflake().nextId()), true);
     }
 
     @Override
-    public FileUploadResult uploadImageAndCreateThumbImage(InputStream inputStream, String fileExt, String customFileName) {
+    public FileUploadResult uploadImageAndCreateThumbImage(InputStream inputStream, String subFileSavePath, String fileExt, String customFileName) {
         if (ESObjectUtils.isNull(inputStream)) {
             logger.error("LocalFile上传文件失败:{}", "上传文件为空");
             return new FileUploadResult(null, 0L, null, null, null, null, false, "上传文件为空");
@@ -118,22 +160,35 @@ public class DefaultLocalFileClient implements LocalFileClient {
             return null;
         }
         String localFilePath;
-        if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
-            if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
-                localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+        if (ESStringUtils.isNotBlank(subFileSavePath)) {
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + subFileSavePath;
+                }
             } else {
-                localFilePath = ESSystemUtils.getUserDir();
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath() + File.separator + subFileSavePath;
             }
         } else {
-            localFilePath = fileClientConfigProperties.getLocalFileSavePath();
-        }
-        if (!ESFileUtils.exist(localFilePath)) {
-            logger.info("LocalFile本地文件保存路径不存在,开始创建");
-            if (!ESFileUtils.createFilePath(localFilePath)) {
-                return null;
+            if (fileClientConfigProperties.isLocalFileUserDirEnable()) {
+                if (ESStringUtils.isNotRealEmpty(fileClientConfigProperties.getLocalFileSavePath())) {
+                    localFilePath = ESSystemUtils.getUserDir() + File.separator + fileClientConfigProperties.getLocalFileSavePath();
+                } else {
+                    localFilePath = ESSystemUtils.getUserDir();
+                }
+            } else {
+                localFilePath = fileClientConfigProperties.getLocalFileSavePath();
             }
         }
-        return uploadLocalFile(inputStream, null, 0, fileExt, null, localFilePath, customFileName, true);
+        String thumbLocalFilePath = localFilePath + File.separator + THUMB_FILE_PATH_NAME;
+        if (!ESFileUtils.exist(localFilePath)) {
+            logger.info("LocalFile本地文件保存路径不存在,开始创建");
+            if (!ESFileUtils.createFilePath(localFilePath) || !ESFileUtils.createFilePath(thumbLocalFilePath)) {
+                return new FileUploadResult(null, 0L, null, null, null, null, false, "文件上传目录创建失败");
+            }
+        }
+        return uploadLocalFile(inputStream, null, 0, fileExt, null, localFilePath, thumbLocalFilePath, customFileName, true);
     }
 
     @Override
@@ -148,7 +203,7 @@ public class DefaultLocalFileClient implements LocalFileClient {
     }
 
     @Override
-    public String getFileDownloadUrl(String filePath) {
+    public String getFileDownloadUrl(String filePath, String subFileSavePath) {
         if (ESStringUtils.isRealEmpty(fileClientConfigProperties.getLocalFileServer())) {
             logger.error("LocalFile服务器地址尚未配置,请先配置");
             return null;
@@ -157,11 +212,11 @@ public class DefaultLocalFileClient implements LocalFileClient {
         if (ESStringUtils.isBlank(subStr)) {
             return null;
         }
-        return fileClientConfigProperties.getLocalFileServer() + "/" + subStr;
+        return fileClientConfigProperties.getLocalFileServer() + "/" + subFileSavePath + "/" + subStr;
     }
 
     @Override
-    public String getImageThumbUrl(String filePath) {
+    public String getImageThumbUrl(String filePath, String subFileSavePath) {
         if (ESStringUtils.isRealEmpty(fileClientConfigProperties.getLocalFileServer())) {
             logger.error("LocalFile服务器地址尚未配置,请先配置");
             return null;
@@ -170,10 +225,10 @@ public class DefaultLocalFileClient implements LocalFileClient {
         if (ESStringUtils.isBlank(subStr)) {
             return null;
         }
-        return fileClientConfigProperties.getLocalFileServer() + "/" + subStr;
+        return fileClientConfigProperties.getLocalFileServer() + "/" + subFileSavePath + "/" + THUMB_FILE_PATH_NAME + "/" + subStr;
     }
 
-    private FileUploadResult uploadLocalFile(MultipartFile fileMedia, Map<String, String> metaData, String localFilePath, String customFileName, Boolean createThumbImage) {
+    private FileUploadResult uploadLocalFile(MultipartFile fileMedia, Map<String, String> metaData, String localFilePath, String thumbLocalFilePath, String customFileName, Boolean createThumbImage) {
         if (ESObjectUtils.isNull(fileMedia)) {
             logger.error("LocalFile上传文件失败:{}", "上传文件为空");
             return new FileUploadResult(null, 0L, null, null, null, null, false, "上传文件为空");
@@ -202,10 +257,10 @@ public class DefaultLocalFileClient implements LocalFileClient {
         if (ESObjectUtils.isNotNull(fileUploadResult)) {
             return fileUploadResult;
         }
-        return uploadLocalFile(inputStream, fileName, fileSize, fileExt, metaData, localFilePath, customFileName, createThumbImage);
+        return uploadLocalFile(inputStream, fileName, fileSize, fileExt, metaData, localFilePath, thumbLocalFilePath, customFileName, createThumbImage);
     }
 
-    private FileUploadResult uploadLocalFile(InputStream inputStream, String fileName, long fileSize, String fileExt, Map<String, String> metaData, String localFilePath, String customFileName, Boolean createThumbImage) {
+    private FileUploadResult uploadLocalFile(InputStream inputStream, String fileName, long fileSize, String fileExt, Map<String, String> metaData, String localFilePath, String thumbLocalFilePath,  String customFileName, Boolean createThumbImage) {
         Set<MetaData> metaDataSet = FileClientUtil.buildDefaultMetaData(fileName, fileSize, fileExt, metaData);
         localFilePath = localFilePath + File.separator + customFileName + "." + fileExt;
         try {
@@ -215,8 +270,9 @@ public class DefaultLocalFileClient implements LocalFileClient {
             return new FileUploadResult(fileName, fileSize, fileExt, null, null, null, false, e.getLocalizedMessage());
         }
         if (createThumbImage) {
+            thumbLocalFilePath = thumbLocalFilePath + File.separator + customFileName + "." + fileExt;
             String insertValue = "_" + fileClientConfigProperties.getLocalThumbImageWidth() + "x" + fileClientConfigProperties.getLocalThumbImageHeight();
-            String thumbFilePath = ESStringUtils.insertStringValueIntoCharPlace(localFilePath, insertValue, ".", 0);
+            String thumbFilePath = ESStringUtils.insertStringValueIntoCharPlace(thumbLocalFilePath, insertValue, ".", 0);
             ESImageUtils.createThumbImage(localFilePath, thumbFilePath, fileClientConfigProperties.getLocalThumbImageWidth(), fileClientConfigProperties.getLocalThumbImageHeight(), false, 1);
             return new FileUploadResult(fileName, fileSize, fileExt, localFilePath, thumbFilePath, FileClientUtil.getMetaData(metaDataSet), true, "LocalFile上传文件成功");
         }

@@ -42,6 +42,11 @@ public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAda
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String appId = request.getHeader(wondernectAuthorizeContextConfigProperties.getAppPropertyName());
+        if (ESStringUtils.isBlank(appId)) {
+            throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
+        }
+        wondernectCommonContext.setAuthorizeData(new AuthorizeData(null, null, null, appId));
         if (!wondernectAuthorizeContextConfigProperties.isEnable()) {
             return true;
         }
@@ -132,7 +137,8 @@ public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAda
         if (ESStringUtils.isRealEmpty(userId)) {
             throw new BusinessException(BusinessError.AUTHORIZE_TOKEN_INVALID);
         }
-        wondernectCommonContext.setAuthorizeData(new AuthorizeData(expiresToken, userId, null));
+        wondernectCommonContext.getAuthorizeData().setToken(expiresToken);
+        wondernectCommonContext.getAuthorizeData().setUserId(userId);
     }
 
     private void authorizeUnlimitedToken(String unlimitedToken) {
@@ -140,7 +146,8 @@ public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAda
         if (ESStringUtils.isRealEmpty(userId)) {
             throw new BusinessException(BusinessError.AUTHORIZE_TOKEN_INVALID);
         }
-        wondernectCommonContext.setAuthorizeData(new AuthorizeData(unlimitedToken, userId, null));
+        wondernectCommonContext.getAuthorizeData().setToken(unlimitedToken);
+        wondernectCommonContext.getAuthorizeData().setUserId(userId);
     }
 
     private String getUserRole() {

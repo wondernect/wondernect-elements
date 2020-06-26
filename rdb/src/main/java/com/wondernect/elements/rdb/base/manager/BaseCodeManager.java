@@ -1,8 +1,6 @@
 package com.wondernect.elements.rdb.base.manager;
 
-import com.wondernect.elements.rdb.base.dao.BaseCodeDao;
 import com.wondernect.elements.rdb.base.model.BaseCodeModel;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Copyright (C), 2017-2019, wondernect.com
@@ -13,14 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class BaseCodeManager<T extends BaseCodeModel> extends BaseManager<T, String> {
 
-    @Autowired
-    private BaseCodeDao<T> baseCodeDao;
-
     public void deleteByCode(String code) {
-        baseCodeDao.deleteByCode(code);
+        super.deleteById(code);
     }
 
     public T findByCode(String code) {
-        return baseCodeDao.findByCode(code);
+        return super.findById(code);
     }
 }

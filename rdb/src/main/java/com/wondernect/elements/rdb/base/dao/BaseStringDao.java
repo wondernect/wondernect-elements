@@ -17,7 +17,7 @@ public abstract class BaseStringDao<T extends BaseStringModel> extends BaseIDDao
     private SnowFlakeAlgorithm snowFlakeAlgorithm;
 
     @Override
-    protected String generateIdentifier() {
+    public String generateIdentifier() {
         return String.valueOf(snowFlakeAlgorithm.getSnowflake().nextId());
     }
 }
