@@ -26,9 +26,17 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
     @Autowired
     private BaseRDBManager<T, ID> baseRDBManager;
 
+    public T saveEntity(T entity) {
+        return baseRDBManager.save(entity);
+    }
+
     public RES_DTO save(T entity) {
         T entitySave = baseRDBManager.save(entity);
         return generate(entitySave);
+    }
+
+    public List<T> saveAllEntity(List<T> entityList) {
+        return baseRDBManager.saveAll(entityList);
     }
 
     public List<RES_DTO> saveAll(List<T> entityList) {

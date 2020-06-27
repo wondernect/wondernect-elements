@@ -1,5 +1,6 @@
 package com.wondernect.elements.rdb.base.manager;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wondernect.elements.rdb.base.dao.BaseRDBDao;
 import com.wondernect.elements.rdb.base.model.BaseRDBModel;
 import com.wondernect.elements.rdb.criteria.Criteria;
@@ -22,6 +23,10 @@ public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializ
 
     @Autowired
     private BaseRDBDao<T, ID> baseRDBDao;
+
+    public JPAQueryFactory getJpaQueryFactory() {
+        return baseRDBDao.getJpaQueryFactory();
+    }
 
     public T save(T entity) {
         return baseRDBDao.save(entity);
