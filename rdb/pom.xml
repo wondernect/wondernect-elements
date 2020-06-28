@@ -44,6 +44,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- authorize-context -->
+        <dependency>
+            <groupId>com.wondernect.elements</groupId>
+            <artifactId>authorize-context</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- property-source -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>

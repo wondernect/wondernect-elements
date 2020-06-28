@@ -1,6 +1,7 @@
 package com.wondernect.elements.rdb.config;
 
-import com.wondernect.elements.rdb.context.AuditorAwareContext;
+import com.wondernect.elements.authorize.context.WondernectCommonContext;
+import com.wondernect.elements.common.utils.ESJSONObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -20,10 +21,10 @@ import java.util.Optional;
 public class AuditorConfig implements AuditorAware<String> {
 
     @Autowired
-    private AuditorAwareContext auditorAwareContext;
+    private WondernectCommonContext wondernectCommonContext;
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        return Optional.ofNullable(auditorAwareContext.getCurrentUser());
+        return Optional.ofNullable(ESJSONObjectUtils.jsonObjectToJsonString(wondernectCommonContext.getAuthorizeData()));
     }
 }

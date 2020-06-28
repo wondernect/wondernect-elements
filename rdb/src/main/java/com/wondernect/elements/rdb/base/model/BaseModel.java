@@ -1,7 +1,7 @@
 package com.wondernect.elements.rdb.base.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wondernect.elements.rdb.context.WondernectEntityListener;
+import com.wondernect.elements.rdb.config.WondernectEntityListener;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;

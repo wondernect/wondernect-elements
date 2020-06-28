@@ -1,4 +1,4 @@
-package com.wondernect.elements.rdb.context;
+package com.wondernect.elements.rdb.config;
 
 import com.wondernect.elements.common.utils.ESClassUtils;
 import com.wondernect.elements.common.utils.ESJSONObjectUtils;
