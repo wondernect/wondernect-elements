@@ -104,9 +104,12 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
 
     @Override
     public AuthorizeData getAuthorizeData() {
-        if (ESObjectUtils.isNull(get(AUTHORIZE_DATA_KEY))) {
-            return new AuthorizeData();
+        Object object = get(AUTHORIZE_DATA_KEY);
+        if (ESObjectUtils.isNull(object)) {
+            AuthorizeData authorizeData = new AuthorizeData();
+            set(AUTHORIZE_DATA_KEY, authorizeData);
+            return authorizeData;
         }
-        return (AuthorizeData) get(AUTHORIZE_DATA_KEY);
+        return (AuthorizeData) object;
     }
 }
