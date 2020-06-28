@@ -52,4 +52,9 @@ public abstract class AbstractWondernectAuthorizeContext implements WondernectAu
         }
         return validUserRoles.contains(userRole);
     }
+
+    @Override
+    public boolean authorizeAppSecret(String appId, String encryptSecret) {
+        return false;
+    }
 }

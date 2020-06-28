@@ -1,7 +1,7 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
 import com.wondernect.elements.authorize.context.WondernectAuthorizeContext;
-import com.wondernect.elements.authorize.context.config.WondernectAuthorizeContextConfigProperties;
+import com.wondernect.elements.authorize.context.config.WondernectUserRoleContextConfigProperties;
 import com.wondernect.elements.authorize.context.impl.DefaultWondernectCommonContext;
 import com.wondernect.elements.common.error.BusinessError;
 import com.wondernect.elements.common.exception.BusinessException;
@@ -26,12 +26,12 @@ import java.util.Arrays;
  * Date: 2019/3/27 13:34
  * Description:
  */
-public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAdapter {
+public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdapter {
 
-    private static Logger logger = LoggerFactory.getLogger(WondernectAuthorizeHandlerInterceptor.class);
+    private static Logger logger = LoggerFactory.getLogger(WondernectUserRoleHandlerInterceptor.class);
 
     @Autowired
-    private WondernectAuthorizeContextConfigProperties wondernectAuthorizeContextConfigProperties;
+    private WondernectUserRoleContextConfigProperties wondernectAuthorizeContextConfigProperties;
 
     @Autowired
     private WondernectAuthorizeContext wondernectAuthorizeContext;
@@ -41,11 +41,6 @@ public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAda
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String appId = request.getHeader(wondernectAuthorizeContextConfigProperties.getAppPropertyName());
-        if (ESStringUtils.isBlank(appId)) {
-            throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
-        }
-        wondernectCommonContext.getAuthorizeData().setAppId(appId);
         if (!wondernectAuthorizeContextConfigProperties.isEnable()) {
             return true;
         }

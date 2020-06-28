@@ -22,4 +22,6 @@ public interface WondernectAuthorizeContext {
     List<String> getRequestValidUserRoles(String requestUrl, String requestMethod);
 
     boolean authorizeUserRole(String userRole, List<String> validUserRoles);
+
+    boolean authorizeAppSecret(String appId, String encryptSecret);
 }

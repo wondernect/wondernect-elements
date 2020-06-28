@@ -1,6 +1,6 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
-import com.wondernect.elements.authorize.context.config.WondernectAuthorizeContextConfigProperties;
+import com.wondernect.elements.authorize.context.config.WondernectUserRoleContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectCommonContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectCorsContextConfigProperties;
 import org.apache.commons.collections4.CollectionUtils;
@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties({
         WondernectCorsContextConfigProperties.class,
         WondernectCommonContextConfigProperties.class,
-        WondernectAuthorizeContextConfigProperties.class
+        WondernectUserRoleContextConfigProperties.class
 })
 public class WondernectContextInterceptor implements WebMvcConfigurer {
 
@@ -33,7 +33,7 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
     private WondernectCommonContextConfigProperties wondernectCommonContextConfigProperties;
 
     @Autowired
-    private WondernectAuthorizeContextConfigProperties wondernectAuthorizeContextConfigProperties;
+    private WondernectUserRoleContextConfigProperties wondernectAuthorizeContextConfigProperties;
 
     @Bean
     public WondernectCorsHandlerInterceptor wondernectCorsHandlerInterceptor() {
@@ -52,9 +52,9 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
     }
 
     @Bean
-    public WondernectAuthorizeHandlerInterceptor wondernectAuthorizeHandlerInterceptor() {
+    public WondernectUserRoleHandlerInterceptor wondernectAuthorizeHandlerInterceptor() {
         if (wondernectAuthorizeContextConfigProperties.isEnable()) {
-            return new WondernectAuthorizeHandlerInterceptor();
+            return new WondernectUserRoleHandlerInterceptor();
         }
         return null;
     }
