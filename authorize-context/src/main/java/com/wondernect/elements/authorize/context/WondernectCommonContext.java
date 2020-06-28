@@ -32,6 +32,4 @@ public interface WondernectCommonContext extends ApplicationContext {
     void setDeviceIdentifier(String deviceIdentifier);
 
     AuthorizeData getAuthorizeData();
-
-    void setAuthorizeData(AuthorizeData authorizeData);
 }

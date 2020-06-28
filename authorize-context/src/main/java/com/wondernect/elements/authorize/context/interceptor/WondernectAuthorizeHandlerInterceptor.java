@@ -46,7 +46,7 @@ public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAda
         if (ESStringUtils.isBlank(appId)) {
             throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
         }
-        wondernectCommonContext.setAuthorizeData(new AuthorizeData(null, null, null, appId));
+        wondernectCommonContext.getAuthorizeData().setAppId(appId);
         if (!wondernectAuthorizeContextConfigProperties.isEnable()) {
             return true;
         }
