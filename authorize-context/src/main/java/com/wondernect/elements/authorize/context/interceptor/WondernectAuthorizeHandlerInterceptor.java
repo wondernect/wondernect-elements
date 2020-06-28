@@ -1,9 +1,8 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
-import com.wondernect.elements.authorize.context.AuthorizeData;
 import com.wondernect.elements.authorize.context.WondernectAuthorizeContext;
-import com.wondernect.elements.authorize.context.WondernectCommonContext;
 import com.wondernect.elements.authorize.context.config.WondernectAuthorizeContextConfigProperties;
+import com.wondernect.elements.authorize.context.impl.DefaultWondernectCommonContext;
 import com.wondernect.elements.common.error.BusinessError;
 import com.wondernect.elements.common.exception.BusinessException;
 import com.wondernect.elements.common.utils.ESStringUtils;
@@ -38,7 +37,7 @@ public class WondernectAuthorizeHandlerInterceptor extends HandlerInterceptorAda
     private WondernectAuthorizeContext wondernectAuthorizeContext;
 
     @Autowired
-    private WondernectCommonContext wondernectCommonContext;
+    private DefaultWondernectCommonContext wondernectCommonContext;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

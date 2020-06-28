@@ -1,6 +1,6 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
-import com.wondernect.elements.authorize.context.WondernectCommonContext;
+import com.wondernect.elements.authorize.context.impl.DefaultWondernectCommonContext;
 import com.wondernect.elements.common.utils.ESHttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class WondernectCommonHandlerInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private WondernectCommonContext wondernectCommonContext;
+    private DefaultWondernectCommonContext wondernectCommonContext;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

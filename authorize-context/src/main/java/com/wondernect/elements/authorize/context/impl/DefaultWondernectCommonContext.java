@@ -4,6 +4,7 @@ import com.wondernect.elements.authorize.context.AuthorizeData;
 import com.wondernect.elements.authorize.context.WondernectCommonContext;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.context.ApplicationContextHolder;
+import org.springframework.stereotype.Component;
 
 /**
  * Copyright (C), 2017-2019, wondernect.com
@@ -13,7 +14,8 @@ import com.wondernect.elements.context.ApplicationContextHolder;
  * Description: default wondernect context
  * WondernectContext的抽象实现,用户使用时必须定义一个@Component/@Service类继承该抽象类,在继承类中可以复写指定方法
  */
-public abstract class AbstractWondernectCommonContext implements WondernectCommonContext {
+@Component
+public class DefaultWondernectCommonContext implements WondernectCommonContext {
 
     private static final String URL_KEY = "URL";
 
@@ -45,7 +47,6 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
         return (String) get(URL_KEY);
     }
 
-    @Override
     public void setRequestUrl(String url) {
         set(URL_KEY, url);
     }
@@ -58,7 +59,6 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
         return (String) get(IP_KEY);
     }
 
-    @Override
     public void setRequestIp(String ip) {
         set(IP_KEY, ip);
     }
@@ -71,7 +71,6 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
         return (String) get(DEVICE_KEY);
     }
 
-    @Override
     public void setRequestDevice(String device) {
         set(DEVICE_KEY, device);
     }
@@ -84,7 +83,6 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
         return (String) get(DEVICE_PLATFORM_KEY);
     }
 
-    @Override
     public void setDevicePlatform(String devicePlatform) {
         set(DEVICE_PLATFORM_KEY, devicePlatform);
     }
@@ -97,7 +95,6 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
         return (String) get(DEVICE_IDENTIFIER_KEY);
     }
 
-    @Override
     public void setDeviceIdentifier(String deviceIdentifier) {
         set(DEVICE_IDENTIFIER_KEY, deviceIdentifier);
     }
@@ -107,9 +104,13 @@ public abstract class AbstractWondernectCommonContext implements WondernectCommo
         Object object = get(AUTHORIZE_DATA_KEY);
         if (ESObjectUtils.isNull(object)) {
             AuthorizeData authorizeData = new AuthorizeData();
-            set(AUTHORIZE_DATA_KEY, authorizeData);
+            setAuthorizeData(authorizeData);
             return authorizeData;
         }
         return (AuthorizeData) object;
+    }
+
+    private void setAuthorizeData(AuthorizeData authorizeData) {
+        set(AUTHORIZE_DATA_KEY, authorizeData);
     }
 }
