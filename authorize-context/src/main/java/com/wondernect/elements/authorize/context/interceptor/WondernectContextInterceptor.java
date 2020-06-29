@@ -64,6 +64,7 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
         return null;
     }
 
+    @Bean
     public WondernectServerHandlerInterceptor wondernectServerHandlerInterceptor() {
         if (wondernectServerContextConfigProperties.isEnable()) {
             return new WondernectServerHandlerInterceptor();
@@ -137,20 +138,20 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
         if (wondernectServerContextConfigProperties.isEnable()) {
             if (CollectionUtils.isNotEmpty(wondernectServerContextConfigProperties.getPathPatterns())) {
                 if (CollectionUtils.isNotEmpty(wondernectServerContextConfigProperties.getExcludePathPatterns())) {
-                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                    registry.addInterceptor(wondernectServerHandlerInterceptor())
                             .addPathPatterns(wondernectServerContextConfigProperties.getPathPatterns())
                             .excludePathPatterns(wondernectServerContextConfigProperties.getExcludePathPatterns());
                 } else {
-                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                    registry.addInterceptor(wondernectServerHandlerInterceptor())
                             .addPathPatterns(wondernectServerContextConfigProperties.getPathPatterns());
                 }
             } else {
                 if (CollectionUtils.isNotEmpty(wondernectServerContextConfigProperties.getExcludePathPatterns())) {
-                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                    registry.addInterceptor(wondernectServerHandlerInterceptor())
                             .addPathPatterns("/**")
                             .excludePathPatterns(wondernectServerContextConfigProperties.getExcludePathPatterns());
                 } else {
-                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                    registry.addInterceptor(wondernectServerHandlerInterceptor())
                             .addPathPatterns("/**");
                 }
             }
