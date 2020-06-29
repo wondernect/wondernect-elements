@@ -1,11 +1,14 @@
 package com.wondernect.elements.rdb.base.dao;
 
+import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.rdb.base.model.BaseRDBModel;
 import com.wondernect.elements.rdb.base.repository.BaseRDBRepository;
 import com.wondernect.elements.rdb.common.error.RDBErrorEnum;
 import com.wondernect.elements.rdb.common.exception.RDBException;
+import com.wondernect.elements.rdb.common.response.JPAQueryPageRequest;
 import com.wondernect.elements.rdb.criteria.Criteria;
 import com.wondernect.elements.rdb.request.PageRequestData;
 import com.wondernect.elements.rdb.request.SortData;
@@ -15,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -202,5 +206,42 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
             throw new RDBException(RDBErrorEnum.RDB_PAGE_GET_FAILED);
         }
         return new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), page.getTotalPages(), page.getTotalElements(), page.getContent());
+    }
+
+    public <S> long count(JPAQuery<S> jpaQuery) {
+        long count;
+        try {
+            count = jpaQuery.fetchCount();
+        } catch (RuntimeException e) {
+            logger.error("JPA Query数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_COUNT_GET_FAILED);
+        }
+        return count;
+    }
+
+    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
+        List<S> list;
+        try {
+            list = jpaQuery.fetch();
+        } catch (RuntimeException e) {
+            logger.error("JPA Query数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_LIST_GET_FAILED);
+        }
+        return list;
+    }
+
+    public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
+        PageResponseData<S> pageResponseData;
+        try {
+            JPAQueryPageRequest jpaQueryPageRequest = generateJPAQueryPageRequest(pageRequestData);
+            QueryResults<S> results = jpaQuery.offset(jpaQueryPageRequest.getOffset()).limit(jpaQueryPageRequest.getLimit()).fetchResults();
+            int totalPages = Long.valueOf(results.getTotal() / results.getLimit()).intValue();
+            long totalElements = Long.valueOf(results.getTotal()).intValue();
+            pageResponseData = new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), totalPages, totalElements, results.getResults());
+        } catch (RuntimeException e) {
+            logger.error("JPA Query数据组合查询分页获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_PAGE_GET_FAILED);
+        }
+        return pageResponseData;
     }
 }

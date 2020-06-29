@@ -1,6 +1,7 @@
 package com.wondernect.elements.rdb.base.dao;
 
 import com.wondernect.elements.common.utils.ESObjectUtils;
+import com.wondernect.elements.rdb.common.response.JPAQueryPageRequest;
 import com.wondernect.elements.rdb.config.RDBConfigProperties;
 import com.wondernect.elements.rdb.request.PageRequestData;
 import com.wondernect.elements.rdb.request.SortData;
@@ -79,5 +80,24 @@ public abstract class BasePageableDao {
             }
         }
         return PageRequest.of(pageRequestData.getPage(), pageRequestData.getSize(), generateSort(pageRequestData.getSortDataList()));
+    }
+
+    public JPAQueryPageRequest generateJPAQueryPageRequest(PageRequestData pageRequestData) {
+        if (ESObjectUtils.isNull(pageRequestData)) {
+            return new JPAQueryPageRequest(0, rdbConfigProperties.getInitPageSize());
+        }
+        if (pageRequestData.getPage() < 0) {
+            pageRequestData.setPage(0);
+        }
+        if (pageRequestData.getSize() <= 0) {
+            pageRequestData.setSize(rdbConfigProperties.getInitPageSize());
+        } else {
+            if (pageRequestData.getSize() > rdbConfigProperties.getLimitPageSize()) {
+                pageRequestData.setSize(rdbConfigProperties.getLimitPageSize());
+            }
+        }
+        int offset = pageRequestData.getPage() * pageRequestData.getSize();
+        int limit = pageRequestData.getSize();
+        return new JPAQueryPageRequest(offset, limit);
     }
 }

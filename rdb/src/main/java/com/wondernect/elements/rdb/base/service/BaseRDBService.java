@@ -1,5 +1,7 @@
 package com.wondernect.elements.rdb.base.service;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.rdb.base.manager.BaseRDBManager;
 import com.wondernect.elements.rdb.base.model.BaseRDBModel;
@@ -25,6 +27,10 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
 
     @Autowired
     private BaseRDBManager<T, ID> baseRDBManager;
+
+    public JPAQueryFactory getJpaQueryFactory() {
+        return baseRDBManager.getJpaQueryFactory();
+    }
 
     public T saveEntity(T entity) {
         return baseRDBManager.save(entity);
@@ -161,6 +167,18 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
                 pageResponseData.getTotalElements(),
                 resDtoList
         );
+    }
+
+    public <S> long count(JPAQuery<S> jpaQuery) {
+        return baseRDBManager.count();
+    }
+
+    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
+        return baseRDBManager.findAll(jpaQuery);
+    }
+
+    public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
+        return baseRDBManager.findAll(jpaQuery, pageRequestData);
     }
 
     public abstract RES_DTO generate(T entity);

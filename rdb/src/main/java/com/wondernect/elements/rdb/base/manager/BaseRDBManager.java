@@ -1,5 +1,6 @@
 package com.wondernect.elements.rdb.base.manager;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wondernect.elements.rdb.base.dao.BaseRDBDao;
 import com.wondernect.elements.rdb.base.model.BaseRDBModel;
@@ -74,5 +75,17 @@ public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializ
 
     public PageResponseData<T> findAll(Criteria<T> criteria, PageRequestData pageRequestData) {
         return baseRDBDao.findAll(criteria, pageRequestData);
+    }
+
+    public <S> long count(JPAQuery<S> jpaQuery) {
+        return baseRDBDao.count(jpaQuery);
+    }
+
+    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
+        return baseRDBDao.findAll(jpaQuery);
+    }
+
+    public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
+        return baseRDBDao.findAll(jpaQuery, pageRequestData);
     }
 }
