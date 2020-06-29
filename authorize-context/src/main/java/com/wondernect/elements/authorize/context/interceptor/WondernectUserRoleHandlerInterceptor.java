@@ -53,9 +53,9 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
         if (null == authorizeUserRole) {
             return true;
         }
-        AuthorizeType authorizeType = authorizeUserRole.authorizeType();
         String expiresToken;
         String unlimitedToken;
+        AuthorizeType authorizeType = authorizeUserRole.authorizeType();
         switch (authorizeType) {
             case EXPIRES_TOKEN:
             {

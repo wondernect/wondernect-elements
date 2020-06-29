@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({
         WondernectCorsContextConfigProperties.class,
         WondernectCommonContextConfigProperties.class,
-        WondernectUserRoleContextConfigProperties.class
+        WondernectUserRoleContextConfigProperties.class,
+        WondernectServerContextConfigProperties.class
 })
 public class WondernectContextConfig {
 

@@ -1,5 +1,6 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
+import com.wondernect.elements.authorize.context.config.WondernectServerContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectUserRoleContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectCommonContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectCorsContextConfigProperties;
@@ -22,7 +23,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties({
         WondernectCorsContextConfigProperties.class,
         WondernectCommonContextConfigProperties.class,
-        WondernectUserRoleContextConfigProperties.class
+        WondernectUserRoleContextConfigProperties.class,
+        WondernectServerContextConfigProperties.class
 })
 public class WondernectContextInterceptor implements WebMvcConfigurer {
 
@@ -33,7 +35,10 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
     private WondernectCommonContextConfigProperties wondernectCommonContextConfigProperties;
 
     @Autowired
-    private WondernectUserRoleContextConfigProperties wondernectAuthorizeContextConfigProperties;
+    private WondernectUserRoleContextConfigProperties wondernectUserRoleContextConfigProperties;
+
+    @Autowired
+    private WondernectServerContextConfigProperties wondernectServerContextConfigProperties;
 
     @Bean
     public WondernectCorsHandlerInterceptor wondernectCorsHandlerInterceptor() {
@@ -53,8 +58,15 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
 
     @Bean
     public WondernectUserRoleHandlerInterceptor wondernectAuthorizeHandlerInterceptor() {
-        if (wondernectAuthorizeContextConfigProperties.isEnable()) {
+        if (wondernectUserRoleContextConfigProperties.isEnable()) {
             return new WondernectUserRoleHandlerInterceptor();
+        }
+        return null;
+    }
+
+    public WondernectServerHandlerInterceptor wondernectServerHandlerInterceptor() {
+        if (wondernectServerContextConfigProperties.isEnable()) {
+            return new WondernectServerHandlerInterceptor();
         }
         return null;
     }
@@ -101,21 +113,42 @@ public class WondernectContextInterceptor implements WebMvcConfigurer {
                 }
             }
         }
-        if (wondernectAuthorizeContextConfigProperties.isEnable()) {
-            if (CollectionUtils.isNotEmpty(wondernectAuthorizeContextConfigProperties.getPathPatterns())) {
-                if (CollectionUtils.isNotEmpty(wondernectAuthorizeContextConfigProperties.getExcludePathPatterns())) {
+        if (wondernectUserRoleContextConfigProperties.isEnable()) {
+            if (CollectionUtils.isNotEmpty(wondernectUserRoleContextConfigProperties.getPathPatterns())) {
+                if (CollectionUtils.isNotEmpty(wondernectUserRoleContextConfigProperties.getExcludePathPatterns())) {
                     registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
-                            .addPathPatterns(wondernectAuthorizeContextConfigProperties.getPathPatterns())
-                            .excludePathPatterns(wondernectAuthorizeContextConfigProperties.getExcludePathPatterns());
+                            .addPathPatterns(wondernectUserRoleContextConfigProperties.getPathPatterns())
+                            .excludePathPatterns(wondernectUserRoleContextConfigProperties.getExcludePathPatterns());
                 } else {
                     registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
-                            .addPathPatterns(wondernectAuthorizeContextConfigProperties.getPathPatterns());
+                            .addPathPatterns(wondernectUserRoleContextConfigProperties.getPathPatterns());
                 }
             } else {
-                if (CollectionUtils.isNotEmpty(wondernectAuthorizeContextConfigProperties.getExcludePathPatterns())) {
+                if (CollectionUtils.isNotEmpty(wondernectUserRoleContextConfigProperties.getExcludePathPatterns())) {
                     registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
                             .addPathPatterns("/**")
-                            .excludePathPatterns(wondernectAuthorizeContextConfigProperties.getExcludePathPatterns());
+                            .excludePathPatterns(wondernectUserRoleContextConfigProperties.getExcludePathPatterns());
+                } else {
+                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                            .addPathPatterns("/**");
+                }
+            }
+        }
+        if (wondernectServerContextConfigProperties.isEnable()) {
+            if (CollectionUtils.isNotEmpty(wondernectServerContextConfigProperties.getPathPatterns())) {
+                if (CollectionUtils.isNotEmpty(wondernectServerContextConfigProperties.getExcludePathPatterns())) {
+                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                            .addPathPatterns(wondernectServerContextConfigProperties.getPathPatterns())
+                            .excludePathPatterns(wondernectServerContextConfigProperties.getExcludePathPatterns());
+                } else {
+                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                            .addPathPatterns(wondernectServerContextConfigProperties.getPathPatterns());
+                }
+            } else {
+                if (CollectionUtils.isNotEmpty(wondernectServerContextConfigProperties.getExcludePathPatterns())) {
+                    registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
+                            .addPathPatterns("/**")
+                            .excludePathPatterns(wondernectServerContextConfigProperties.getExcludePathPatterns());
                 } else {
                     registry.addInterceptor(wondernectAuthorizeHandlerInterceptor())
                             .addPathPatterns("/**");

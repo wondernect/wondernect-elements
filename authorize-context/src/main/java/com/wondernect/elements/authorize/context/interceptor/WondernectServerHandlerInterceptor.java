@@ -38,31 +38,14 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String appId;
-        switch (wondernectServerContextConfigProperties.getDeployType()) {
-            case SINGLE:
-            {
-                appId = request.getHeader(wondernectServerContextConfigProperties.getAppPropertyName());
-                wondernectCommonContext.getAuthorizeData().setAppId(appId);
-                break;
-            }
-            case MULTIPLE:
-            {
-                appId = request.getHeader(wondernectServerContextConfigProperties.getAppPropertyName());
-                if (ESStringUtils.isBlank(appId)) {
-                    throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
-                }
-                wondernectCommonContext.getAuthorizeData().setAppId(appId);
-                break;
-            }
-            default:
-            {
-                throw new BusinessException(BusinessError.AUTHORIZE_APP_DEPLOY_TYPE_INVALID);
-            }
-        }
         if (!wondernectServerContextConfigProperties.isEnable()) {
             return true;
         }
+        String appId = request.getHeader(wondernectServerContextConfigProperties.getAppPropertyName());
+        if (ESStringUtils.isBlank(appId)) {
+            throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
+        }
+        wondernectCommonContext.getAuthorizeData().setAppId(appId);
         if (!(handler instanceof HandlerMethod)) {
             throw new BusinessException(BusinessError.INVALID_REQUEST_URL);
         }
@@ -71,7 +54,7 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
         AuthorizeServer authorizeAppSecret = method.getAnnotation(AuthorizeServer.class);
         if (null != authorizeAppSecret) {
             String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
-            if (ESStringUtils.isRealEmpty(encryptSecret)) {
+            if (ESStringUtils.isBlank(encryptSecret)) {
                 throw new BusinessException(BusinessError.AUTHORIZE_HEADER_IS_NULL);
             }
             if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
