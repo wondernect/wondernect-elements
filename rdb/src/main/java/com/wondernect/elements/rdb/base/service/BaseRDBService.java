@@ -173,12 +173,41 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
         return baseRDBManager.count();
     }
 
-    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
+    public <S> List<S> findAllEntity(JPAQuery<S> jpaQuery) {
         return baseRDBManager.findAll(jpaQuery);
     }
 
-    public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
+    public List<RES_DTO> findAll(JPAQuery<T> jpaQuery) {
+        List<T> list = baseRDBManager.findAll(jpaQuery);
+        List<RES_DTO> resDtoList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T entity : list) {
+                resDtoList.add(generate(entity));
+            }
+        }
+        return resDtoList;
+    }
+
+    public <S> PageResponseData<S> findAllEntity(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
         return baseRDBManager.findAll(jpaQuery, pageRequestData);
+    }
+
+    public PageResponseData<RES_DTO> findAll(JPAQuery<T> jpaQuery, PageRequestData pageRequestData) {
+        PageResponseData<T> pageResponseData = baseRDBManager.findAll(jpaQuery, pageRequestData);
+        List<T> list = pageResponseData.getDataList();
+        List<RES_DTO> resDtoList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T entity : list) {
+                resDtoList.add(generate(entity));
+            }
+        }
+        return new PageResponseData<>(
+                pageResponseData.getPage(),
+                pageResponseData.getSize(),
+                pageResponseData.getTotalPages(),
+                pageResponseData.getTotalElements(),
+                resDtoList
+        );
     }
 
     public abstract RES_DTO generate(T entity);
