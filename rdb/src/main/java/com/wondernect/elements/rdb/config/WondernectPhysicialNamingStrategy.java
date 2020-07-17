@@ -27,6 +27,14 @@ public class WondernectPhysicialNamingStrategy extends SpringPhysicalNamingStrat
         return this.apply(name, jdbcEnvironment);
     }
 
+    @Override
+    public Identifier toPhysicalColumnName(Identifier name, JdbcEnvironment jdbcEnvironment) {
+        if (!rdbConfigProperties.getTableColumnDeal()) {
+            return name;
+        }
+        return super.toPhysicalColumnName(name, jdbcEnvironment);
+    }
+
     private Identifier apply(Identifier name, JdbcEnvironment jdbcEnvironment) {
         if (name == null) {
             return null;

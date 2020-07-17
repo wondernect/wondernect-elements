@@ -1,6 +1,7 @@
 package com.wondernect.elements.rdb.base.dao;
 
 import com.wondernect.elements.common.utils.ESObjectUtils;
+import com.wondernect.elements.common.utils.ESStringUtils;
 import com.wondernect.elements.rdb.common.response.JPAQueryPageRequest;
 import com.wondernect.elements.rdb.config.RDBConfigProperties;
 import com.wondernect.elements.rdb.request.PageRequestData;
@@ -29,7 +30,10 @@ public abstract class BasePageableDao {
         List<Sort.Order> orders = new ArrayList<>();
         if (CollectionUtils.isEmpty(sortDataList)) {
             sortDataList = new ArrayList<>();
-            sortDataList.add(new SortData(rdbConfigProperties.getSortProperty(), rdbConfigProperties.getSortDirection()));
+            if (ESStringUtils.isNotBlank(rdbConfigProperties.getSortProperty()) &&
+                    ESStringUtils.isNotBlank(rdbConfigProperties.getSortDirection())) {
+                sortDataList.add(new SortData(rdbConfigProperties.getSortProperty(), rdbConfigProperties.getSortDirection()));
+            }
         }
         for (SortData sortData : sortDataList) {
             orders.add(new Sort.Order(Sort.Direction.valueOf(sortData.getDirection()), sortData.getProperty()));

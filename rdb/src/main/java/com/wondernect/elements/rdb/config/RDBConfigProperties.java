@@ -28,13 +28,15 @@ public class RDBConfigProperties implements Serializable {
 
     private List<String> tablePrefixBlackList; // 不添加表名称前缀的表名列表
 
+    private Boolean TableColumnDeal = true; // 是否处理表属性名
+
     private int initPageSize = 10; // 当用户传入page size为空时初始化size为initPageSize
 
     private int limitPageSize = 500; // 当用户传入page size大于limitPageSize时,修改size为limitPageSize
 
-    private String sortProperty = "createTime"; // 排序属性
+    private String sortProperty; // 排序属性
 
-    private String sortDirection = "DESC"; // 排序方式
+    private String sortDirection; // 排序方式
 
     public String getTablePrefix() {
         return tablePrefix;
@@ -50,6 +52,14 @@ public class RDBConfigProperties implements Serializable {
 
     public void setTablePrefixBlackList(List<String> tablePrefixBlackList) {
         this.tablePrefixBlackList = tablePrefixBlackList;
+    }
+
+    public Boolean getTableColumnDeal() {
+        return TableColumnDeal;
+    }
+
+    public void setTableColumnDeal(Boolean tableColumnDeal) {
+        TableColumnDeal = tableColumnDeal;
     }
 
     public int getInitPageSize() {
