@@ -103,6 +103,14 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
         return baseRDBManager.findAll(criteria, sortDataList);
     }
 
+    public T findOneEntity(List<SortData> sortDataList) {
+        return baseRDBManager.findOne(sortDataList);
+    }
+
+    public T findOneEntity(Criteria<T> criteria, List<SortData> sortDataList) {
+        return baseRDBManager.findOne(criteria, sortDataList);
+    }
+
     public List<RES_DTO> findAll(List<SortData> sortDataList) {
         List<T> list = baseRDBManager.findAll(sortDataList);
         List<RES_DTO> resDtoList = new ArrayList<>();
@@ -123,6 +131,34 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
             }
         }
         return resDtoList;
+    }
+
+    public RES_DTO findOne(List<SortData> sortDataList) {
+        List<T> list = baseRDBManager.findAll(sortDataList);
+        List<RES_DTO> resDtoList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T entity : list) {
+                resDtoList.add(generate(entity));
+            }
+        }
+        if (CollectionUtils.isEmpty(resDtoList)) {
+            return null;
+        }
+        return resDtoList.get(0);
+    }
+
+    public RES_DTO findOne(Criteria<T> criteria, List<SortData> sortDataList) {
+        List<T> list = baseRDBManager.findAll(criteria, sortDataList);
+        List<RES_DTO> resDtoList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T entity : list) {
+                resDtoList.add(generate(entity));
+            }
+        }
+        if (CollectionUtils.isEmpty(resDtoList)) {
+            return null;
+        }
+        return resDtoList.get(0);
     }
 
     public PageResponseData<T> findAllEntity(PageRequestData pageRequestData) {
@@ -186,6 +222,10 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
             }
         }
         return resDtoList;
+    }
+
+    public <S> S findOneEntity(JPAQuery<S> jpaQuery) {
+        return baseRDBManager.findOne(jpaQuery);
     }
 
     public <S> PageResponseData<S> findAllEntity(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {

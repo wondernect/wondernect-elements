@@ -186,6 +186,39 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
         return list;
     }
 
+    public T findOne(List<SortData> sortDataList) {
+        List<T> list = new ArrayList<>();
+        try {
+            Iterable<T> iterable = baseRDBRepository.findAll(generateDefaultSort(sortDataList));
+            if (ESObjectUtils.isNotNull(iterable)) {
+                for (T t : iterable) {
+                    list.add(t);
+                }
+            }
+        } catch (RuntimeException e) {
+            logger.error("RDB数据获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_LIST_GET_FAILED);
+        }
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public T findOne(Criteria<T> criteria, List<SortData> sortDataList) {
+        List<T> list;
+        try {
+            list = baseRDBRepository.findAll(criteria, generateDefaultSort(sortDataList));
+        } catch (RuntimeException e) {
+            logger.error("RDB数据组合查询获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_LIST_GET_FAILED);
+        }
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
+
     public PageResponseData<T> findAll(PageRequestData pageRequestData) {
         Page<T> page;
         try {
@@ -228,6 +261,20 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
             throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_LIST_GET_FAILED);
         }
         return list;
+    }
+
+    public <S> S findOne(JPAQuery<S> jpaQuery) {
+        List<S> list;
+        try {
+            list = jpaQuery.fetch();
+        } catch (RuntimeException e) {
+            logger.error("JPA Query数据组合查询获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_LIST_GET_FAILED);
+        }
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
     }
 
     public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {

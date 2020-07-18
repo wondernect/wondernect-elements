@@ -69,6 +69,14 @@ public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializ
         return baseRDBDao.findAll(criteria, sortDataList);
     }
 
+    public T findOne(List<SortData> sortDataList) {
+        return baseRDBDao.findOne(sortDataList);
+    }
+
+    public T findOne(Criteria<T> criteria, List<SortData> sortDataList) {
+        return baseRDBDao.findOne(criteria, sortDataList);
+    }
+
     public PageResponseData<T> findAll(PageRequestData pageRequestData) {
         return baseRDBDao.findAll(pageRequestData);
     }
@@ -83,6 +91,10 @@ public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializ
 
     public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
         return baseRDBDao.findAll(jpaQuery);
+    }
+
+    public <S> S findOne(JPAQuery<S> jpaQuery) {
+        return baseRDBDao.findOne(jpaQuery);
     }
 
     public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
