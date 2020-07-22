@@ -1,9 +1,13 @@
 package com.wondernect.elements.rdb.base.service;
 
+import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wondernect.elements.common.utils.ESObjectUtils;
+import com.wondernect.elements.common.utils.ESStringUtils;
 import com.wondernect.elements.easyoffice.excel.ESExcelItem;
+import com.wondernect.elements.easyoffice.excel.ESExcelUtils;
+import com.wondernect.elements.easyoffice.excel.EasyExcel;
 import com.wondernect.elements.rdb.base.manager.BaseRDBManager;
 import com.wondernect.elements.rdb.base.model.BaseRDBModel;
 import com.wondernect.elements.rdb.criteria.Criteria;
@@ -13,9 +17,12 @@ import com.wondernect.elements.rdb.response.PageResponseData;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C), 2020, wondernect.com
@@ -249,6 +256,24 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
                 pageResponseData.getTotalElements(),
                 resDtoList
         );
+    }
+
+    public List<ESExcelItem> excelItemList(Class<?> cls) {
+        return ESExcelUtils.getAllEntityExcelItem(cls);
+    }
+
+    public void excelDataExport(List<ESExcelItem> excelItemList, List<RES_DTO> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+        List<ExcelExportEntity> titleList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(excelItemList)) {
+            for (ESExcelItem excelItem : excelItemList) {
+                excelItemHandle(excelItem);
+                if (!excelItem.getHidden()) {
+                    titleList.add(ESExcelUtils.generateExcelExportEntity(excelItem.getTitle(), excelItem.getName(), excelItem.getOrderNum()));
+                }
+            }
+        }
+        List<Map<String, Object>> dataList = ESExcelUtils.getEntityDataList(resDtoList, excelItemList);
+        EasyExcel.exportExcel(titleList, dataList, title, sheetName, fileName, request, response);
     }
 
     public abstract RES_DTO generate(T entity);
