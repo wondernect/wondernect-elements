@@ -3,6 +3,7 @@ package com.wondernect.elements.rdb.base.service;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wondernect.elements.common.utils.ESObjectUtils;
+import com.wondernect.elements.easyoffice.excel.ESExcelItem;
 import com.wondernect.elements.rdb.base.manager.BaseRDBManager;
 import com.wondernect.elements.rdb.base.model.BaseRDBModel;
 import com.wondernect.elements.rdb.criteria.Criteria;
@@ -251,4 +252,8 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
     }
 
     public abstract RES_DTO generate(T entity);
+
+    public ESExcelItem excelItemHandle(ESExcelItem excelItem) {
+        return excelItem;
+    }
 }
