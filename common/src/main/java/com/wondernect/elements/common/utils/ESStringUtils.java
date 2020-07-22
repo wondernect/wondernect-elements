@@ -28,6 +28,26 @@ public class ESStringUtils extends StringUtils {
     }
 
     /**
+     * 首字母小写
+     */
+    public static String firstLetterToLower(String str) {
+        if (org.apache.commons.lang.StringUtils.isBlank(str)) {
+            return "";
+        }
+        return str.replaceFirst(str.substring(0, 1), str.substring(0, 1).toLowerCase());
+    }
+
+    /**
+     * 首字母大写
+     */
+    public static String firstLetterToUpper(String str) {
+        if (org.apache.commons.lang.StringUtils.isBlank(str)) {
+            return "";
+        }
+        return str.replaceFirst(str.substring(0, 1), str.substring(0, 1).toUpperCase());
+    }
+
+    /**
      * 截取从index到指定char位置的字符串
      */
     public static String subStringValueFromIndexToCharPlace(String value, int fromIndex, String toChar) {
