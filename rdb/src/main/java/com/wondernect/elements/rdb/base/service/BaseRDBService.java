@@ -262,7 +262,7 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
         return ESExcelUtils.getAllEntityExcelItem(cls);
     }
 
-    public void excelDataExport(List<ESExcelItem> excelItemList, List<RES_DTO> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+    public <S> void excelDataExport(List<ESExcelItem> excelItemList, List<S> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
         List<ExcelExportEntity> titleList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(excelItemList)) {
             for (ESExcelItem excelItem : excelItemList) {
