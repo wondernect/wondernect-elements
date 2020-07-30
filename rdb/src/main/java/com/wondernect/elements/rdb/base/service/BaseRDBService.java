@@ -3,9 +3,11 @@ package com.wondernect.elements.rdb.base.service;
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.wondernect.elements.common.exception.BusinessException;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
 import com.wondernect.elements.easyoffice.excel.ESExcelItem;
+import com.wondernect.elements.easyoffice.excel.ESExcelItemHandler;
 import com.wondernect.elements.easyoffice.excel.ESExcelUtils;
 import com.wondernect.elements.easyoffice.excel.EasyExcel;
 import com.wondernect.elements.rdb.base.manager.BaseRDBManager;
@@ -262,15 +264,29 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
         return ESExcelUtils.getAllEntityExcelItem(cls);
     }
 
-    public <S> void excelDataExport(List<ESExcelItem> excelItemList, List<S> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+    public <S> void excelDataExport(String exportServiceIdentifier, List<ESExcelItem> excelItemList, List<S> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
         List<ExcelExportEntity> titleList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(excelItemList)) {
+            List<ESExcelItemHandler> excelItemHandlerList = generateExcelItemHandlerList(exportServiceIdentifier);
             for (ESExcelItem excelItem : excelItemList) {
-                excelItemHandle(excelItem);
+                for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
+                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
+                        excelItem.setOrderNum(excelItemHandler.itemOrder());
+                        excelItem.setHidden(excelItemHandler.hidden());
+                        if (ESStringUtils.isNotBlank(excelItemHandler.itemTitle())) {
+                            excelItem.setTitle(excelItemHandler.itemTitle());
+                        }
+                        excelItem.setItemHandler(excelItemHandler);
+                        break;
+                    }
+                }
                 if (!excelItem.getHidden()) {
                     titleList.add(ESExcelUtils.generateExcelExportEntity(excelItem.getTitle(), excelItem.getName(), excelItem.getOrderNum()));
                 }
             }
+        }
+        if (CollectionUtils.isEmpty(titleList)) {
+            throw new BusinessException("导出excel配置的列标题数必须大于0");
         }
         List<Map<String, Object>> dataList = ESExcelUtils.getEntityDataList(resDtoList, excelItemList);
         EasyExcel.exportExcel(titleList, dataList, title, sheetName, fileName, request, response);
@@ -278,7 +294,5 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
 
     public abstract RES_DTO generate(T entity);
 
-    public ESExcelItem excelItemHandle(ESExcelItem excelItem) {
-        return excelItem;
-    }
+    public abstract List<ESExcelItemHandler> generateExcelItemHandlerList(String exportServiceIdentifier);
 }
