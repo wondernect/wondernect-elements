@@ -100,8 +100,8 @@ public final class ESExcelUtils {
                     for (ESExcelItem excelItem : excelItemList) {
                         if (!excelItem.getHidden()) {
                             Object itemValue = ESClassUtils.invokeGetMethod(object, ESClassUtils.getGetMethod(object, excelItem.getGetMethodName()));
-                            if (null != excelItem.getItemHandler() && ESStringUtils.equals(excelItem.getName(), excelItem.getItemHandler().itemName())) {
-                                itemValue = excelItem.getItemHandler().handleExcelItemObject(itemValue);
+                            if (null != excelItem.getExportItemHandler() && ESStringUtils.equals(excelItem.getName(), excelItem.getExportItemHandler().itemName())) {
+                                itemValue = excelItem.getExportItemHandler().handleExcelExportItemObject(itemValue);
                             }
                             studyData.put(excelItem.getName(), itemValue);
                         }

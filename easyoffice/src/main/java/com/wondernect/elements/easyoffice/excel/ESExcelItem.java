@@ -35,8 +35,8 @@ public class ESExcelItem {
     // 该列导入或导出时是否隐藏
     private Boolean hidden = true;
 
-    // 该列属性值处理方法
-    private ESExcelItemHandler itemHandler;
+    // 导出时该列属性值处理方法
+    private ESExcelItemHandler exportItemHandler;
 
     public ESExcelItem() {
     }
@@ -50,7 +50,7 @@ public class ESExcelItem {
         this.setMethodName = setMethodName;
         this.orderNum = 0;
         this.hidden = true;
-        this.itemHandler = null;
+        this.exportItemHandler = null;
     }
 
     public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum) {
@@ -62,7 +62,7 @@ public class ESExcelItem {
         this.setMethodName = setMethodName;
         this.orderNum = orderNum;
         this.hidden = true;
-        this.itemHandler = null;
+        this.exportItemHandler = null;
     }
 
     public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, Boolean hidden) {
@@ -74,10 +74,10 @@ public class ESExcelItem {
         this.setMethodName = setMethodName;
         this.orderNum = orderNum;
         this.hidden = hidden;
-        this.itemHandler = null;
+        this.exportItemHandler = null;
     }
 
-    public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, Boolean hidden, ESExcelItemHandler itemHandler) {
+    public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, Boolean hidden, ESExcelItemHandler exportItemHandler) {
         this.entityName = entityName;
         this.name = name;
         this.type = type;
@@ -86,7 +86,7 @@ public class ESExcelItem {
         this.setMethodName = setMethodName;
         this.orderNum = orderNum;
         this.hidden = hidden;
-        this.itemHandler = itemHandler;
+        this.exportItemHandler = exportItemHandler;
     }
 
     @Override
@@ -102,12 +102,12 @@ public class ESExcelItem {
                 Objects.equals(setMethodName, excelItem.setMethodName) &&
                 Objects.equals(orderNum, excelItem.orderNum) &&
                 Objects.equals(hidden, excelItem.hidden) &&
-                Objects.equals(itemHandler, excelItem.itemHandler);
+                Objects.equals(exportItemHandler, excelItem.exportItemHandler);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityName, name, type, title, getMethodName, setMethodName, hidden, itemHandler);
+        return Objects.hash(entityName, name, type, title, getMethodName, setMethodName, hidden, exportItemHandler);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ESExcelItem {
                 ", setMethodName='" + setMethodName + '\'' +
                 ", orderNum='" + orderNum + '\'' +
                 ", hidden='" + hidden + '\'' +
-                ", itemHandler='" + itemHandler + '\'' +
+                ", exportItemHandler='" + exportItemHandler + '\'' +
                 '}';
     }
 
@@ -189,11 +189,11 @@ public class ESExcelItem {
         this.hidden = hidden;
     }
 
-    public ESExcelItemHandler getItemHandler() {
-        return itemHandler;
+    public ESExcelItemHandler getExportItemHandler() {
+        return exportItemHandler;
     }
 
-    public void setItemHandler(ESExcelItemHandler itemHandler) {
-        this.itemHandler = itemHandler;
+    public void setExportItemHandler(ESExcelItemHandler exportItemHandler) {
+        this.exportItemHandler = exportItemHandler;
     }
 }

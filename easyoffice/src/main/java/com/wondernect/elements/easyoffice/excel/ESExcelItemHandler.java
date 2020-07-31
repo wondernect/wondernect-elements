@@ -15,30 +15,30 @@ public interface ESExcelItemHandler<T> {
      * 返回该handler处理的属性名
      * @return 属性名
      */
-    public String itemName();
+    String itemName();
 
     /**
      * excel列展示名称
      * @return excel列展示名称
      */
-    public String itemTitle();
+    String itemTitle();
 
     /**
      * excel列展示顺序
      * @return 序号
      */
-    public int itemOrder();
+    int itemOrder();
 
     /**
      * 属性值返回时是否隐藏
      * @return 是否隐藏
      */
-    public Boolean hidden();
+    Boolean hidden();
 
     /**
-     * 处理对应属性值，返回展示的值
+     * 导出处理对应属性值，返回展示的值
      * @param object 属性原始值
      * @return 处理后excel展示的值
      */
-    public Object handleExcelItemObject(T object);
+    Object handleExcelExportItemObject(T object);
 }

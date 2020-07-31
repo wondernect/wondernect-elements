@@ -267,7 +267,7 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
     public <S> void excelDataExport(String exportServiceIdentifier, List<ESExcelItem> excelItemList, List<S> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
         List<ExcelExportEntity> titleList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(excelItemList)) {
-            List<ESExcelItemHandler> excelItemHandlerList = generateExcelItemHandlerList(exportServiceIdentifier);
+            List<ESExcelItemHandler> excelItemHandlerList = generateExcelExportItemHandlerList(exportServiceIdentifier);
             for (ESExcelItem excelItem : excelItemList) {
                 for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                     if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
@@ -276,7 +276,7 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
                         if (ESStringUtils.isNotBlank(excelItemHandler.itemTitle())) {
                             excelItem.setTitle(excelItemHandler.itemTitle());
                         }
-                        excelItem.setItemHandler(excelItemHandler);
+                        excelItem.setExportItemHandler(excelItemHandler);
                         break;
                     }
                 }
@@ -294,5 +294,5 @@ public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends
 
     public abstract RES_DTO generate(T entity);
 
-    public abstract List<ESExcelItemHandler> generateExcelItemHandlerList(String exportServiceIdentifier);
+    public abstract List<ESExcelItemHandler> generateExcelExportItemHandlerList(String exportServiceIdentifier);
 }
