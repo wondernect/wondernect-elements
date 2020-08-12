@@ -6,7 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +18,8 @@ import java.util.Map;
 /**
  * wondernect.com
  * Created by cxhome on 2017/8/26.
- * @author sunbeam
  *
+ * @author sunbeam
  */
 public final class ESJSONObjectUtils {
 
@@ -76,6 +80,67 @@ public final class ESJSONObjectUtils {
         return null;
     }
 
+    /**
+     * 通过网络访问json并读取文件
+     *
+     * @param url:http://127.0.0.1:80/dashboard/dept_uuid.json
+     */
+    public static String loadJsonStringFromUrl(String url) {
+        StringBuilder json = new StringBuilder();
+        BufferedReader bufferedReader = null;
+        try {
+            URLConnection urlConnection = new URL(url).openConnection();
+            bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
+            String inputLine;
+            while ((inputLine = bufferedReader.readLine()) != null) {
+                json.append(inputLine);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            logger.error("load json string from url failed", e);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException el) {
+                    logger.error("load json string from url failed", el);
+                }
+            }
+        }
+        return json.toString();
+    }
+
+    /**
+     * 通过本地文件访问json并读取
+     *
+     * @param path：E:/svn/05.Hospital/templatedept_uuid.json
+     */
+    public static String loadJsonStringFromLocalPath(String path) {
+        StringBuilder json = new StringBuilder();
+        File file = new File(path);
+        BufferedReader reader = null;
+        try {
+            FileInputStream in = new FileInputStream(file);
+            reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null) {
+                json.append(inputLine);
+            }
+            reader.close();
+        } catch (IOException e) {
+            logger.error("load json string from local path failed", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException el) {
+                    logger.error("load json string from local path failed", el);
+                }
+            }
+        }
+        return json.toString();
+    }
+
     public static void main(String[] args) {
         Map<String, Double> map = new HashMap<>();
         map.put("5.0", 10.0);
@@ -87,5 +152,6 @@ public final class ESJSONObjectUtils {
         System.out.println(jsonMap);
         System.out.println(jsonMap.keySet());
         System.out.println(jsonMap.values());
+        System.out.println(loadJsonStringFromLocalPath("F:\\aa.json"));
     }
 }
