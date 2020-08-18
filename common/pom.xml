@@ -17,6 +17,7 @@
     <url>http://www.example.com</url>
 
     <properties>
+        <bcprov.version>1.46</bcprov.version>
         <zxing.core.version>3.4.0</zxing.core.version>
         <zxing.javase.version>3.4.0</zxing.javase.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
@@ -34,6 +35,13 @@
     </properties>
 
     <dependencies>
+        <!-- 加解密工具包 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>${bcprov.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
         <dependency>
             <groupId>com.google.zxing</groupId>
