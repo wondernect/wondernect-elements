@@ -6,7 +6,6 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -28,39 +27,45 @@ public final class ESAES_ECB_PKCS5_Utils {
 
     /**
      * 加密
-     *
-     * @param content      原文
+     * @param content 原文
      * @param key 加密密码
      * @return String
-     * @throws Exception 异常
      */
-    public static String encrypt(String content, String key) throws Exception {
-        byte[] raw = key.getBytes(CHARSET_NAME);
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, AES_NAME);
-        Cipher cipher = Cipher.getInstance(ALGORITHM);//"算法/模式/补码方式"
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-        byte[] encrypted = cipher.doFinal(content.getBytes(CHARSET_NAME));
-        //此处使用BASE64做转码功能
-        return new BASE64Encoder().encode(encrypted);
+    public static String encrypt(String content, String key) {
+        try {
+            byte[] raw = key.getBytes(CHARSET_NAME);
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, AES_NAME);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);//"算法/模式/补码方式"
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+            byte[] encrypted = cipher.doFinal(content.getBytes(CHARSET_NAME));
+            //此处使用BASE64做转码功能
+            return new BASE64Encoder().encode(encrypted);
+        } catch (Exception ex) {
+            logger.error("加密异常", ex);
+            return ESStringUtils.EMPTY;
+        }
     }
 
     /**
      * 解密
-     *
-     * @param content   密文
+     * @param content 密文
      * @param key 加密密码
      * @return String
-     * @throws Exception 异常
      */
-    public static String decrypt(String content, String key) throws Exception {
-        byte[] raw = key.getBytes(CHARSET_NAME);
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, AES_NAME);
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-        //先用base64解密
-        byte[] encrypted = new BASE64Decoder().decodeBuffer(content);
-        byte[] original = cipher.doFinal(encrypted);
-        return new String(original,CHARSET_NAME);
+    public static String decrypt(String content, String key) {
+        try {
+            byte[] raw = key.getBytes(CHARSET_NAME);
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, AES_NAME);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+            //先用base64解密
+            byte[] encrypted = new BASE64Decoder().decodeBuffer(content);
+            byte[] original = cipher.doFinal(encrypted);
+            return new String(original,CHARSET_NAME);
+        } catch (Exception ex) {
+            logger.error("解密异常", ex);
+            return ESStringUtils.EMPTY;
+        }
     }
 
     public static void main(String[] args) {
