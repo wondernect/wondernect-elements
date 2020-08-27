@@ -26,9 +26,9 @@ public class WondernectServerContextConfigProperties implements Serializable {
 
     private boolean enable = false; // 是否启用应用认证
 
-    private String appPropertyName = "SERVER_APPID"; // 应用标识
+    private String appPropertyName = "APPID"; // 应用标识
 
-    private String encryptSecretPropertyName = "SERVER_SECRET"; // 传递加密内容的头部key
+    private String encryptSecretPropertyName = "APPSECRET"; // 传递加密内容的头部key
 
     private List<String> pathPatterns; // 过滤路径
 
