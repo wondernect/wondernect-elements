@@ -14,9 +14,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface AuthorizeUserRole {
 
-    AuthorizeType authorizeType() default AuthorizeType.UNLIMITED_TOKEN;
+    AuthorizeType authorizeType() default AuthorizeType.EXPIRES_TOKEN;
 
-    AuthorizeRoleType authorizeRoleType() default AuthorizeRoleType.CONFIG;
+    AuthorizeRoleType authorizeRoleType() default AuthorizeRoleType.ONLY_AUTHORIZE;
 
     String[] validUserRoles() default {};
 }
