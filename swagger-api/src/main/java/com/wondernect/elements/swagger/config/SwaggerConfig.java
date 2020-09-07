@@ -58,8 +58,9 @@ public class SwaggerConfig {
 
     private List<ApiKey> securitySchemes() {
         List<ApiKey> apiKeyList = new ArrayList<>();
-        apiKeyList.add(new ApiKey("APPID", "APPID", "header"));
-        apiKeyList.add(new ApiKey("Authorization", "Authorization", "header"));
+        apiKeyList.add(new ApiKey(swaggerConfigProperties.getAppIdPropertyName(), swaggerConfigProperties.getAppIdPropertyName(), swaggerConfigProperties.getAppIdPassAs()));
+        apiKeyList.add(new ApiKey(swaggerConfigProperties.getAppSecretPropertyName(), swaggerConfigProperties.getAppSecretPropertyName(), swaggerConfigProperties.getAppSecretPassAs()));
+        apiKeyList.add(new ApiKey(swaggerConfigProperties.getAuthorizationPropertyName(), swaggerConfigProperties.getAuthorizationPropertyName(), swaggerConfigProperties.getAuthorizationPassAs()));
         return apiKeyList;
     }
 
@@ -68,8 +69,9 @@ public class SwaggerConfig {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "global access");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        securityReferenceList.add(new SecurityReference("APPID", authorizationScopes));
-        securityReferenceList.add(new SecurityReference("Authorization", authorizationScopes));
+        securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getAppIdPropertyName(), authorizationScopes));
+        securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getAppSecretPropertyName(), authorizationScopes));
+        securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getAuthorizationPropertyName(), authorizationScopes));
 
         List<SecurityContext> securityContextList = new ArrayList<>();
         securityContextList.add(
