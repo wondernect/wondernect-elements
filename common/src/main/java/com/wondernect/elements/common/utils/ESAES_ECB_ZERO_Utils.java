@@ -1,5 +1,6 @@
 package com.wondernect.elements.common.utils;
 
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
@@ -76,12 +77,11 @@ public final class ESAES_ECB_ZERO_Utils {
      */
     public static String encryptHex(String clearText, String password) {
         try {
-            byte[] raw = password.getBytes(CHARSET_NAME);
-            SecretKeySpec skeySpec = new SecretKeySpec(raw, AES_NAME);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);//"算法/模式/补码方式"
+            SecretKeySpec skeySpec = new SecretKeySpec(password.getBytes(CHARSET_NAME), AES_NAME);
+            Cipher cipher = Cipher.getInstance(ALGORITHM); // "算法/模式/补码方式"
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
             byte[] encrypted = cipher.doFinal(clearText.getBytes(CHARSET_NAME));
-            return ESSecurityUtils.byte2hex(encrypted);
+            return Hex.encodeHexString(encrypted);
         } catch (Exception ex) {
             logger.error("加密异常", ex);
             return ESStringUtils.EMPTY;
@@ -96,11 +96,10 @@ public final class ESAES_ECB_ZERO_Utils {
      */
     public static String decryptHex(String cipherText, String password) {
         try {
-            byte[] raw = password.getBytes(CHARSET_NAME);
-            SecretKeySpec skeySpec = new SecretKeySpec(raw, AES_NAME);
+            byte[] encrypted = Hex.decodeHex(cipherText.toCharArray());
+            SecretKeySpec skeySpec = new SecretKeySpec(password.getBytes(CHARSET_NAME), AES_NAME);
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-            byte[] encrypted = ESSecurityUtils.hex2byte(cipherText);
             byte[] original = cipher.doFinal(encrypted);
             return new String(original, CHARSET_NAME);
         } catch (Exception ex) {

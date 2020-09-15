@@ -30,14 +30,14 @@ public final class ESSecurityUtils {
     /**
      * base64 encode
      */
-    public String base64Encode(byte[] encrypted) {
+    public static String base64Encode(byte[] encrypted) {
         return new BASE64Encoder().encode(encrypted);
     }
 
     /**
      * base64 decode
      */
-    public byte[] base64Decode(String content) throws IOException {
+    public static byte[] base64Decode(String content) throws IOException {
         return new BASE64Decoder().decodeBuffer(content);
     }
 
