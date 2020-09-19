@@ -45,7 +45,6 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
         if (ESStringUtils.isBlank(appId)) {
             throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
         }
-        wondernectCommonContext.getAuthorizeData().setAppId(appId);
         if (!(handler instanceof HandlerMethod)) {
             throw new BusinessException(BusinessError.INVALID_REQUEST_URL);
         }
@@ -55,12 +54,18 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
         if (null != authorizeAppSecret) {
             String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
             if (ESStringUtils.isBlank(encryptSecret)) {
-                throw new BusinessException(BusinessError.AUTHORIZE_HEADER_IS_NULL);
+                throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
             }
-            if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
-                throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
-            }
+            authorizeAppSecret(appId, encryptSecret);
         }
         return true;
+    }
+
+    private void authorizeAppSecret(String appId, String encryptSecret) {
+        String appIdGet = wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret);
+        if (ESStringUtils.isBlank(appIdGet)) {
+            throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
+        }
+        wondernectCommonContext.getAuthorizeData().setAppId(appIdGet);
     }
 }

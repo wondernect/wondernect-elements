@@ -28,6 +28,11 @@ public abstract class AbstractWondernectAuthorizeContext implements WondernectAu
     }
 
     @Override
+    public String authorizeAppSecret(String appId, String encryptSecret) {
+        return null;
+    }
+
+    @Override
     public String getUserRole(String userId) {
         return null;
     }
@@ -51,13 +56,5 @@ public abstract class AbstractWondernectAuthorizeContext implements WondernectAu
             return false;
         }
         return validUserRoles.contains(userRole);
-    }
-
-    @Override
-    public boolean authorizeAppSecret(String appId, String encryptSecret) {
-        if (ESStringUtils.isBlank(appId)) {
-            return false;
-        }
-        return true;
     }
 }
