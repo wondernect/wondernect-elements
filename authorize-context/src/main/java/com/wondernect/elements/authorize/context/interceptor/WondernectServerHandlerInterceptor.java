@@ -41,10 +41,6 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
         if (!wondernectServerContextConfigProperties.isEnable()) {
             return true;
         }
-        String appId = request.getHeader(wondernectServerContextConfigProperties.getAppPropertyName());
-        if (ESStringUtils.isBlank(appId)) {
-            throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
-        }
         if (!(handler instanceof HandlerMethod)) {
             throw new BusinessException(BusinessError.INVALID_REQUEST_URL);
         }
@@ -52,20 +48,19 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
         Method method = handlerMethod.getMethod();
         AuthorizeServer authorizeAppSecret = method.getAnnotation(AuthorizeServer.class);
         if (null != authorizeAppSecret) {
+            String appId = request.getHeader(wondernectServerContextConfigProperties.getAppPropertyName());
+            if (ESStringUtils.isBlank(appId)) {
+                throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
+            }
+            wondernectCommonContext.getAuthorizeData().setAppId(appId);
             String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
             if (ESStringUtils.isBlank(encryptSecret)) {
                 throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
             }
-            authorizeAppSecret(appId, encryptSecret);
+            if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
+                throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
+            }
         }
         return true;
-    }
-
-    private void authorizeAppSecret(String appId, String encryptSecret) {
-        String appIdGet = wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret);
-        if (ESStringUtils.isBlank(appIdGet)) {
-            throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
-        }
-        wondernectCommonContext.getAuthorizeData().setAppId(appIdGet);
     }
 }
