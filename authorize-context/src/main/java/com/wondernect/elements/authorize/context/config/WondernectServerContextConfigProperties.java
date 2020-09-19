@@ -26,6 +26,8 @@ public class WondernectServerContextConfigProperties implements Serializable {
 
     private boolean enable = false; // 是否启用应用认证
 
+    private String userPropertyName = "USERID"; // 用户标识
+
     private String appPropertyName = "APPID"; // 应用标识
 
     private String encryptSecretPropertyName = "APPSECRET"; // 传递加密内容的头部key
@@ -40,6 +42,14 @@ public class WondernectServerContextConfigProperties implements Serializable {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public String getUserPropertyName() {
+        return userPropertyName;
+    }
+
+    public void setUserPropertyName(String userPropertyName) {
+        this.userPropertyName = userPropertyName;
     }
 
     public String getAppPropertyName() {

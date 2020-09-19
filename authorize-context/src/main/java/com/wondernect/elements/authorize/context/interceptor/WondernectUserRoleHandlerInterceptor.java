@@ -1,6 +1,7 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
 import com.wondernect.elements.authorize.context.WondernectAuthorizeContext;
+import com.wondernect.elements.authorize.context.config.WondernectServerContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectUserRoleContextConfigProperties;
 import com.wondernect.elements.authorize.context.impl.DefaultWondernectCommonContext;
 import com.wondernect.elements.common.error.BusinessError;
@@ -29,6 +30,9 @@ import java.util.Arrays;
 public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(WondernectUserRoleHandlerInterceptor.class);
+
+    @Autowired
+    private WondernectServerContextConfigProperties wondernectServerContextConfigProperties;
 
     @Autowired
     private WondernectUserRoleContextConfigProperties wondernectAuthorizeContextConfigProperties;
@@ -80,6 +84,7 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
                 throw new BusinessException(BusinessError.AUTHORIZE_TYPE_IS_INVALID);
             }
         }
+        request.setAttribute(wondernectServerContextConfigProperties.getUserPropertyName(), wondernectCommonContext.getAuthorizeData().getUserId());
         AuthorizeRoleType authorizeRoleType = authorizeUserRole.authorizeRoleType();
         switch (authorizeRoleType) {
             case ONLY_AUTHORIZE:
