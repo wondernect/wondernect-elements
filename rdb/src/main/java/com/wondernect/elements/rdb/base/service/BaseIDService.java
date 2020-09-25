@@ -1,6 +1,7 @@
 package com.wondernect.elements.rdb.base.service;
 
 import com.wondernect.elements.rdb.base.model.BaseIDModel;
+import com.wondernect.elements.rdb.response.BaseIDResponseDTO;
 
 import java.io.Serializable;
 
@@ -11,6 +12,6 @@ import java.io.Serializable;
  * Date: 2020-06-26 08:19
  * Description:
  */
-public abstract class BaseIDService<RES_DTO, T extends BaseIDModel<ID>, ID extends Serializable> extends BaseService<RES_DTO, T, ID> {
+public abstract class BaseIDService<RES_DTO extends BaseIDResponseDTO<ID>, T extends BaseIDModel<ID>, ID extends Serializable> extends BaseService<RES_DTO, T, ID> {
 
 }

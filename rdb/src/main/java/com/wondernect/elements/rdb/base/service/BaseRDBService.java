@@ -15,6 +15,7 @@ import com.wondernect.elements.rdb.base.model.BaseRDBModel;
 import com.wondernect.elements.rdb.criteria.Criteria;
 import com.wondernect.elements.rdb.request.PageRequestData;
 import com.wondernect.elements.rdb.request.SortData;
+import com.wondernect.elements.rdb.response.BaseRDBResponseDTO;
 import com.wondernect.elements.rdb.response.PageResponseData;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import java.util.Map;
  * Date: 2020-06-26 07:55
  * Description:
  */
-public abstract class BaseRDBService<RES_DTO, T extends BaseRDBModel, ID extends Serializable> {
+public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T extends BaseRDBModel, ID extends Serializable> {
 
     @Autowired
     private BaseRDBManager<T, ID> baseRDBManager;

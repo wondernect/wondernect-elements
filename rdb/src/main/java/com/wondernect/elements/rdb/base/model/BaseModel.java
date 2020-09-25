@@ -5,6 +5,10 @@ import com.wondernect.elements.rdb.config.WondernectEntityListener;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,6 +27,8 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 @EntityListeners(value = {AuditingEntityListener.class, WondernectEntityListener.class})
+@FilterDef(name = "appFilter", parameters = { @ParamDef(name = "create_app", type = "java.lang.String") })
+@Filters({ @Filter(name = "appFilter", condition = "create_app = :create_app") })
 public abstract class BaseModel extends BaseRDBModel {
 
     @CreatedDate

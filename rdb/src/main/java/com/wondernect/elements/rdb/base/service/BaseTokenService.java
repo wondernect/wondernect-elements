@@ -1,6 +1,7 @@
 package com.wondernect.elements.rdb.base.service;
 
 import com.wondernect.elements.rdb.base.model.BaseTokenModel;
+import com.wondernect.elements.rdb.response.BaseTokenResponseDTO;
 
 /**
  * Copyright (C), 2020, wondernect.com
@@ -9,7 +10,7 @@ import com.wondernect.elements.rdb.base.model.BaseTokenModel;
  * Date: 2020-06-26 08:33
  * Description:
  */
-public abstract class BaseTokenService<RES_DTO, T extends BaseTokenModel> extends BaseService<RES_DTO, T, String> {
+public abstract class BaseTokenService<RES_DTO extends BaseTokenResponseDTO, T extends BaseTokenModel> extends BaseService<RES_DTO, T, String> {
 
     public void deleteByToken(String token) {
         super.deleteById(token);
