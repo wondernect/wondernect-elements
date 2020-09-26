@@ -15,6 +15,8 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class ESPasswordValidator implements ConstraintValidator<ESPassword, String> {
 
+    private boolean emptyValidate = true;
+
     private int min = 6;
 
     private int max = 20;
@@ -25,6 +27,9 @@ public class ESPasswordValidator implements ConstraintValidator<ESPassword, Stri
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        if (!emptyValidate && ESStringUtils.isBlank(s)) {
+            return true;
+        }
         if (ESStringUtils.isBlank(s)) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate("密码不能为空").addConstraintViolation();
@@ -50,6 +55,7 @@ public class ESPasswordValidator implements ConstraintValidator<ESPassword, Stri
 
     @Override
     public void initialize(ESPassword constraintAnnotation) {
+        emptyValidate = constraintAnnotation.emptyValidate();
         min = constraintAnnotation.min();
         max = constraintAnnotation.max();
         strong = constraintAnnotation.strong();

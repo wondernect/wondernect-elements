@@ -19,6 +19,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = ESPasswordValidator.class)
 public @interface ESPassword {
 
+    boolean emptyValidate() default true;
+
     int min() default 6;
 
     int max() default 20;
