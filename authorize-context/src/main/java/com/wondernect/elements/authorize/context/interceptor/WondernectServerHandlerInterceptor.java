@@ -64,6 +64,7 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
             if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
                 throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
             }
+            wondernectCommonContext.getAuthorizeData().setAppSecret(encryptSecret);
         }
         return true;
     }
