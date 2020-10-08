@@ -65,7 +65,7 @@ public abstract class BaseModel extends BaseRDBModel {
     @ApiModelProperty(notes = "创建应用")
     private String createApp;
 
-    @JsonProperty("update_App")
+    @JsonProperty("update_app")
     @Getter
     @Setter
     @ApiModelProperty(notes = "更新应用")
