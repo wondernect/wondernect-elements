@@ -22,7 +22,7 @@ public final class ESHttpUtils {
      * 获取request ip address
      */
     public static String getHttpRequestIP(HttpServletRequest request) {
-        String ipAddress = request.getHeader("x-forwarded-for");
+        String ipAddress = request.getHeader("X-Forwarded-For");
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
