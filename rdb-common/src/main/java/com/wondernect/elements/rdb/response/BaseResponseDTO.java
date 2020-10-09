@@ -40,7 +40,7 @@ public abstract class BaseResponseDTO extends BaseRDBResponseDTO {
     private String createApp;
 
     @Getter @Setter
-    @JsonProperty("update_App")
+    @JsonProperty("update_app")
     @ApiModelProperty(notes = "更新应用")
     private String updateApp;
 }
