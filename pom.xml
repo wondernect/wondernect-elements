@@ -41,6 +41,7 @@
         <module>thymeleaf</module>
         <module>rabbitmq</module>
         <module>boot-application</module>
+        <module>jdbc-client</module>
     </modules>
 
     <build>
