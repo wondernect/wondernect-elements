@@ -19,23 +19,33 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "wondernect.elements.jdbc-client")
 public class JDBCClientConfigProperties {
 
-    private String accessKeyId;
+    private String url;
 
-    private String accessKeySecret;
+    private String username;
 
-    public String getAccessKeyId() {
-        return accessKeyId;
+    private String password;
+
+    public String getUrl() {
+        return url;
     }
 
-    public void setAccessKeyId(String accessKeyId) {
-        this.accessKeyId = accessKeyId;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getAccessKeySecret() {
-        return accessKeySecret;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccessKeySecret(String accessKeySecret) {
-        this.accessKeySecret = accessKeySecret;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

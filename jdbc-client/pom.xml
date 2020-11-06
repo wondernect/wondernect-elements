@@ -22,11 +22,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <!-- mysql connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.11</version>
+        </dependency>
         <!-- property-source -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
             <artifactId>property-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wondernect.elements</groupId>
+            <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
