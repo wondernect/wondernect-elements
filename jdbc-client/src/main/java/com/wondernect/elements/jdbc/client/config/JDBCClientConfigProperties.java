@@ -19,11 +19,21 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "wondernect.elements.jdbc-client")
 public class JDBCClientConfigProperties {
 
+    private String driver = "com.mysql.cj.jdbc.Driver";
+
     private String url;
 
     private String username;
 
     private String password;
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
 
     public String getUrl() {
         return url;

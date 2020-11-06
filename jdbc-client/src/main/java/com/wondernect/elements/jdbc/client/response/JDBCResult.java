@@ -15,7 +15,6 @@ import java.io.Serializable;
 @ApiModel(description = "数据库操作返回结果")
 public class JDBCResult implements Serializable {
 
-
     @JsonProperty("result")
     @ApiModelProperty(notes = "结果")
     private Boolean result;
@@ -23,5 +22,4 @@ public class JDBCResult implements Serializable {
     @JsonProperty("message")
     @ApiModelProperty(notes = "结果描述")
     private String message;
-
 }

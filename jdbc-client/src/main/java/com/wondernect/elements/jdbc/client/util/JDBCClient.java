@@ -2,30 +2,35 @@ package com.wondernect.elements.jdbc.client.util;
 
 import com.wondernect.elements.jdbc.client.config.JDBCClientConfigProperties;
 import com.wondernect.elements.jdbc.client.response.JDBCResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@Service
 public class JDBCClient {
+
+    private static final Logger logger = LoggerFactory.getLogger(JDBCClient.class);
 
     @Autowired
     private JDBCClientConfigProperties jdbcClientConfigProperties;
 
     //初始化数据库
     public JDBCResult initDatabase(String databaseName) {
-        String driverClassName = "com.mysql.cj.jdbc.Driver";    //驱动
         String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
         String password = jdbcClientConfigProperties.getPassword();
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
-        Boolean result = false;
+        boolean result = false;
         String message = null;
         try {
-            Class.forName(driverClassName);//执行驱动
+            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             String createDatabaseSql = "create database if not exists " + databaseName + ";";
             //初始化数据库
@@ -39,6 +44,7 @@ public class JDBCClient {
             result = false;
             message = "初始化数据库时驱动加载异常，原因是" + e.getMessage();
         } catch (SQLException e) {
+            logger.error("初始化数据库发生异常", e);
             result = false;
             message = "初始化数据库发生异常，原因是" + e.getMessage();
         } finally {
@@ -46,7 +52,7 @@ public class JDBCClient {
                 if (con != null) con.close();  //必须要关
                 if (pstmt != null) pstmt.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("初始化数据库发生异常", e);
             }
         }
         return new JDBCResult(result, message);
@@ -54,18 +60,17 @@ public class JDBCClient {
 
     //赋权限
     public JDBCResult giveRights(int type, String databaseName, String userName, String passWord) {
-        String driverClassName = "com.mysql.cj.jdbc.Driver";    //驱动
         String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
         String password = jdbcClientConfigProperties.getPassword();
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         PreparedStatement pstmtOne = null;    //使用预编译语句
-        Boolean result = false;
+        boolean result = false;
         String message = null;
-        String createUserRightsSql = null;
+        String createUserRightsSql;
         try {
-            Class.forName(driverClassName);//执行驱动
+            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             if (type == 1) {
                 //只读权限
@@ -85,9 +90,11 @@ public class JDBCClient {
                 message = "权限赋予成功";
             }
         } catch (ClassNotFoundException e) {
+            logger.error("权限赋予时数据库驱动加载异常", e);
             result = false;
             message = "权限赋予时数据库驱动加载异常，原因是" + e.getMessage();
         } catch (SQLException e) {
+            logger.error("权限赋予时发生异常", e);
             result = false;
             message = "权限赋予时发生异常，原因是" + e.getMessage();
         } finally {
@@ -96,7 +103,7 @@ public class JDBCClient {
                 if (pstmt != null) pstmt.close();
                 if (pstmtOne != null) pstmtOne.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("权限赋予时发生异常", e);
             }
         }
         return new JDBCResult(result, message);
@@ -104,16 +111,15 @@ public class JDBCClient {
 
     //收回权限
     public JDBCResult revokeRights(String userName) {
-        String driverClassName = "com.mysql.cj.jdbc.Driver";    //驱动
         String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
         String password = jdbcClientConfigProperties.getPassword();
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
-        Boolean result = false;
+        boolean result = false;
         String message = null;
         try {
-            Class.forName(driverClassName);//执行驱动
+            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             //收回权限
             String revokeUserRightsSql = "revoke all privileges,grant option from " + "'" + userName + "'" + "@'%';";
@@ -124,9 +130,11 @@ public class JDBCClient {
                 message = "收回权限成功";
             }
         } catch (ClassNotFoundException e) {
+            logger.error("收回权限时数据库驱动加载异常", e);
             result = false;
             message = "收回权限时数据库驱动加载异常，原因是" + e.getMessage();
         } catch (SQLException e) {
+            logger.error("收回权限时发生异常", e);
             result = false;
             message = "收回权限时发生异常，原因是" + e.getMessage();
         } finally {
@@ -134,7 +142,7 @@ public class JDBCClient {
                 if (con != null) con.close();  //必须要关
                 if (pstmt != null) pstmt.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("收回权限时发生异常", e);
             }
         }
         return new JDBCResult(result, message);
@@ -142,13 +150,12 @@ public class JDBCClient {
 
     //测试连接
     public JDBCResult testConnect(String url, String userName, String passWord) {
-        String driverClassName = "com.mysql.cj.jdbc.Driver";    //驱动
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
-        Boolean result = false;
+        boolean result = false;
         String message = null;
         try {
-            Class.forName(driverClassName);//执行驱动
+            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             con = DriverManager.getConnection(url, userName, passWord);//获取连接
             String testSql = "SELECT 1 from dual;";
             //测试链接
@@ -159,9 +166,11 @@ public class JDBCClient {
                 message = "测试连接成功";
             }
         } catch (ClassNotFoundException e) {
+            logger.error("测试连接时数据库驱动加载异常", e);
             result = false;
             message = "测试连接时数据库驱动加载异常，原因是" + e.getMessage();
         } catch (SQLException e) {
+            logger.error("测试连接时发生异常", e);
             result = false;
             message = "测试连接时发生异常，原因是" + e.getMessage();
         } finally {
@@ -169,10 +178,9 @@ public class JDBCClient {
                 if (con != null) con.close();  //必须要关
                 if (pstmt != null) pstmt.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("测试连接时发生异常", e);
             }
         }
         return new JDBCResult(result, message);
     }
-
 }
