@@ -52,7 +52,7 @@ public class JDBCClient {
                 if (con != null) con.close();  //必须要关
                 if (pstmt != null) pstmt.close();
             } catch (SQLException e) {
-                logger.error("初始化数据库发生异常", e);
+                logger.error("初始化数据库时关闭连接发生异常", e);
             }
         }
         return new JDBCResult(result, message);
@@ -103,28 +103,35 @@ public class JDBCClient {
                 if (pstmt != null) pstmt.close();
                 if (pstmtOne != null) pstmtOne.close();
             } catch (SQLException e) {
-                logger.error("权限赋予时发生异常", e);
+                logger.error("权限赋予时关闭连接发生异常", e);
             }
         }
         return new JDBCResult(result, message);
     }
 
     //收回权限
-    public JDBCResult revokeRights(String userName) {
+    public JDBCResult revokeRights(String databaseName, String userName) {
         String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
         String password = jdbcClientConfigProperties.getPassword();
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
+        PreparedStatement pstmtOne = null;    //使用预编译语句
         boolean result = false;
         String message = null;
         try {
             Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             //收回权限
-            String revokeUserRightsSql = "revoke all privileges,grant option from " + "'" + userName + "'" + "@'%';";
+            //收回该用户对所有数据的操作权限
+//            String revokeUserRightsSql = "revoke all privileges,grant option from " + "'" + userName + "'" + "@'%';";
+            //收回该用户对某一个数据的操作权限
+            String revokeUserRightsSql = "revoke all privileges on " + databaseName + ".* from " + "'" + userName + "'" + "@'%';";
+            String flush = "flush privileges;";
             pstmt = con.prepareStatement(revokeUserRightsSql);
             boolean execute = pstmt.execute();
+            pstmtOne = con.prepareStatement(flush);
+            pstmtOne.execute();//刷新
             if (execute) {
                 result = true;
                 message = "收回权限成功";
@@ -141,8 +148,9 @@ public class JDBCClient {
             try {
                 if (con != null) con.close();  //必须要关
                 if (pstmt != null) pstmt.close();
+                if (pstmtOne != null) pstmtOne.close();
             } catch (SQLException e) {
-                logger.error("收回权限时发生异常", e);
+                logger.error("收回权限时关闭连接发生异常", e);
             }
         }
         return new JDBCResult(result, message);
@@ -160,7 +168,7 @@ public class JDBCClient {
             String testSql = "SELECT 1 from dual;";
             //测试链接
             pstmt = con.prepareStatement(testSql);
-            boolean execute = pstmt.execute();//赋权限
+            boolean execute = pstmt.execute();//测试链接
             if (execute) {
                 result = true;
                 message = "测试连接成功";
@@ -178,7 +186,7 @@ public class JDBCClient {
                 if (con != null) con.close();  //必须要关
                 if (pstmt != null) pstmt.close();
             } catch (SQLException e) {
-                logger.error("测试连接时发生异常", e);
+                logger.error("测试连接时关闭连接发生异常", e);
             }
         }
         return new JDBCResult(result, message);
