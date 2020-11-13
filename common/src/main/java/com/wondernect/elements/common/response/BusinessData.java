@@ -48,6 +48,23 @@ public class BusinessData<T> implements Serializable {
 
     /**
      * 失败
+     * @param code 错误代码
+     * @param message 错误信息
+     */
+    public BusinessData(String code, String message) {
+        this(code, message, null);
+    }
+
+    /**
+     * 失败
+     * @param message 错误信息
+     */
+    public BusinessData(String message) {
+        this(BusinessError.BUSINESS_ERROR.getCode(), message, null);
+    }
+
+    /**
+     * 失败
      * @param businessError 错误枚举
      */
     public BusinessData(BusinessError businessError) {

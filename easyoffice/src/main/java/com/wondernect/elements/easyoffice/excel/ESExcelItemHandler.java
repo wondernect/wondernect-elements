@@ -30,15 +30,16 @@ public interface ESExcelItemHandler<T> {
     int itemOrder();
 
     /**
-     * 属性值返回时是否隐藏
-     * @return 是否隐藏
-     */
-    Boolean hidden();
-
-    /**
      * 导出处理对应属性值，返回展示的值
      * @param object 属性原始值
      * @return 处理后excel展示的值
      */
     Object handleExcelExportItemObject(T object);
+
+    /**
+     * 导入处理对应属性值，返回对应对象属性类型值
+     * @param object 属性原始值
+     * @return 处理后导入数据库对象的属性值
+     */
+    T handleExcelImportItemObject(Object object);
 }
