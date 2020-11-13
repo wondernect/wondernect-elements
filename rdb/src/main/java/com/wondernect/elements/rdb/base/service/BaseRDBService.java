@@ -285,7 +285,8 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return ESExcelUtils.getAllEntityExcelItem(cls);
     }
 
-    public <S> void excelDataExport(String exportServiceIdentifier, List<ESExcelItem> allExcelItemList, List<S> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+    public void excelDataExport(String exportServiceIdentifier, Class<RES_DTO> valueType, List<RES_DTO> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+        List<ESExcelItem> allExcelItemList = ESExcelUtils.getAllEntityExcelItem(valueType);
         if (CollectionUtils.isEmpty(allExcelItemList)) {
             logger.error("导出excel对象属性数量必须大于0");
             throw new BusinessException("导出excel对象属性数量必须大于0");
@@ -334,7 +335,12 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         EasyExcel.exportExcel(excelExportEntityList, dataList, title, sheetName, fileName, request, response);
     }
 
-    public void excelDataImport(String importServiceIdentifier, int titleRows, int headRows, List<ESExcelItem> allExcelItemList, Class<RES_DTO> valueType, InputStream fileInputStream, String failedfileName, HttpServletRequest request, HttpServletResponse response) {
+    public void excelDataImport(String importServiceIdentifier, Class<RES_DTO> valueType, int titleRows, int headRows, InputStream fileInputStream, String failedfileName, HttpServletRequest request, HttpServletResponse response) {
+        List<ESExcelItem> allExcelItemList = ESExcelUtils.getAllEntityExcelItem(valueType);
+        if (CollectionUtils.isEmpty(allExcelItemList)) {
+            logger.error("导入excel对象属性数量必须大于0");
+            throw new BusinessException("导入excel对象属性数量必须大于0");
+        }
         // 1、数据导入
         ImportParams params = new ImportParams();
         params.setTitleRows(titleRows);
