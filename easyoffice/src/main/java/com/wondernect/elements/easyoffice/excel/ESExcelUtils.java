@@ -4,6 +4,7 @@ import com.wondernect.elements.common.utils.ESClassUtils;
 import com.wondernect.elements.common.utils.ESJSONObjectUtils;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -27,28 +28,36 @@ public final class ESExcelUtils {
      */
     public static List<ESExcelItem> getAllEntityExcelItem(Class<?> cls) {
         List<ESExcelItem> excelItemList = new ArrayList<>();
-        List<Field> fieldList = ESClassUtils.getFieldsListWithAnnotation(cls, io.swagger.annotations.ApiModelProperty.class);
-        if (CollectionUtils.isNotEmpty(fieldList)) {
-            for (Field field : fieldList) {
-                String name = ESClassUtils.getFieldName(field);
-                String type = ESClassUtils.getFieldType(field);
-                String getFieldName = "get" + ESStringUtils.firstLetterToUpper(name);
-                String setFieldName = "set" + ESStringUtils.firstLetterToUpper(name);
-                ApiModelProperty apiModelProperty = field.getAnnotation(io.swagger.annotations.ApiModelProperty.class);
-                if (null != apiModelProperty) {
-                    String title = apiModelProperty.value();
-                    if (ESStringUtils.isBlank(title)) {
-                        title = apiModelProperty.notes();
+        ApiModel apiModel = cls.getAnnotation(io.swagger.annotations.ApiModel.class);
+        if (null != apiModel) {
+            String entityName = apiModel.value();
+            if (ESStringUtils.isBlank(entityName)) {
+                entityName = apiModel.description();
+            }
+            List<Field> fieldList = ESClassUtils.getFieldsListWithAnnotation(cls, io.swagger.annotations.ApiModelProperty.class);
+            if (CollectionUtils.isNotEmpty(fieldList)) {
+                for (Field field : fieldList) {
+                    String name = ESClassUtils.getFieldName(field);
+                    String type = ESClassUtils.getFieldType(field);
+                    String getFieldName = "get" + ESStringUtils.firstLetterToUpper(name);
+                    String setFieldName = "set" + ESStringUtils.firstLetterToUpper(name);
+                    ApiModelProperty apiModelProperty = field.getAnnotation(io.swagger.annotations.ApiModelProperty.class);
+                    if (null != apiModelProperty) {
+                        String title = apiModelProperty.value();
+                        if (ESStringUtils.isBlank(title)) {
+                            title = apiModelProperty.notes();
+                        }
+                        ESExcelItem excelItem = new ESExcelItem(
+                                cls.getName(),
+                                entityName,
+                                name,
+                                type,
+                                title,
+                                getFieldName,
+                                setFieldName
+                        );
+                        excelItemList.add(excelItem);
                     }
-                    ESExcelItem excelItem = new ESExcelItem(
-                            cls.getName(),
-                            name,
-                            type,
-                            title,
-                            getFieldName,
-                            setFieldName
-                    );
-                    excelItemList.add(excelItem);
                 }
             }
         }

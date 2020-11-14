@@ -11,6 +11,9 @@ import java.util.Objects;
  */
 public class ESExcelItem {
 
+    // 实体类
+    private String entity;
+
     // 实体类名称
     private String entityName;
 
@@ -41,7 +44,8 @@ public class ESExcelItem {
     public ESExcelItem() {
     }
 
-    public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName) {
+    public ESExcelItem(String entity, String entityName, String name, String type, String title, String getMethodName, String setMethodName) {
+        this.entity = entity;
         this.entityName = entityName;
         this.name = name;
         this.type = type;
@@ -53,7 +57,8 @@ public class ESExcelItem {
         this.importItemHandler = null;
     }
 
-    public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum) {
+    public ESExcelItem(String entity, String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum) {
+        this.entity = entity;
         this.entityName = entityName;
         this.name = name;
         this.type = type;
@@ -65,7 +70,8 @@ public class ESExcelItem {
         this.importItemHandler = null;
     }
 
-    public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, ESExcelItemHandler exportItemHandler) {
+    public ESExcelItem(String entity, String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, ESExcelItemHandler exportItemHandler) {
+        this.entity = entity;
         this.entityName = entityName;
         this.name = name;
         this.type = type;
@@ -77,7 +83,8 @@ public class ESExcelItem {
         this.importItemHandler = null;
     }
 
-    public ESExcelItem(String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, ESExcelItemHandler exportItemHandler, ESExcelItemHandler importItemHandler) {
+    public ESExcelItem(String entity, String entityName, String name, String type, String title, String getMethodName, String setMethodName, int orderNum, ESExcelItemHandler exportItemHandler, ESExcelItemHandler importItemHandler) {
+        this.entity = entity;
         this.entityName = entityName;
         this.name = name;
         this.type = type;
@@ -94,7 +101,8 @@ public class ESExcelItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ESExcelItem excelItem = (ESExcelItem) o;
-        return Objects.equals(entityName, excelItem.entityName) &&
+        return Objects.equals(entity, excelItem.entity) &&
+                Objects.equals(entityName, excelItem.entityName) &&
                 Objects.equals(name, excelItem.name) &&
                 Objects.equals(type, excelItem.type) &&
                 Objects.equals(title, excelItem.title) &&
@@ -107,12 +115,13 @@ public class ESExcelItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityName, name, type, title, getMethodName, setMethodName, exportItemHandler, importItemHandler);
+        return Objects.hash(entity, entityName, name, type, title, getMethodName, setMethodName, exportItemHandler, importItemHandler);
     }
 
     @Override
     public String toString() {
         return "ESExcelItem{" +
+                "entity='" + entity + '\'' +
                 "entityName='" + entityName + '\'' +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
@@ -123,6 +132,14 @@ public class ESExcelItem {
                 ", exportItemHandler='" + exportItemHandler + '\'' +
                 ", importItemHandler='" + importItemHandler + '\'' +
                 '}';
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
     }
 
     public String getEntityName() {
