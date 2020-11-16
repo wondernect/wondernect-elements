@@ -298,18 +298,18 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
             for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                 // 1、构造导出entity list
                 ExcelExportEntity excelExportEntity = new ExcelExportEntity(
-                        ESStringUtils.isNotBlank(excelItemHandler.itemTitle()) ? excelItemHandler.itemTitle() : excelItemHandler.itemName(),
-                        excelItemHandler.itemName()
+                        ESStringUtils.isNotBlank(excelItemHandler.getItemTitle()) ? excelItemHandler.getItemTitle() : excelItemHandler.getItemName(),
+                        excelItemHandler.getItemName()
                 );
-                excelExportEntity.setOrderNum(excelItemHandler.itemOrder());
+                excelExportEntity.setOrderNum(excelItemHandler.getItemOrder());
                 excelExportEntityList.add(excelExportEntity);
                 // 2、构造导出item list
                 for (ESExcelItem excelItem : allExcelItemList) {
-                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
-                        if (ESStringUtils.isNotBlank(excelItemHandler.itemTitle())) {
-                            excelItem.setTitle(excelItemHandler.itemTitle());
+                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.getItemName())) {
+                        if (ESStringUtils.isNotBlank(excelItemHandler.getItemTitle())) {
+                            excelItem.setTitle(excelItemHandler.getItemTitle());
                         }
-                        excelItem.setOrderNum(excelItemHandler.itemOrder());
+                        excelItem.setOrderNum(excelItemHandler.getItemOrder());
                         excelItem.setExportItemHandler(excelItemHandler);
                         excelItemList.add(excelItem);
                         break;
@@ -369,7 +369,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
                 for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                     // 2、构造导入item list
                     for (ESExcelItem excelItem : allExcelItemList) {
-                        if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
+                        if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.getItemName())) {
                             excelItem.setImportItemHandler(excelItemHandler);
                             excelItemList.add(excelItem);
                             break;
