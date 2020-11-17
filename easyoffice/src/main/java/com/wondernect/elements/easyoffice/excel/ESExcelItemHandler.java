@@ -12,12 +12,6 @@ package com.wondernect.elements.easyoffice.excel;
 public abstract class ESExcelItemHandler<T> {
 
     /**
-     * 返回该handler处理的属性名
-     * @return 属性名
-     */
-    private String itemName;
-
-    /**
      * excel列展示名称
      * @return excel列展示名称
      */
@@ -31,18 +25,12 @@ public abstract class ESExcelItemHandler<T> {
 
     /**
      * 构造方法
-     * @param itemName 属性名
      * @param itemTitle 导入导出标题
      * @param itemOrder 导入导出排序
      */
-    public ESExcelItemHandler(String itemName, String itemTitle, int itemOrder) {
-        this.itemName = itemName;
+    public ESExcelItemHandler(String itemTitle, int itemOrder) {
         this.itemTitle = itemTitle;
         this.itemOrder = itemOrder;
-    }
-
-    public String getItemName() {
-        return itemName;
     }
 
     public String getItemTitle() {
@@ -52,6 +40,8 @@ public abstract class ESExcelItemHandler<T> {
     public int getItemOrder() {
         return itemOrder;
     }
+
+    public abstract String itemName();
 
     /**
      * 导出处理对应属性值，返回展示的值

@@ -285,7 +285,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return ESExcelUtils.getAllEntityExcelItem(cls);
     }
 
-    public void excelDataExport(String exportServiceIdentifier, Class<RES_DTO> valueType, List<RES_DTO> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+    public void excelDataExport(String templateId, Class<RES_DTO> valueType, List<RES_DTO> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
         List<ESExcelItem> allExcelItemList = ESExcelUtils.getAllEntityExcelItem(valueType);
         if (CollectionUtils.isEmpty(allExcelItemList)) {
             logger.error("导出excel对象属性数量必须大于0");
@@ -293,19 +293,19 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         }
         List<ExcelExportEntity> excelExportEntityList = new ArrayList<>();
         List<ESExcelItem> excelItemList = new ArrayList<>();
-        List<ESExcelItemHandler> excelItemHandlerList = generateExcelExportItemHandlerList(exportServiceIdentifier);
+        List<ESExcelItemHandler> excelItemHandlerList = generateExcelItemHandlerList(templateId);
         if (CollectionUtils.isNotEmpty(excelItemHandlerList)) {
             for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                 // 1、构造导出entity list
                 ExcelExportEntity excelExportEntity = new ExcelExportEntity(
-                        ESStringUtils.isNotBlank(excelItemHandler.getItemTitle()) ? excelItemHandler.getItemTitle() : excelItemHandler.getItemName(),
-                        excelItemHandler.getItemName()
+                        ESStringUtils.isNotBlank(excelItemHandler.getItemTitle()) ? excelItemHandler.getItemTitle() : excelItemHandler.itemName(),
+                        excelItemHandler.itemName()
                 );
                 excelExportEntity.setOrderNum(excelItemHandler.getItemOrder());
                 excelExportEntityList.add(excelExportEntity);
                 // 2、构造导出item list
                 for (ESExcelItem excelItem : allExcelItemList) {
-                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.getItemName())) {
+                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
                         if (ESStringUtils.isNotBlank(excelItemHandler.getItemTitle())) {
                             excelItem.setTitle(excelItemHandler.getItemTitle());
                         }
@@ -335,7 +335,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         EasyExcel.exportExcel(excelExportEntityList, dataList, title, sheetName, fileName, request, response);
     }
 
-    public void excelDataImport(String importServiceIdentifier, Class<RES_DTO> valueType, int titleRows, int headRows, InputStream fileInputStream, String failedfileName, HttpServletRequest request, HttpServletResponse response) {
+    public void excelDataImport(String templateId, Class<RES_DTO> valueType, int titleRows, int headRows, InputStream fileInputStream, String failedfileName, HttpServletRequest request, HttpServletResponse response) {
         List<ESExcelItem> allExcelItemList = ESExcelUtils.getAllEntityExcelItem(valueType);
         if (CollectionUtils.isEmpty(allExcelItemList)) {
             logger.error("导入excel对象属性数量必须大于0");
@@ -345,11 +345,11 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         ImportParams params = new ImportParams();
         params.setTitleRows(titleRows);
         params.setHeadRows(headRows);
-        ESExcelImportDataHandler excelImportDataHandler = generateExcelImportDataHandler(importServiceIdentifier);
+        ESExcelImportDataHandler excelImportDataHandler = generateExcelImportDataHandler(templateId);
         if (ESObjectUtils.isNotNull(excelImportDataHandler)) {
             params.setDataHandler(excelImportDataHandler);
         }
-        ESExcelImportVerifyHandler excelImportVerifyHandler = generateExcelImportVerifyHandler(importServiceIdentifier);
+        ESExcelImportVerifyHandler excelImportVerifyHandler = generateExcelImportVerifyHandler(templateId);
         if (ESObjectUtils.isNotNull(excelImportVerifyHandler)) {
             params.setNeedVerify(true);
             params.setVerifyHandler(excelImportVerifyHandler);
@@ -364,12 +364,12 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         // 2、成功导入数据处理
         if (CollectionUtils.isNotEmpty(result.getList())) {
             List<ESExcelItem> excelItemList = new ArrayList<>();
-            List<ESExcelItemHandler> excelItemHandlerList = generateExcelImportItemHandlerList(importServiceIdentifier);
+            List<ESExcelItemHandler> excelItemHandlerList = generateExcelItemHandlerList(templateId);
             if (CollectionUtils.isNotEmpty(excelItemHandlerList)) {
                 for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                     // 2、构造导入item list
                     for (ESExcelItem excelItem : allExcelItemList) {
-                        if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.getItemName())) {
+                        if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
                             excelItem.setImportItemHandler(excelItemHandler);
                             excelItemList.add(excelItem);
                             break;
@@ -399,19 +399,15 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return null;
     }
 
-    public List<ESExcelItemHandler> generateExcelExportItemHandlerList(String exportServiceIdentifier) {
+    public List<ESExcelItemHandler> generateExcelItemHandlerList(String templateId) {
         return new ArrayList<>();
     }
 
-    public List<ESExcelItemHandler> generateExcelImportItemHandlerList(String importServiceIdentifier) {
-        return new ArrayList<>();
-    }
-
-    public ESExcelImportDataHandler generateExcelImportDataHandler(String importServiceIdentifier) {
+    public ESExcelImportDataHandler generateExcelImportDataHandler(String templateId) {
         return null;
     }
 
-    public ESExcelImportVerifyHandler generateExcelImportVerifyHandler(String importServiceIdentifier) {
+    public ESExcelImportVerifyHandler generateExcelImportVerifyHandler(String templateId) {
         return null;
     }
 }

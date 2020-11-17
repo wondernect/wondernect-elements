@@ -89,7 +89,7 @@ public final class ESExcelUtils {
         if (CollectionUtils.isNotEmpty(excelItemList)) {
             for (ESExcelItem excelItem : excelItemList) {
                 Object itemValue = map.get(excelItem.getName());
-                if (null != excelItem.getImportItemHandler() && ESStringUtils.equals(excelItem.getName(), excelItem.getImportItemHandler().getItemName())) {
+                if (null != excelItem.getImportItemHandler() && ESStringUtils.equals(excelItem.getName(), excelItem.getImportItemHandler().itemName())) {
                     itemValue = excelItem.getImportItemHandler().handleExcelImportItemObject(itemValue);
                     result.put(excelItem.getName(), itemValue);
                 }
