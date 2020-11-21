@@ -285,7 +285,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return ESExcelUtils.getAllEntityExcelItem(cls);
     }
 
-    public void excelDataExport(String templateId, Class<RES_DTO> valueType, List<RES_DTO> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
+    public <S> void excelDataExport(String templateId, Class<S> valueType, List<S> resDtoList, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
         List<ESExcelItem> allExcelItemList = ESExcelUtils.getAllEntityExcelItem(valueType);
         if (CollectionUtils.isEmpty(allExcelItemList)) {
             logger.error("导出excel对象属性数量必须大于0");
@@ -335,7 +335,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         EasyExcel.exportExcel(excelExportEntityList, dataList, title, sheetName, fileName, request, response);
     }
 
-    public void excelDataImport(String templateId, Class<RES_DTO> valueType, int titleRows, int headRows, InputStream fileInputStream, String failedfileName, HttpServletRequest request, HttpServletResponse response) {
+    public <S> void excelDataImport(String templateId, Class<S> valueType, int titleRows, int headRows, InputStream fileInputStream, String failedfileName, HttpServletRequest request, HttpServletResponse response) {
         List<ESExcelItem> allExcelItemList = ESExcelUtils.getAllEntityExcelItem(valueType);
         if (CollectionUtils.isEmpty(allExcelItemList)) {
             logger.error("导入excel对象属性数量必须大于0");
@@ -378,10 +378,10 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
                 }
             }
             for (Map<String, Object> map : result.getList()) {
-                RES_DTO responseDTO = ESExcelUtils.getImportObject(valueType, map, excelItemList);
+                S responseDTO = ESExcelUtils.getImportObject(valueType, map, excelItemList);
                 T entity = generate(responseDTO);
                 if (ESObjectUtils.isNotNull(entity)) {
-                    baseRDBManager.save(entity);
+                    excelDataImport(entity, responseDTO);
                 }
             }
         }
@@ -395,7 +395,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return null;
     }
 
-    public T generate(RES_DTO responseDTO) {
+    public <S> T generate(S responseDTO) {
         return null;
     }
 
@@ -409,5 +409,9 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
 
     public ESExcelImportVerifyHandler generateExcelImportVerifyHandler(String templateId) {
         return null;
+    }
+
+    public <S> void excelDataImport(T entity, S responseDTO) {
+
     }
 }
