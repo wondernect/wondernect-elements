@@ -269,7 +269,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
 
     public <S> void excelDataExport(
             String templateId,
-            Class<S> excelEntity,
+            Class<?> excelEntity,
             List<S> excelEntityDataList,
             String title,
             String sheetName,
@@ -326,9 +326,9 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         EasyExcel.exportExcel(excelExportEntityList, excelExportEntityDataList, title, sheetName, fileName, request, response);
     }
 
-    public <S> void excelDataImport(
+    public void excelDataImport(
             String templateId,
-            Class<S> excelEntity,
+            Class<?> excelEntity,
             ESExcelImportDataHandler excelImportDataHandler,
             ESExcelImportVerifyHandler excelImportVerifyHandler,
             int titleRows,
