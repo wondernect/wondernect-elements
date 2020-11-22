@@ -3,6 +3,7 @@ package com.wondernect.elements.easyoffice.excel;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,26 +14,26 @@ import java.util.Map;
  * Date: 2020-11-22 18:06
  * Description: excel String item handler
  */
-public class ESExcelEnumItemHandler<E extends Enum> extends ESExcelItemHandler<E> {
+public class ESExcelIDItemHandler<ID extends Serializable> extends ESExcelItemHandler<ID> {
 
-    private Map<E, String> dictionary = new HashMap<>();
+    private Map<ID, String> dictionary = new HashMap<>();
 
-    public ESExcelEnumItemHandler(String itemName, String itemTitle, int itemOrder) {
+    public ESExcelIDItemHandler(String itemName, String itemTitle, int itemOrder) {
         super(itemName, itemTitle, itemOrder);
     }
 
-    public ESExcelEnumItemHandler(String itemName, String itemTitle, int itemOrder, Map<E, String> dictionary) {
+    public ESExcelIDItemHandler(String itemName, String itemTitle, int itemOrder, Map<ID, String> dictionary) {
         super(itemName, itemTitle, itemOrder);
         this.dictionary = dictionary;
     }
 
     @Override
-    public Object handleExcelExportItemObject(E object) {
+    public Object handleExcelExportItemObject(ID object) {
         if (ESObjectUtils.isNotNull(object)) {
             Object value = null;
-            for (E enumValue : dictionary.keySet()) {
-                if (enumValue == object) {
-                    value = dictionary.get(enumValue);
+            for (ID key : dictionary.keySet()) {
+                if (key == object) {
+                    value = dictionary.get(key);
                     break;
                 }
             }
@@ -43,16 +44,16 @@ public class ESExcelEnumItemHandler<E extends Enum> extends ESExcelItemHandler<E
     }
 
     @Override
-    public E handleExcelImportItemObject(Object object) {
+    public ID handleExcelImportItemObject(Object object) {
         if (ESObjectUtils.isNotNull(object)) {
-            E value = null;
-            for (E enumValue : dictionary.keySet()) {
-                if (ESStringUtils.equals(dictionary.get(enumValue), object.toString())) {
-                    value = enumValue;
+            ID result = null;
+            for (ID key : dictionary.keySet()) {
+                if (ESStringUtils.equals(dictionary.get(key), object.toString())) {
+                    result = key;
                     break;
                 }
             }
-            return value;
+            return result;
         } else {
             return null;
         }
