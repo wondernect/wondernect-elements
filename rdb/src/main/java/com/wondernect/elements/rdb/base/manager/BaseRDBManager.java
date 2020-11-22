@@ -8,6 +8,8 @@ import com.wondernect.elements.rdb.criteria.Criteria;
 import com.wondernect.elements.rdb.request.PageRequestData;
 import com.wondernect.elements.rdb.request.SortData;
 import com.wondernect.elements.rdb.response.PageResponseData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -21,6 +23,8 @@ import java.util.List;
  * Description: rdb manager
  */
 public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializable> {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseRDBManager.class);
 
     @Autowired
     private BaseRDBDao<T, ID> baseRDBDao;

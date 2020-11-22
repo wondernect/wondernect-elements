@@ -112,7 +112,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return baseRDBManager.count(criteria);
     }
 
-    public <S> long count(JPAQuery<S> jpaQuery) {
+    public long count(JPAQuery<T> jpaQuery) {
         return baseRDBManager.count(jpaQuery);
     }
 
@@ -124,7 +124,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return baseRDBManager.findAll(criteria, sortDataList);
     }
 
-    public <S> List<S> findAllEntity(JPAQuery<S> jpaQuery) {
+    public List<T> findAllEntity(JPAQuery<T> jpaQuery) {
         return baseRDBManager.findAll(jpaQuery);
     }
 
@@ -150,8 +150,15 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return resDtoList;
     }
 
-    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
-        return baseRDBManager.findAll(jpaQuery);
+    public List<RES_DTO> findAll(JPAQuery<T> jpaQuery) {
+        List<T> list = baseRDBManager.findAll(jpaQuery);
+        List<RES_DTO> resDtoList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T entity : list) {
+                resDtoList.add(generate(entity));
+            }
+        }
+        return resDtoList;
     }
 
     public T findOneEntity(List<SortData> sortDataList) {
@@ -162,7 +169,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return baseRDBManager.findOne(criteria, sortDataList);
     }
 
-    public <S> S findOneEntity(JPAQuery<S> jpaQuery) {
+    public T findOneEntity(JPAQuery<T> jpaQuery) {
         return baseRDBManager.findOne(jpaQuery);
     }
 
@@ -182,8 +189,12 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return generate(entity);
     }
 
-    public <S> S findOne(JPAQuery<S> jpaQuery) {
-        return baseRDBManager.findOne(jpaQuery);
+    public RES_DTO findOne(JPAQuery<T> jpaQuery) {
+        T entity = baseRDBManager.findOne(jpaQuery);
+        if (ESObjectUtils.isNull(entity)) {
+            return null;
+        }
+        return generate(entity);
     }
 
     public PageResponseData<T> findAllEntity(PageRequestData pageRequestData) {
@@ -194,7 +205,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return baseRDBManager.findAll(criteria, pageRequestData);
     }
 
-    public <S> PageResponseData<S> findAllEntity(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
+    public PageResponseData<T> findAllEntity(JPAQuery<T> jpaQuery, PageRequestData pageRequestData) {
         return baseRDBManager.findAll(jpaQuery, pageRequestData);
     }
 
@@ -234,16 +245,26 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         );
     }
 
-    public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
-        return baseRDBManager.findAll(jpaQuery, pageRequestData);
+    public PageResponseData<RES_DTO> findAll(JPAQuery<T> jpaQuery, PageRequestData pageRequestData) {
+        PageResponseData<T> pageResponseData = baseRDBManager.findAll(jpaQuery, pageRequestData);
+        List<T> list = pageResponseData.getDataList();
+        List<RES_DTO> resDtoList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (T entity : list) {
+                resDtoList.add(generate(entity));
+            }
+        }
+        return new PageResponseData<>(
+                pageResponseData.getPage(),
+                pageResponseData.getSize(),
+                pageResponseData.getTotalPages(),
+                pageResponseData.getTotalElements(),
+                resDtoList
+        );
     }
 
     public RES_DTO generate(T entity) {
         return null;
-    }
-
-    public List<ESExcelItem> excelItemList(Class<?> cls) {
-        return ESExcelUtils.getAllEntityExcelItem(cls);
     }
 
     public <S> void excelDataExport(
@@ -268,14 +289,14 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
             for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                 // 1、构造导出entity list
                 ExcelExportEntity excelExportEntity = new ExcelExportEntity(
-                        ESStringUtils.isNotBlank(excelItemHandler.getItemTitle()) ? excelItemHandler.getItemTitle() : excelItemHandler.itemName(),
-                        excelItemHandler.itemName()
+                        ESStringUtils.isNotBlank(excelItemHandler.getItemTitle()) ? excelItemHandler.getItemTitle() : excelItemHandler.getItemName(),
+                        excelItemHandler.getItemName()
                 );
                 excelExportEntity.setOrderNum(excelItemHandler.getItemOrder());
                 excelExportEntityList.add(excelExportEntity);
                 // 2、构造导出item list
                 for (ESExcelItem excelItem : allExcelItemList) {
-                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
+                    if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.getItemName())) {
                         if (ESStringUtils.isNotBlank(excelItemHandler.getItemTitle())) {
                             excelItem.setTitle(excelItemHandler.getItemTitle());
                         }
@@ -348,7 +369,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
                 for (ESExcelItemHandler excelItemHandler : excelItemHandlerList) {
                     // 2、构造导入item list
                     for (ESExcelItem excelItem : allExcelItemList) {
-                        if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.itemName())) {
+                        if (ESStringUtils.equals(excelItem.getName(), excelItemHandler.getItemName())) {
                             excelItem.setImportItemHandler(excelItemHandler);
                             excelItemList.add(excelItem);
                             break;
@@ -357,10 +378,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
                 }
             }
             for (Map<String, Object> map : result.getList()) {
-                S excelEntityData = ESExcelUtils.getImportObject(excelEntity, map, excelItemList);
-                if (ESObjectUtils.isNotNull(excelEntityData)) {
-                    saveExcelEntityData(excelEntityData);
-                }
+                saveExcelEntityData(map, excelItemList);
             }
         }
         // 响应错误数据
@@ -373,7 +391,7 @@ public abstract class BaseRDBService<RES_DTO extends BaseRDBResponseDTO, T exten
         return new ArrayList<>();
     }
 
-    public <S> void saveExcelEntityData(S excelEntityData) {
+    public void saveExcelEntityData(Map<String, Object> map, List<ESExcelItem> excelItemList) {
 
     }
 }
