@@ -41,6 +41,10 @@ public abstract class ESExcelItemHandler<T> {
         return itemOrder;
     }
 
+    /**
+     * 属性名
+     * @return 属性名
+     */
     public abstract String itemName();
 
     /**

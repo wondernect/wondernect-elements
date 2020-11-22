@@ -159,6 +159,17 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
         return count;
     }
 
+    public <S> long count(JPAQuery<S> jpaQuery) {
+        long count;
+        try {
+            count = jpaQuery.fetchCount();
+        } catch (RuntimeException e) {
+            logger.error("JPA Query数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_COUNT_GET_FAILED);
+        }
+        return count;
+    }
+
     public List<T> findAll(List<SortData> sortDataList) {
         List<T> list = new ArrayList<>();
         try {
@@ -172,6 +183,9 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
             logger.error("RDB数据列表获取失败:" + e.getLocalizedMessage(), e);
             throw new RDBException(RDBErrorEnum.RDB_LIST_GET_FAILED);
         }
+        if (ESObjectUtils.isNull(list)) {
+            list = new ArrayList<>();
+        }
         return list;
     }
 
@@ -182,6 +196,23 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
         } catch (RuntimeException e) {
             logger.error("RDB数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
             throw new RDBException(RDBErrorEnum.RDB_LIST_GET_FAILED);
+        }
+        if (ESObjectUtils.isNull(list)) {
+            list = new ArrayList<>();
+        }
+        return list;
+    }
+
+    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
+        List<S> list;
+        try {
+            list = jpaQuery.fetch();
+        } catch (RuntimeException e) {
+            logger.error("JPA Query数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_LIST_GET_FAILED);
+        }
+        if (ESObjectUtils.isNull(list)) {
+            list = new ArrayList<>();
         }
         return list;
     }
@@ -219,50 +250,6 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
         return list.get(0);
     }
 
-    public PageResponseData<T> findAll(PageRequestData pageRequestData) {
-        Page<T> page;
-        try {
-            page = baseRDBRepository.findAll(generateDefaultPageRequest(pageRequestData));
-        } catch (RuntimeException e) {
-            logger.error("RDB数据分页获取失败:" + e.getLocalizedMessage(), e);
-            throw new RDBException(RDBErrorEnum.RDB_PAGE_GET_FAILED);
-        }
-        return new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), page.getTotalPages(), page.getTotalElements(), page.getContent());
-    }
-
-    public PageResponseData<T> findAll(Criteria<T> criteria, PageRequestData pageRequestData) {
-        Page<T> page;
-        try {
-            page = baseRDBRepository.findAll(criteria, generateDefaultPageRequest(pageRequestData));
-        } catch (RuntimeException e) {
-            logger.error("RDB数据组合查询分页获取失败:" + e.getLocalizedMessage(), e);
-            throw new RDBException(RDBErrorEnum.RDB_PAGE_GET_FAILED);
-        }
-        return new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), page.getTotalPages(), page.getTotalElements(), page.getContent());
-    }
-
-    public <S> long count(JPAQuery<S> jpaQuery) {
-        long count;
-        try {
-            count = jpaQuery.fetchCount();
-        } catch (RuntimeException e) {
-            logger.error("JPA Query数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
-            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_COUNT_GET_FAILED);
-        }
-        return count;
-    }
-
-    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
-        List<S> list;
-        try {
-            list = jpaQuery.fetch();
-        } catch (RuntimeException e) {
-            logger.error("JPA Query数据组合查询列表获取失败:" + e.getLocalizedMessage(), e);
-            throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_LIST_GET_FAILED);
-        }
-        return list;
-    }
-
     public <S> S findOne(JPAQuery<S> jpaQuery) {
         List<S> list;
         try {
@@ -277,18 +264,55 @@ public abstract class BaseRDBDao<T extends BaseRDBModel, ID extends Serializable
         return list.get(0);
     }
 
+    public PageResponseData<T> findAll(PageRequestData pageRequestData) {
+        Page<T> page;
+        List<T> list;
+        try {
+            page = baseRDBRepository.findAll(generateDefaultPageRequest(pageRequestData));
+            list = page.getContent();
+        } catch (RuntimeException e) {
+            logger.error("RDB数据分页获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_PAGE_GET_FAILED);
+        }
+        if (ESObjectUtils.isNull(list)) {
+            list = new ArrayList<>();
+        }
+        return new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), page.getTotalPages(), page.getTotalElements(), list);
+    }
+
+    public PageResponseData<T> findAll(Criteria<T> criteria, PageRequestData pageRequestData) {
+        Page<T> page;
+        List<T> list;
+        try {
+            page = baseRDBRepository.findAll(criteria, generateDefaultPageRequest(pageRequestData));
+            list = page.getContent();
+        } catch (RuntimeException e) {
+            logger.error("RDB数据组合查询分页获取失败:" + e.getLocalizedMessage(), e);
+            throw new RDBException(RDBErrorEnum.RDB_PAGE_GET_FAILED);
+        }
+        if (ESObjectUtils.isNull(list)) {
+            list = new ArrayList<>();
+        }
+        return new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), page.getTotalPages(), page.getTotalElements(), list);
+    }
+
     public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
-        PageResponseData<S> pageResponseData;
+        int totalPages;
+        long totalElements;
+        List<S> list;
         try {
             JPAQueryPageRequest jpaQueryPageRequest = generateJPAQueryPageRequest(pageRequestData);
             QueryResults<S> results = jpaQuery.offset(jpaQueryPageRequest.getOffset()).limit(jpaQueryPageRequest.getLimit()).fetchResults();
-            int totalPages = Long.valueOf(results.getTotal() / results.getLimit()).intValue();
-            long totalElements = Long.valueOf(results.getTotal()).intValue();
-            pageResponseData = new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), totalPages, totalElements, results.getResults());
+            totalPages = Long.valueOf(results.getTotal() / results.getLimit()).intValue();
+            totalElements = Long.valueOf(results.getTotal()).intValue();
+            list = results.getResults();
         } catch (RuntimeException e) {
             logger.error("JPA Query数据组合查询分页获取失败:" + e.getLocalizedMessage(), e);
             throw new RDBException(RDBErrorEnum.RDB_JPA_QUERY_PAGE_GET_FAILED);
         }
-        return pageResponseData;
+        if (ESObjectUtils.isNull(list)) {
+            list = new ArrayList<>();
+        }
+        return new PageResponseData<>(pageRequestData.getPage(), pageRequestData.getSize(), totalPages, totalElements, list);
     }
 }

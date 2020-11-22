@@ -61,12 +61,20 @@ public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializ
         return baseRDBDao.count(criteria);
     }
 
+    public <S> long count(JPAQuery<S> jpaQuery) {
+        return baseRDBDao.count(jpaQuery);
+    }
+
     public List<T> findAll(List<SortData> sortDataList) {
         return baseRDBDao.findAll(sortDataList);
     }
 
     public List<T> findAll(Criteria<T> criteria, List<SortData> sortDataList) {
         return baseRDBDao.findAll(criteria, sortDataList);
+    }
+
+    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
+        return baseRDBDao.findAll(jpaQuery);
     }
 
     public T findOne(List<SortData> sortDataList) {
@@ -77,24 +85,16 @@ public abstract class BaseRDBManager<T extends BaseRDBModel, ID extends Serializ
         return baseRDBDao.findOne(criteria, sortDataList);
     }
 
+    public <S> S findOne(JPAQuery<S> jpaQuery) {
+        return baseRDBDao.findOne(jpaQuery);
+    }
+
     public PageResponseData<T> findAll(PageRequestData pageRequestData) {
         return baseRDBDao.findAll(pageRequestData);
     }
 
     public PageResponseData<T> findAll(Criteria<T> criteria, PageRequestData pageRequestData) {
         return baseRDBDao.findAll(criteria, pageRequestData);
-    }
-
-    public <S> long count(JPAQuery<S> jpaQuery) {
-        return baseRDBDao.count(jpaQuery);
-    }
-
-    public <S> List<S> findAll(JPAQuery<S> jpaQuery) {
-        return baseRDBDao.findAll(jpaQuery);
-    }
-
-    public <S> S findOne(JPAQuery<S> jpaQuery) {
-        return baseRDBDao.findOne(jpaQuery);
     }
 
     public <S> PageResponseData<S> findAll(JPAQuery<S> jpaQuery, PageRequestData pageRequestData) {
