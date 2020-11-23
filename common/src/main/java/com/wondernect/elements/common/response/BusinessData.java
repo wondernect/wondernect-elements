@@ -3,13 +3,18 @@ package com.wondernect.elements.common.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wondernect.elements.common.error.BusinessError;
 import com.wondernect.elements.common.exception.BusinessException;
+import com.wondernect.elements.common.utils.ESJSONObjectUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created on 2017/10/22.
@@ -21,6 +26,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ApiModel(description = "响应对象")
 public class BusinessData<T> implements Serializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(BusinessData.class);
 
     private static final long serialVersionUID = 6863694488955478047L;
 
@@ -92,6 +99,18 @@ public class BusinessData<T> implements Serializable {
      */
     public boolean success() {
         return "SUCCESS".equals(this.getCode());
+    }
+
+    /**
+     * response响应错误信息
+     */
+    public static void error(String message, HttpServletResponse response) {
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            response.getOutputStream().write(ESJSONObjectUtils.jsonObjectToJsonString(new BusinessData(message)).getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage(), e);
+        }
     }
 
     /**
