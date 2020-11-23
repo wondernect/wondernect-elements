@@ -197,6 +197,11 @@ public final class ESRegexUtils {
     }
 
     public static void main(String[] args) throws SQLException, UnsupportedEncodingException {
+        System.out.println(isInteger("9223372036854775807"));
+        System.out.println(Long.valueOf("9223372036854775807"));
+        System.out.println(isDouble("3.2"));
+        System.out.println(Double.valueOf("3.2"));
+        System.out.println(Float.valueOf("3.2"));
         String pattern = "GET:/v5/wfs/fastdfs/user/[^/]+/page";
         String value = "GET:/v5/wfs/fastdfs/user/2shdj_gfaksfhja_shf454524545/page";
         String pattern1 = "GET:/v5/wfs/fastdfs/[^/]+/user/[^/]+/page";

@@ -1,14 +1,15 @@
-package com.wondernect.elements.easyoffice.excel;
+package com.wondernect.elements.easyoffice.excel.handler;
 
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
+import com.wondernect.elements.easyoffice.excel.ESExcelItemHandler;
 
 /**
  * Copyright (C), 2020, wondernect.com
  * FileName: ESExcelBooleanItemHandler
  * Author: chenxun
  * Date: 2020-11-22 18:06
- * Description: excel String item handler
+ * Description: excel Boolean item handler
  */
 public class ESExcelBooleanItemHandler extends ESExcelItemHandler<Boolean> {
 

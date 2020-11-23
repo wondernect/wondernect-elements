@@ -1,31 +1,32 @@
-package com.wondernect.elements.easyoffice.excel;
+package com.wondernect.elements.easyoffice.excel.handler;
 
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESRegexUtils;
+import com.wondernect.elements.easyoffice.excel.ESExcelItemHandler;
 
 /**
  * Copyright (C), 2020, wondernect.com
- * FileName: ESExcelDoubleItemHandler
+ * FileName: ESExcelLongItemHandler
  * Author: chenxun
  * Date: 2020-11-22 18:06
- * Description: excel String item handler
+ * Description: excel Long item handler
  */
-public class ESExcelIntegerItemHandler extends ESExcelItemHandler<Integer> {
+public class ESExcelLongItemHandler extends ESExcelItemHandler<Long> {
 
-    public ESExcelIntegerItemHandler(String itemName, String itemTitle, int itemOrder) {
+    public ESExcelLongItemHandler(String itemName, String itemTitle, int itemOrder) {
         super(itemName, itemTitle, itemOrder);
     }
 
     @Override
-    public Object handleExcelExportItemObject(Integer object) {
+    public Object handleExcelExportItemObject(Long object) {
         return object;
     }
 
     @Override
-    public Integer handleExcelImportItemObject(Object object) {
+    public Long handleExcelImportItemObject(Object object) {
         if (ESObjectUtils.isNotNull(object)) {
             if (ESRegexUtils.isInteger(object.toString())) {
-                return Integer.valueOf(object.toString());
+                return Long.valueOf(object.toString());
             } else {
                 return null;
             }
