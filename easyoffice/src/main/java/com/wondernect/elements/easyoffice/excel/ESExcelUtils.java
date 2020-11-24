@@ -37,10 +37,10 @@ public final class ESExcelUtils {
             List<Field> fieldList = ESClassUtils.getFieldsListWithAnnotation(cls, io.swagger.annotations.ApiModelProperty.class);
             if (CollectionUtils.isNotEmpty(fieldList)) {
                 for (Field field : fieldList) {
-                    String name = ESClassUtils.getFieldName(field);
+                    String name = ESStringUtils.toUnderLineString(ESClassUtils.getFieldName(field));
                     String type = ESClassUtils.getFieldType(field);
-                    String getFieldName = "get" + ESStringUtils.firstLetterToUpper(name);
-                    String setFieldName = "set" + ESStringUtils.firstLetterToUpper(name);
+                    String getFieldName = "get" + ESStringUtils.firstLetterToUpper(ESClassUtils.getFieldName(field));
+                    String setFieldName = "set" + ESStringUtils.firstLetterToUpper(ESClassUtils.getFieldName(field));
                     ApiModelProperty apiModelProperty = field.getAnnotation(io.swagger.annotations.ApiModelProperty.class);
                     if (null != apiModelProperty) {
                         String title = apiModelProperty.value();

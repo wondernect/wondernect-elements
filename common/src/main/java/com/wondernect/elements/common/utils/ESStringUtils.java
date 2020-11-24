@@ -3,6 +3,8 @@ package com.wondernect.elements.common.utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * wondernect.com
@@ -31,7 +33,7 @@ public class ESStringUtils extends StringUtils {
      * 首字母小写
      */
     public static String firstLetterToLower(String str) {
-        if (org.apache.commons.lang.StringUtils.isBlank(str)) {
+        if (isBlank(str)) {
             return "";
         }
         return str.replaceFirst(str.substring(0, 1), str.substring(0, 1).toLowerCase());
@@ -41,10 +43,19 @@ public class ESStringUtils extends StringUtils {
      * 首字母大写
      */
     public static String firstLetterToUpper(String str) {
-        if (org.apache.commons.lang.StringUtils.isBlank(str)) {
+        if (isBlank(str)) {
             return "";
         }
         return str.replaceFirst(str.substring(0, 1), str.substring(0, 1).toUpperCase());
+    }
+
+    /**
+     * 分隔符
+     */
+    public static String toUnderLineString(String str) {
+        return firstLetterToLower(
+                Arrays.stream(Objects.requireNonNull(splitByCharacterTypeCamelCase(str))).reduce(((s1, s2) -> s1.toLowerCase().concat("_").concat(s2.toLowerCase()))).orElse("")
+        );
     }
 
     /**
