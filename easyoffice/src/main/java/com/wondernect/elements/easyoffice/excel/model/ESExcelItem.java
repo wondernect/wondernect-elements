@@ -1,4 +1,6 @@
-package com.wondernect.elements.easyoffice.excel;
+package com.wondernect.elements.easyoffice.excel.model;
+
+import com.wondernect.elements.easyoffice.excel.handler.ESExcelItemHandler;
 
 import java.util.Objects;
 

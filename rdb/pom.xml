@@ -51,13 +51,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- easyoffice -->
-        <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>easyoffice</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- property-source -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>

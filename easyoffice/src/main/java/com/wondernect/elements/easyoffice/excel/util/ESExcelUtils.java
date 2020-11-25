@@ -1,9 +1,10 @@
-package com.wondernect.elements.easyoffice.excel;
+package com.wondernect.elements.easyoffice.excel.util;
 
 import com.wondernect.elements.common.utils.ESClassUtils;
 import com.wondernect.elements.common.utils.ESJSONObjectUtils;
 import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
+import com.wondernect.elements.easyoffice.excel.model.ESExcelItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.collections4.CollectionUtils;

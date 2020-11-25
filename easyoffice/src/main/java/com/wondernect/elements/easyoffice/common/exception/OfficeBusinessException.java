@@ -21,4 +21,8 @@ public class OfficeBusinessException extends BusinessException {
     public OfficeBusinessException(OfficeBusinessError officeBusinessError) {
         super(officeBusinessError.getMessage(), officeBusinessError.getCode());
     }
+
+    public OfficeBusinessException(String message) {
+        super(message);
+    }
 }
