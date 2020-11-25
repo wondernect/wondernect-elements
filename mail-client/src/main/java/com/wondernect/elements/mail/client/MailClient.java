@@ -1,6 +1,7 @@
 package com.wondernect.elements.mail.client;
 
 import com.wondernect.elements.mail.client.util.MailSendResult;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Map;
 
@@ -16,10 +17,10 @@ public interface MailClient {
     /**
      * plain文本
      */
-    MailSendResult sendPlainTextMail(String toAddress, String subject, String plainText, Map<String, Object> varibles);
+    MailSendResult sendPlainTextMail(JavaMailSenderImpl javaMailSender,String personal, String toAddress, String subject, String plainText, Map<String, Object> varibles);
 
     /**
      * html文本
      */
-    MailSendResult sendHtmlMail(String toAddress, String subject, String htmlContent);
+    MailSendResult sendHtmlMail(JavaMailSenderImpl javaMailSender,String personal, String toAddress, String subject, String htmlContent);
 }

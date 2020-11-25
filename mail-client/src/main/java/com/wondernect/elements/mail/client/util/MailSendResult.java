@@ -28,7 +28,7 @@ public class MailSendResult implements Serializable {
     @ApiModelProperty(notes = "邮件发送者")
     private String fromAddress;
 
-    @JsonProperty("from_address")
+    @JsonProperty("from_name")
     @ApiModelProperty(notes = "邮件发送者名称")
     private String fromName;
 

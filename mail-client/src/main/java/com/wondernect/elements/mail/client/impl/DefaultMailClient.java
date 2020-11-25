@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -32,14 +34,14 @@ public class DefaultMailClient implements MailClient {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultMailClient.class);
 
-    @Autowired
-    private MailClientConfigProperties mailClientConfigProperties;
+//    @Autowired
+//    private MailClientConfigProperties mailClientConfigProperties;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+//    @Autowired
+//    private JavaMailSender javaMailSender;
 
     @Override
-    public MailSendResult sendPlainTextMail(String toAddress, String subject, String plainText, Map<String, Object> varibles) {
+    public MailSendResult sendPlainTextMail(JavaMailSenderImpl javaMailSender, String personal, String toAddress, String subject, String plainText, Map<String, Object> varibles) {
         if (MapUtils.isNotEmpty(varibles)) {
             for (String key : varibles.keySet()) {
                 if (ESObjectUtils.isNull(varibles.get(key))) {
@@ -48,31 +50,33 @@ public class DefaultMailClient implements MailClient {
                 plainText = plainText.replace(key, varibles.get(key).toString());
             }
         }
-        return sendMail(mailClientConfigProperties.getFromAddress(), mailClientConfigProperties.getFromName(), mailClientConfigProperties.getCharset(), toAddress, subject, plainText, false);
+        return sendMail(javaMailSender,javaMailSender.getUsername(), personal, toAddress, subject, plainText, false);
     }
 
     @Override
-    public MailSendResult sendHtmlMail(String toAddress, String subject, String htmlContent) {
-        return sendMail(mailClientConfigProperties.getFromAddress(), mailClientConfigProperties.getFromName(), mailClientConfigProperties.getCharset(), toAddress, subject, htmlContent, true);
+    public MailSendResult sendHtmlMail(JavaMailSenderImpl javaMailSender, String personal, String toAddress, String subject, String htmlContent) {
+        return sendMail(javaMailSender,javaMailSender.getUsername(), personal, toAddress, subject, htmlContent, true);
     }
 
-    private MailSendResult sendMail(String fromAddress, String fromName, String charset, String toAddress, String subject, String content, boolean isHtml) {
+    private MailSendResult sendMail(JavaMailSenderImpl javaMailSender,String fromAddress, String fromName, String toAddress, String subject, String content, boolean isHtml) {
         MailSendResult mailSendResult = null;
-        MimeMessage email = javaMailSender.createMimeMessage();
-        InternetAddress address = null;
+//        MimeMessage email = javaMailSender.createMimeMessage();
+//        InternetAddress address = null;
+//        try {
+//            address = new InternetAddress(fromAddress, MimeUtility.encodeText(fromName), charset);
+//        } catch (UnsupportedEncodingException e) {
+//            logger.error("MailClient send mail failed, message={}, stacktrace={}", e.getLocalizedMessage(), e.getStackTrace());
+//            mailSendResult = new MailSendResult(fromAddress, fromName, toAddress, subject, content, false, e.getLocalizedMessage());
+//        }
+//        if (ESObjectUtils.isNotNull(mailSendResult)) {
+//            return mailSendResult;
+//        }
+//        MimeMessageHelper mimeMessageHelper;
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            address = new InternetAddress(fromAddress, MimeUtility.encodeText(fromName), charset);
-        } catch (UnsupportedEncodingException e) {
-            logger.error("MailClient send mail failed, message={}, stacktrace={}", e.getLocalizedMessage(), e.getStackTrace());
-            mailSendResult = new MailSendResult(fromAddress, fromName, toAddress, subject, content, false, e.getLocalizedMessage());
-        }
-        if (ESObjectUtils.isNotNull(mailSendResult)) {
-            return mailSendResult;
-        }
-        MimeMessageHelper mimeMessageHelper;
-        try {
-            mimeMessageHelper = new MimeMessageHelper(email, true);
-            mimeMessageHelper.setFrom(address);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());
+            mimeMessageHelper.setFrom(fromAddress);
             mimeMessageHelper.setTo(toAddress);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(content, isHtml);
@@ -84,7 +88,7 @@ public class DefaultMailClient implements MailClient {
             return mailSendResult;
         }
         try {
-            javaMailSender.send(email);
+            javaMailSender.send(mimeMessage);
         } catch (MailException e) {
             logger.error("MailClient send mail failed, message={}, stacktrace={}", e.getLocalizedMessage(), e.getStackTrace());
             mailSendResult = new MailSendResult(fromAddress, fromName, toAddress, subject, content, false, e.getLocalizedMessage());
