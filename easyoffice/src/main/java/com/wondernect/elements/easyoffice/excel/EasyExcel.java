@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -189,7 +190,7 @@ public final class EasyExcel {
     }
 
     /**
-     * excel导出
+     * 1、pojo excel导出(请求响应)
      * @param dataSet 数据集合
      * @param title 表格名称
      * @param sheetName sheetName
@@ -203,7 +204,20 @@ public final class EasyExcel {
     }
 
     /**
-     * excel导出
+     * 1、pojo excel导出(输出到文件)
+     * @param dataSet 数据集合
+     * @param title 表格名称
+     * @param sheetName sheetName
+     * @param pojoClass 自定义excle pojo
+     * @param filePath 导出文件路径
+     * @param fileName 导出文件名称
+     */
+    public static String exportExcel(Collection<?> dataSet, String title, String sheetName, Class<?> pojoClass, String filePath, String fileName) {
+        return exportExcel(dataSet, new ExportParams(title, sheetName), pojoClass, filePath, fileName);
+    }
+
+    /**
+     * 1、pojo excel导出(请求响应)
      * @param dataSet 数据集合
      * @param exportParams 表格相关参数
      * @param pojoClass 自定义excel pojo
@@ -217,20 +231,7 @@ public final class EasyExcel {
     }
 
     /**
-     * excel导出
-     * @param dataSet 数据集合
-     * @param title 表格名称
-     * @param sheetName sheetName
-     * @param pojoClass 自定义excle pojo
-     * @param filePath 导出文件路径
-     * @param fileName 导出文件名称
-     */
-    public static String exportExcel(Collection<?> dataSet, String title, String sheetName, Class<?> pojoClass, String filePath, String fileName) {
-        return exportExcel(dataSet, new ExportParams(title, sheetName), pojoClass, filePath, fileName);
-    }
-
-    /**
-     * excel导出
+     * 1、pojo excel导出(输出到文件)
      * @param dataSet 数据集合
      * @param exportParams 表格相关参数
      * @param pojoClass 自定义excel pojo
@@ -243,7 +244,7 @@ public final class EasyExcel {
     }
 
     /**
-     * excel导出
+     * 2、自定义title&data excel导出(请求响应)
      * @param entityList 自定义excel header
      * @param dataSet 数据集合
      * @param title 表格名称
@@ -253,11 +254,26 @@ public final class EasyExcel {
      * @param response 响应
      */
     public static void exportExcel(List<ExcelExportEntity> entityList, Collection<? extends Map<?, ?>> dataSet, String title, String sheetName, String fileName, HttpServletRequest request, HttpServletResponse response) {
-        exportExcel(entityList, dataSet, new ExportParams(title, sheetName), fileName, request, response);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(title, sheetName), entityList, dataSet);
+        exportExcel(workbook, fileName, request, response);
     }
 
     /**
-     * excel导出
+     * 2、自定义title&data excel导出(输出到文件)
+     * @param entityList 自定义excel header
+     * @param dataSet 数据集合
+     * @param title 表格名称
+     * @param sheetName sheetName
+     * @param filePath 导出文件路径
+     * @param fileName 导出文件名称
+     */
+    public static String exportExcel(List<ExcelExportEntity> entityList, Collection<? extends Map<?, ?>> dataSet, String title, String sheetName, String filePath, String fileName) {
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(title, sheetName), entityList, dataSet);
+        return exportExcel(workbook, filePath, fileName);
+    }
+
+    /**
+     * 2、自定义title&data excel导出(请求响应)
      * @param entityList 自定义excel header
      * @param dataSet 数据集合
      * @param exportParams 表格相关参数
@@ -271,7 +287,20 @@ public final class EasyExcel {
     }
 
     /**
-     * 模板导出(请求响应)
+     * 2、自定义title&data excel导出(输出到文件)
+     * @param entityList 自定义excel header
+     * @param dataSet 数据集合
+     * @param exportParams 表格相关参数
+     * @param filePath 导出文件路径
+     * @param fileName 导出文件名称
+     */
+    public static void exportExcel(List<ExcelExportEntity> entityList, Collection<? extends Map<?, ?>> dataSet, ExportParams exportParams, String filePath, String fileName) {
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, entityList, dataSet);
+        exportExcel(workbook, filePath, fileName);
+    }
+
+    /**
+     * 3、模板导出(请求响应)
      */
     public static void exportExcel(TemplateExportParams params, Map<String, Object> map, String fileName, HttpServletRequest request, HttpServletResponse response) {
         Workbook workbook = ExcelExportUtil.exportExcel(params, map);
@@ -279,7 +308,7 @@ public final class EasyExcel {
     }
 
     /**
-     * 模板导出(输出到文件)
+     * 3、模板导出(输出到文件)
      */
     public static String exportExcel(TemplateExportParams params, Map<String, Object> map, String filePath, String fileName) {
         Workbook workbook = ExcelExportUtil.exportExcel(params, map);
@@ -299,7 +328,7 @@ public final class EasyExcel {
             if (isIE(request)) {
                 fileName = URLEncoder.encode(fileName, "UTF-8");
             } else {
-                fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
             }
             response.setHeader("content-type", "application/vnd.ms-excel");
             response.setHeader("content-disposition", "attachment;filename=" + fileName);
