@@ -34,14 +34,8 @@ public class DefaultMailClient implements MailClient {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultMailClient.class);
 
-//    @Autowired
-//    private MailClientConfigProperties mailClientConfigProperties;
-
-//    @Autowired
-//    private JavaMailSender javaMailSender;
-
     @Override
-    public MailSendResult sendPlainTextMail(JavaMailSenderImpl javaMailSender, String personal, String toAddress, String subject, String plainText, Map<String, Object> varibles) {
+    public MailSendResult sendPlainTextMail(String host, int port, String username, String password, String personal, String toAddress, String subject, String plainText, Map<String, Object> varibles) {
         if (MapUtils.isNotEmpty(varibles)) {
             for (String key : varibles.keySet()) {
                 if (ESObjectUtils.isNull(varibles.get(key))) {
@@ -50,29 +44,22 @@ public class DefaultMailClient implements MailClient {
                 plainText = plainText.replace(key, varibles.get(key).toString());
             }
         }
-        return sendMail(javaMailSender,javaMailSender.getUsername(), personal, toAddress, subject, plainText, false);
+        return sendMail(host, port, username, password, username, personal, toAddress, subject, plainText, false);
     }
 
     @Override
-    public MailSendResult sendHtmlMail(JavaMailSenderImpl javaMailSender, String personal, String toAddress, String subject, String htmlContent) {
-        return sendMail(javaMailSender,javaMailSender.getUsername(), personal, toAddress, subject, htmlContent, true);
+    public MailSendResult sendHtmlMail(String host, int port, String username, String password, String personal, String toAddress, String subject, String htmlContent) {
+        return sendMail(host, port, username, password, username, personal, toAddress, subject, htmlContent, true);
     }
 
-    private MailSendResult sendMail(JavaMailSenderImpl javaMailSender,String fromAddress, String fromName, String toAddress, String subject, String content, boolean isHtml) {
+    private MailSendResult sendMail(String host, int port, String username, String password,
+                                    String fromAddress, String fromName, String toAddress, String subject, String content, boolean isHtml) {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(host);
+        javaMailSender.setPort(port);
+        javaMailSender.setUsername(username);
+        javaMailSender.setPassword(password);
         MailSendResult mailSendResult = null;
-//        MimeMessage email = javaMailSender.createMimeMessage();
-//        InternetAddress address = null;
-//        try {
-//            address = new InternetAddress(fromAddress, MimeUtility.encodeText(fromName), charset);
-//        } catch (UnsupportedEncodingException e) {
-//            logger.error("MailClient send mail failed, message={}, stacktrace={}", e.getLocalizedMessage(), e.getStackTrace());
-//            mailSendResult = new MailSendResult(fromAddress, fromName, toAddress, subject, content, false, e.getLocalizedMessage());
-//        }
-//        if (ESObjectUtils.isNotNull(mailSendResult)) {
-//            return mailSendResult;
-//        }
-//        MimeMessageHelper mimeMessageHelper;
-
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());

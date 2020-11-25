@@ -17,10 +17,10 @@ public interface MailClient {
     /**
      * plain文本
      */
-    MailSendResult sendPlainTextMail(JavaMailSenderImpl javaMailSender,String personal, String toAddress, String subject, String plainText, Map<String, Object> varibles);
+    MailSendResult sendPlainTextMail(String host, int port, String username, String password, String personal, String toAddress, String subject, String plainText, Map<String, Object> varibles);
 
     /**
      * html文本
      */
-    MailSendResult sendHtmlMail(JavaMailSenderImpl javaMailSender,String personal, String toAddress, String subject, String htmlContent);
+    MailSendResult sendHtmlMail(String host, int port, String username, String password, String personal, String toAddress, String subject, String htmlContent);
 }
