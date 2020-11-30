@@ -12,17 +12,29 @@ import com.wondernect.elements.common.utils.ESStringUtils;
  */
 public class ESExcelBooleanItemHandler extends ESExcelItemHandler<Boolean> {
 
+    private String trueString;
+
+    private String falseString;
+
     public ESExcelBooleanItemHandler(String itemName, String itemTitle, int itemOrder) {
         super(itemName, itemTitle, itemOrder);
+        trueString = "是";
+        falseString = "否";
+    }
+
+    public ESExcelBooleanItemHandler(String itemName, String itemTitle, int itemOrder, String trueString, String falseString) {
+        super(itemName, itemTitle, itemOrder);
+        this.trueString = trueString;
+        this.falseString = falseString;
     }
 
     @Override
     public Object handleExcelExportItemObject(Boolean object) {
         if (ESObjectUtils.isNotNull(object)) {
             if (object) {
-                return "是";
+                return trueString;
             } else {
-                return "否";
+                return falseString;
             }
         } else {
             return null;
@@ -32,9 +44,9 @@ public class ESExcelBooleanItemHandler extends ESExcelItemHandler<Boolean> {
     @Override
     public Boolean handleExcelImportItemObject(Object object) {
         if (ESObjectUtils.isNotNull(object)) {
-            if (ESStringUtils.equals("是", object.toString())) {
+            if (ESStringUtils.equals(trueString, object.toString())) {
                 return true;
-            } else if (ESStringUtils.equals("否", object.toString())) {
+            } else if (ESStringUtils.equals(falseString, object.toString())) {
                 return false;
             } else {
                 return null;
