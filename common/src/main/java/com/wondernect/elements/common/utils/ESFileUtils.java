@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Copyright (C), 2017-2019, wondernect.com
@@ -119,6 +120,17 @@ public final class ESFileUtils {
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage(), e);
         }
+    }
+
+    public static InputStream getFileInputStream(String filePath) {
+        File file = new File(filePath);
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (IOException e) {
+            logger.error("load input stream from local path failed", e);
+        }
+        return inputStream;
     }
 
     /**

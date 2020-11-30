@@ -4,9 +4,19 @@ import eu.bitwalker.useragentutils.UserAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.*;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 /**
  * wondernect.com
@@ -115,5 +125,61 @@ public final class ESHttpUtils {
             param = defaultValue;
         }
         return param;
+    }
+
+    private static class miTM implements TrustManager, X509TrustManager {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        public boolean isServerTrusted(X509Certificate[] certs) {
+            return true;
+        }
+
+        public boolean isClientTrusted(X509Certificate[] certs) {
+            return true;
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+
+        }
+
+        public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+
+        }
+    }
+
+    private static void trustAllHttpsCertificates() throws Exception {
+        TrustManager[] trustAllCerts = new TrustManager[1];
+        TrustManager tm = new miTM();
+        trustAllCerts[0] = tm;
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, null);
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    }
+
+    /**
+     * 忽略HTTPS请求的SSL证书，必须在openConnection之前调用
+     */
+    private static void ignoreSsl() throws Exception{
+        HostnameVerifier hv = new HostnameVerifier() {
+            public boolean verify(String urlHostName, SSLSession session) {
+                return true;
+            }
+        };
+        trustAllHttpsCertificates();
+        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+    }
+
+    public static InputStream getUrlConnectionInputStream(String url) {
+        InputStream inputStream = null;
+        try {
+            ignoreSsl();	//在openConnection前调用该方法
+            URLConnection urlConnection = new URL(url).openConnection();
+            inputStream = urlConnection.getInputStream();
+        } catch (Exception e) {
+            logger.error("load input stream from url failed", e);
+        }
+        return inputStream;
     }
 }

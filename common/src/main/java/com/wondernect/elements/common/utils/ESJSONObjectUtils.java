@@ -6,16 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Map;
 
@@ -84,50 +76,6 @@ public final class ESJSONObjectUtils {
         return null;
     }
 
-    private static class miTM implements TrustManager,X509TrustManager {
-        public X509Certificate[] getAcceptedIssuers() {
-            return null;
-        }
-
-        public boolean isServerTrusted(X509Certificate[] certs) {
-            return true;
-        }
-
-        public boolean isClientTrusted(X509Certificate[] certs) {
-            return true;
-        }
-
-        public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-
-        }
-
-        public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-
-        }
-    }
-
-    private static void trustAllHttpsCertificates() throws Exception {
-        TrustManager[] trustAllCerts = new TrustManager[1];
-        TrustManager tm = new miTM();
-        trustAllCerts[0] = tm;
-        SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, trustAllCerts, null);
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-    }
-
-    /**
-     * 忽略HTTPS请求的SSL证书，必须在openConnection之前调用
-     */
-    private static void ignoreSsl() throws Exception{
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String urlHostName, SSLSession session) {
-                return true;
-            }
-        };
-        trustAllHttpsCertificates();
-        HttpsURLConnection.setDefaultHostnameVerifier(hv);
-    }
-
     /**
      * 通过网络访问json并读取文件
      *
@@ -137,9 +85,7 @@ public final class ESJSONObjectUtils {
         StringBuilder json = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
-            ignoreSsl();	//在openConnection前调用该方法
-            URLConnection urlConnection = new URL(url).openConnection();
-            bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
+            bufferedReader = new BufferedReader(new InputStreamReader(ESHttpUtils.getUrlConnectionInputStream(url), StandardCharsets.UTF_8));
             String inputLine;
             while ((inputLine = bufferedReader.readLine()) != null) {
                 json.append(inputLine);
@@ -166,22 +112,20 @@ public final class ESJSONObjectUtils {
      */
     public static String loadJsonStringFromLocalPath(String path) {
         StringBuilder json = new StringBuilder();
-        File file = new File(path);
-        BufferedReader reader = null;
+        BufferedReader bufferedReader = null;
         try {
-            FileInputStream in = new FileInputStream(file);
-            reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            bufferedReader = new BufferedReader(new InputStreamReader(ESFileUtils.getFileInputStream(path), StandardCharsets.UTF_8));
             String inputLine;
-            while ((inputLine = reader.readLine()) != null) {
+            while ((inputLine = bufferedReader.readLine()) != null) {
                 json.append(inputLine);
             }
-            reader.close();
+            bufferedReader.close();
         } catch (IOException e) {
             logger.error("load json string from local path failed", e);
         } finally {
-            if (reader != null) {
+            if (bufferedReader != null) {
                 try {
-                    reader.close();
+                    bufferedReader.close();
                 } catch (IOException el) {
                     logger.error("load json string from local path failed", el);
                 }
@@ -201,7 +145,7 @@ public final class ESJSONObjectUtils {
         // System.out.println(jsonMap);
         // System.out.println(jsonMap.keySet());
         // System.out.println(jsonMap.values());
-        System.out.println(loadJsonStringFromLocalPath("F:\\aa.json"));
+        // System.out.println(loadJsonStringFromLocalPath("F:\\aa.json"));
         System.out.println(loadJsonStringFromUrl("https://service.cela.gov.cn/system/studyinfo/file/url?signature=eyJzdWIiOiJPUEVOIiwiaXNzIjoiOGE5OThhMTU3MjcyODYwYTAxNzI3MmJlMzJmMjAwMjciLCJleHAiOjE1OTc4MTA4MzB9.bHjASnTEdIlhLSM-dCEl4h6QdtytIYVdQXVtIR4LPP4&token=3daa530bd9191b1c782148dc3de67e64&file_id=8a998a1474024c9801740250155f002b"));
     }
 }
