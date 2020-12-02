@@ -18,20 +18,21 @@ public class JDBCClient {
 
     private static final Logger logger = LoggerFactory.getLogger(JDBCClient.class);
 
-    @Autowired
-    private JDBCClientConfigProperties jdbcClientConfigProperties;
+    /*@Autowired
+    private JDBCClientConfigProperties jdbcClientConfigProperties;*/
 
     //初始化数据库
-    public JDBCResult initDatabase(String databaseName) {
-        String url = jdbcClientConfigProperties.getUrl();
+    public JDBCResult initDatabase(String driver,String url, String username,String password,String databaseName) {
+        /*String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
-        String password = jdbcClientConfigProperties.getPassword();
+        String password = jdbcClientConfigProperties.getPassword();*/
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         boolean result;
         String message;
         try {
-            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+            Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             String createDatabaseSql = "create database if not exists " + databaseName + " default character set utf8 collate utf8_general_ci;";
             //初始化数据库
@@ -58,10 +59,10 @@ public class JDBCClient {
     }
 
     //赋权限
-    public JDBCResult giveRights(int type, String databaseName, String userName, String passWord) {
-        String url = jdbcClientConfigProperties.getUrl();
+    public JDBCResult giveRights(int type, String driver,String url, String username,String password,String databaseName, String userName, String passWord) {
+        /*String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
-        String password = jdbcClientConfigProperties.getPassword();
+        String password = jdbcClientConfigProperties.getPassword();*/
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         PreparedStatement pstmtOne = null;    //使用预编译语句
@@ -69,7 +70,8 @@ public class JDBCClient {
         String message;
         String createUserRightsSql;
         try {
-            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+            Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             if (type == 1) {
                 //只读权限
@@ -110,20 +112,21 @@ public class JDBCClient {
     }
 
     //收回权限
-    public JDBCResult revokeRights(String databaseName, String userName) {
-        String url = jdbcClientConfigProperties.getUrl();
+    public JDBCResult revokeRights(String driver,String url, String username,String password,String databaseName, String userName) {
+        /*String url = jdbcClientConfigProperties.getUrl();
         String username = jdbcClientConfigProperties.getUsername();
-        String password = jdbcClientConfigProperties.getPassword();
+        String password = jdbcClientConfigProperties.getPassword();*/
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         PreparedStatement pstmtOne = null;    //使用预编译语句
         boolean result;
         String message;
         try {
-            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+            Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             //收回权限
-            //收回该用户对所有数据的操作权限
+            //收回该用户对所有数据库的操作权限
 //            String revokeUserRightsSql = "revoke all privileges,grant option from " + "'" + userName + "'" + "@'%';";
             //收回该用户对某一个数据的操作权限
             String revokeUserRightsSql = "revoke all privileges on " + databaseName + ".* from " + "'" + userName + "'" + "@'%';";
@@ -156,13 +159,14 @@ public class JDBCClient {
     }
 
     //测试连接
-    public JDBCResult testConnect(String url, String userName, String passWord) {
+    public JDBCResult testConnect(String driver,String url, String userName, String passWord) {
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         boolean result;
         String message;
         try {
-            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
+            Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, userName, passWord);//获取连接
             String testSql = "SELECT 1 from dual;";
             //测试链接
