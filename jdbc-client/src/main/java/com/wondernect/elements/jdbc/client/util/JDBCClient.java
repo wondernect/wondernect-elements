@@ -1,11 +1,9 @@
 package com.wondernect.elements.jdbc.client.util;
 
 import com.wondernect.elements.common.exception.BusinessException;
-import com.wondernect.elements.jdbc.client.config.JDBCClientConfigProperties;
 import com.wondernect.elements.jdbc.client.response.JDBCResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -18,20 +16,13 @@ public class JDBCClient {
 
     private static final Logger logger = LoggerFactory.getLogger(JDBCClient.class);
 
-    /*@Autowired
-    private JDBCClientConfigProperties jdbcClientConfigProperties;*/
-
     //初始化数据库
-    public JDBCResult initDatabase(String driver,String url, String username,String password,String databaseName) {
-        /*String url = jdbcClientConfigProperties.getUrl();
-        String username = jdbcClientConfigProperties.getUsername();
-        String password = jdbcClientConfigProperties.getPassword();*/
+    public JDBCResult initDatabase(String driver, String url, String username, String password, String databaseName) {
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         boolean result;
         String message;
         try {
-//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             String createDatabaseSql = "create database if not exists " + databaseName + " default character set utf8 collate utf8_general_ci;";
@@ -59,10 +50,7 @@ public class JDBCClient {
     }
 
     //赋权限
-    public JDBCResult giveRights(int type, String driver,String url, String username,String password,String databaseName, String userName, String passWord) {
-        /*String url = jdbcClientConfigProperties.getUrl();
-        String username = jdbcClientConfigProperties.getUsername();
-        String password = jdbcClientConfigProperties.getPassword();*/
+    public JDBCResult giveRights(int type, String driver, String url, String username, String password, String databaseName, String userName, String passWord) {
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         PreparedStatement pstmtOne = null;    //使用预编译语句
@@ -70,7 +58,6 @@ public class JDBCClient {
         String message;
         String createUserRightsSql;
         try {
-//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             if (type == 1) {
@@ -112,17 +99,13 @@ public class JDBCClient {
     }
 
     //收回权限
-    public JDBCResult revokeRights(String driver,String url, String username,String password,String databaseName, String userName) {
-        /*String url = jdbcClientConfigProperties.getUrl();
-        String username = jdbcClientConfigProperties.getUsername();
-        String password = jdbcClientConfigProperties.getPassword();*/
+    public JDBCResult revokeRights(String driver, String url, String username, String password, String databaseName, String userName) {
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         PreparedStatement pstmtOne = null;    //使用预编译语句
         boolean result;
         String message;
         try {
-//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, username, password);//获取连接
             //收回权限
@@ -159,13 +142,12 @@ public class JDBCClient {
     }
 
     //测试连接
-    public JDBCResult testConnect(String driver,String url, String userName, String passWord) {
+    public JDBCResult testConnect(String driver, String url, String userName, String passWord) {
         Connection con = null;        //连接
         PreparedStatement pstmt = null;    //使用预编译语句
         boolean result;
         String message;
         try {
-//            Class.forName(jdbcClientConfigProperties.getDriver());//执行驱动
             Class.forName(driver);//执行驱动
             con = DriverManager.getConnection(url, userName, passWord);//获取连接
             String testSql = "SELECT 1 from dual;";
