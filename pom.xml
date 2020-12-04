@@ -42,6 +42,7 @@
         <module>rabbitmq</module>
         <module>boot-application</module>
         <module>jdbc-client</module>
+        <module>log-context</module>
     </modules>
 
     <build>
