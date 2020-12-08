@@ -36,6 +36,7 @@
         <module>sms-client</module>
         <module>i18n</module>
         <module>log</module>
+        <module>log-context</module>
         <module>swagger-api</module>
         <module>itext</module>
         <module>thymeleaf</module>
