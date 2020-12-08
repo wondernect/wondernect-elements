@@ -84,7 +84,7 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
                 throw new BusinessException(BusinessError.AUTHORIZE_TYPE_IS_INVALID);
             }
         }
-        request.setAttribute(wondernectServerContextConfigProperties.getRequestPropertyName(), wondernectCommonContext.getAuthorizeData().getRequestId());
+        request.setAttribute(wondernectServerContextConfigProperties.getRequestPropertyName(), wondernectCommonContext.getRequestId());
         request.setAttribute(wondernectServerContextConfigProperties.getUserPropertyName(), wondernectCommonContext.getAuthorizeData().getUserId());
         AuthorizeRoleType authorizeRoleType = authorizeUserRole.authorizeRoleType();
         switch (authorizeRoleType) {

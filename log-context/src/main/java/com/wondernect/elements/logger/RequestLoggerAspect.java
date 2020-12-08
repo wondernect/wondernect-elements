@@ -51,7 +51,7 @@ public class RequestLoggerAspect {
                         wondernectCommonContext.getAuthorizeData().getUserId(),
                         requestLogger.operation(),
                         requestLogger.description(),
-                        wondernectCommonContext.getAuthorizeData().getRequestId(),
+                        wondernectCommonContext.getRequestId(),
                         wondernectCommonContext.getRequestUrl(),
                         wondernectCommonContext.getRequestMethod(),
                         ESJSONObjectUtils.jsonObjectToJsonString(joinPoint.getArgs()),

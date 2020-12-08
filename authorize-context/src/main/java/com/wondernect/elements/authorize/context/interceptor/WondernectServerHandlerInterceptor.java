@@ -63,7 +63,7 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
             wondernectCommonContext.getAuthorizeData().setAppSecret(encryptSecret);
             String requestId = request.getHeader(wondernectServerContextConfigProperties.getRequestPropertyName());
             if (ESStringUtils.isNotBlank(requestId)) {
-                wondernectCommonContext.getAuthorizeData().setRequestId(requestId);
+                wondernectCommonContext.setRequestId(requestId);
             }
             String userId = request.getHeader(wondernectServerContextConfigProperties.getUserPropertyName());
             if (ESStringUtils.isNotBlank(userId)) {

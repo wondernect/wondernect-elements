@@ -3,6 +3,7 @@ package com.wondernect.elements.authorize.context.impl;
 import com.wondernect.elements.authorize.context.AuthorizeData;
 import com.wondernect.elements.authorize.context.WondernectCommonContext;
 import com.wondernect.elements.common.utils.ESObjectUtils;
+import com.wondernect.elements.common.utils.ESUUIDGenerateUtils;
 import com.wondernect.elements.context.ApplicationContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DefaultWondernectCommonContext implements WondernectCommonContext {
+
+    private static final String ID_KEY = "REQUEST_ID";
 
     private static final String URL_KEY = "URL";
 
@@ -39,6 +42,21 @@ public class DefaultWondernectCommonContext implements WondernectCommonContext {
     @Override
     public void set(String s, Object o) {
         ApplicationContextHolder.getContext().set(s, o);
+    }
+
+    @Override
+    public String getRequestId() {
+        Object object = get(ID_KEY);
+        if (ESObjectUtils.isNull(object)) {
+            String requestId = ESUUIDGenerateUtils.generateIdentifier();
+            setRequestId(requestId);
+            return requestId;
+        }
+        return object.toString();
+    }
+
+    public void setRequestId(String requestId) {
+        set(ID_KEY, requestId);
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.wondernect.elements.context.ApplicationContext;
  */
 public interface WondernectCommonContext extends ApplicationContext {
 
+    String getRequestId();
+
     String getRequestUrl();
 
     String getRequestMethod();
