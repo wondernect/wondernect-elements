@@ -13,6 +13,8 @@ public interface WondernectCommonContext extends ApplicationContext {
 
     String getRequestUrl();
 
+    String getRequestMethod();
+
     String getRequestIp();
 
     String getRequestDevice();

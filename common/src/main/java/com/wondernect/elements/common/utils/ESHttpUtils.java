@@ -106,6 +106,17 @@ public final class ESHttpUtils {
     }
 
     /**
+     * 获取request method
+     */
+    public static String getHttpRequestMethod(HttpServletRequest request) {
+        String method = request.getMethod();
+        if (null == method || "".equals(method)) {
+            method = "UNKNOWN";
+        }
+        return method;
+    }
+
+    /**
      * 获取request header param
      */
     public static String getHttpRequestHeader(HttpServletRequest request, String paramKey, String defaultValue) {

@@ -53,10 +53,6 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
                 throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
             }
             wondernectCommonContext.getAuthorizeData().setAppId(appId);
-            String userId = request.getHeader(wondernectServerContextConfigProperties.getUserPropertyName());
-            if (ESStringUtils.isNotBlank(userId)) {
-                wondernectCommonContext.getAuthorizeData().setUserId(userId);
-            }
             String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
             if (ESStringUtils.isBlank(encryptSecret)) {
                 throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
@@ -65,6 +61,14 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
                 throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
             }
             wondernectCommonContext.getAuthorizeData().setAppSecret(encryptSecret);
+            String requestId = request.getHeader(wondernectServerContextConfigProperties.getRequestPropertyName());
+            if (ESStringUtils.isNotBlank(requestId)) {
+                wondernectCommonContext.getAuthorizeData().setRequestId(requestId);
+            }
+            String userId = request.getHeader(wondernectServerContextConfigProperties.getUserPropertyName());
+            if (ESStringUtils.isNotBlank(userId)) {
+                wondernectCommonContext.getAuthorizeData().setUserId(userId);
+            }
         }
         return true;
     }

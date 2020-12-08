@@ -23,6 +23,7 @@ public class WondernectCommonHandlerInterceptor extends HandlerInterceptorAdapte
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         wondernectCommonContext.setRequestUrl(ESHttpUtils.getHttpRequestURI(request));
+        wondernectCommonContext.setRequestMethod(ESHttpUtils.getHttpRequestMethod(request));
         wondernectCommonContext.setRequestIp(ESHttpUtils.getHttpRequestIP(request));
         wondernectCommonContext.setRequestDevice(ESHttpUtils.getHttpRequestUserAgent(request));
         wondernectCommonContext.setDevicePlatform(ESHttpUtils.getDevicePlatform(request));

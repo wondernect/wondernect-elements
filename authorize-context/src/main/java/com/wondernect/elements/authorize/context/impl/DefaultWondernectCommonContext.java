@@ -19,6 +19,8 @@ public class DefaultWondernectCommonContext implements WondernectCommonContext {
 
     private static final String URL_KEY = "URL";
 
+    private static final String METHOD_KEY = "METHOD";
+
     private static final String IP_KEY = "IP";
 
     private static final String DEVICE_KEY = "DEVICE";
@@ -49,6 +51,18 @@ public class DefaultWondernectCommonContext implements WondernectCommonContext {
 
     public void setRequestUrl(String url) {
         set(URL_KEY, url);
+    }
+
+    @Override
+    public String getRequestMethod() {
+        if (ESObjectUtils.isNull(get(METHOD_KEY))) {
+            return null;
+        }
+        return (String) get(METHOD_KEY);
+    }
+
+    public void setRequestMethod(String method) {
+        set(METHOD_KEY, method);
     }
 
     @Override
