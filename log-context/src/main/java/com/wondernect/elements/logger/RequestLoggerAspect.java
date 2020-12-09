@@ -41,6 +41,7 @@ public class RequestLoggerAspect {
             return response;
         } catch (Exception e) {
             logger.error("请求日志记录执行异常", e);
+            response = e;
             throw new BusinessException(e.getLocalizedMessage());
         } finally {
             try {
