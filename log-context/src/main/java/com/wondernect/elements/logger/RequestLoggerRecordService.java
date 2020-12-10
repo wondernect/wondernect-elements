@@ -21,6 +21,7 @@ public interface RequestLoggerRecordService {
             String method,
             String argValue,
             String returnValue,
+            Long runStartTime,
             Long runTime,
             String ip,
             String devicePlatform,

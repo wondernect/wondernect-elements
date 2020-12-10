@@ -34,10 +34,11 @@ public class RequestLoggerAspect {
     @Around(value = "@annotation(requestLogger)")
     public Object enableAppFilter(ProceedingJoinPoint joinPoint, RequestLogger requestLogger) throws Throwable {
         Object response = null;
-        long consumeTime = ESDateTimeUtils.getCurrentTimestamp();
+        long runStartTime = ESDateTimeUtils.getCurrentTimestamp();
+        long runTime = 0;
         try {
             response = joinPoint.proceed();
-            consumeTime = ESDateTimeUtils.getCurrentTimestamp() - consumeTime;
+            runTime = ESDateTimeUtils.getCurrentTimestamp() - runStartTime;
             return response;
         } catch (Exception e) {
             logger.error("请求日志记录执行异常", e);
@@ -57,7 +58,8 @@ public class RequestLoggerAspect {
                         wondernectCommonContext.getRequestMethod(),
                         ESJSONObjectUtils.jsonObjectToJsonString(joinPoint.getArgs()),
                         ESJSONObjectUtils.jsonObjectToJsonString(response),
-                        consumeTime,
+                        runStartTime,
+                        runTime,
                         wondernectCommonContext.getRequestIp(),
                         wondernectCommonContext.getDevicePlatform(),
                         wondernectCommonContext.getRequestDevice()
