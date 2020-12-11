@@ -51,6 +51,7 @@ public class RequestLoggerAspect {
                         requestLogger.service(),
                         requestLogger.module(),
                         wondernectCommonContext.getAuthorizeData().getUserId(),
+                        wondernectCommonContext.getAuthorizeData().getAppId(),
                         requestLogger.operation(),
                         requestLogger.description(),
                         wondernectCommonContext.getRequestId(),

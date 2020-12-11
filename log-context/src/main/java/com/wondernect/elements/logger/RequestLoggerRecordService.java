@@ -14,6 +14,7 @@ public interface RequestLoggerRecordService {
             String service,
             String module,
             String userId,
+            String appId,
             String operation,
             String description,
             String requestId,
