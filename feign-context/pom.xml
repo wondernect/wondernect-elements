@@ -10,10 +10,10 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>authorize-context</artifactId>
+    <artifactId>feign-context</artifactId>
     <packaging>jar</packaging>
 
-    <name>authorize-context</name>
+    <name>feign-context</name>
     <url>http://www.example.com</url>
 
     <dependencies>
@@ -23,11 +23,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- context -->
+        <!-- open feign -->
         <dependency>
-            <groupId>com.wondernect.elements</groupId>
-            <artifactId>context</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <!-- common -->
@@ -44,7 +43,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 单元测试相关 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

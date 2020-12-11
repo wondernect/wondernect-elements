@@ -43,6 +43,7 @@
         <module>rabbitmq</module>
         <module>boot-application</module>
         <module>jdbc-client</module>
+        <module>feign-context</module>
     </modules>
 
     <build>
