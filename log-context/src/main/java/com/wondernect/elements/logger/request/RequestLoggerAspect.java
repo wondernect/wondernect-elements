@@ -1,4 +1,4 @@
-package com.wondernect.elements.logger;
+package com.wondernect.elements.logger.request;
 
 import com.wondernect.elements.authorize.context.WondernectCommonContext;
 import com.wondernect.elements.common.exception.BusinessException;
@@ -36,6 +36,7 @@ public class RequestLoggerAspect {
         Object response = null;
         long runStartTime = ESDateTimeUtils.getCurrentTimestamp();
         long runTime = 0;
+        boolean exception = false;
         try {
             response = joinPoint.proceed();
             runTime = ESDateTimeUtils.getCurrentTimestamp() - runStartTime;
@@ -43,9 +44,13 @@ public class RequestLoggerAspect {
         } catch (Exception e) {
             logger.error("请求日志记录执行异常", e);
             response = e;
+            exception = true;
             throw new BusinessException(e.getLocalizedMessage());
         } finally {
             try {
+                if (!exception && !requestLogger.recordResponse()) {
+                    response = "";
+                }
                 requestLoggerRecordService.recordRequestLog(
                         requestLogger.level(),
                         requestLogger.service(),

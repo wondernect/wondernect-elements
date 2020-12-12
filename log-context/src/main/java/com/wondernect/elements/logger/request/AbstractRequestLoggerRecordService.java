@@ -1,4 +1,4 @@
-package com.wondernect.elements.logger;
+package com.wondernect.elements.logger.request;
 
 import com.wondernect.elements.common.utils.ESDateTimeUtils;
 import org.slf4j.Logger;

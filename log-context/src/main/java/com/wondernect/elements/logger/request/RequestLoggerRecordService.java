@@ -1,4 +1,4 @@
-package com.wondernect.elements.logger;
+package com.wondernect.elements.logger.request;
 
 /**
  * Copyright (C), 2017-2020, wondernect.com

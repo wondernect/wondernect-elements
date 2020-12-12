@@ -1,4 +1,4 @@
-package com.wondernect.elements.logger;
+package com.wondernect.elements.logger.request;
 
 import java.lang.annotation.*;
 
@@ -23,4 +23,6 @@ public @interface RequestLogger {
     String operation() default "";
 
     String description() default "";
+
+    boolean recordResponse() default true;
 }
