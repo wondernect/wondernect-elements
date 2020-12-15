@@ -33,20 +33,25 @@ public final class ESHttpUtils {
      */
     public static String getHttpRequestIP(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
+        System.out.println("X-Forwarded-For头部请求ip地址为:" + ipAddress);
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
+            System.out.println("Proxy-Client-IP头部请求ip地址为:" + ipAddress);
         }
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
+            System.out.println("WL-Proxy-Client-IP头部请求ip地址为:" + ipAddress);
         }
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
+            System.out.println("getRemoteAddr头部请求ip地址为:" + ipAddress);
             if(ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")){
                 //根据网卡取本机配置的IP
                 InetAddress inet;
                 try {
                     inet = InetAddress.getLocalHost();
                     ipAddress= inet.getHostAddress();
+                    System.out.println("getHostAddress头部请求ip地址为:" + ipAddress);
                 } catch (UnknownHostException e) {
                     logger.error("ESHttpUtils get ip address failed", e);
                 }
@@ -54,6 +59,7 @@ public final class ESHttpUtils {
         }
         //对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
         if(ipAddress != null && ipAddress.length() > 15){ //"***.***.***.***".length() = 15
+            System.out.println("ipAddress多个请求ip地址为:" + ipAddress);
             if(ipAddress.indexOf(",") > 0){
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
