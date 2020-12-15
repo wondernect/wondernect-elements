@@ -1,7 +1,6 @@
 package com.wondernect.elements.logger.request;
 
 import com.wondernect.elements.authorize.context.WondernectCommonContext;
-import com.wondernect.elements.common.exception.BusinessException;
 import com.wondernect.elements.common.utils.ESDateTimeUtils;
 import com.wondernect.elements.common.utils.ESJSONObjectUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -45,7 +44,7 @@ public class RequestLoggerAspect {
             logger.error("请求日志记录执行异常", e);
             response = e;
             exception = true;
-            throw new BusinessException(e.getLocalizedMessage());
+            throw e;
         } finally {
             try {
                 if (!exception && !requestLogger.recordResponse()) {
