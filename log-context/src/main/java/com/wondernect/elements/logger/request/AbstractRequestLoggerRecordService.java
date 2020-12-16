@@ -43,6 +43,7 @@ public abstract class AbstractRequestLoggerRecordService implements RequestLogge
                 "level:{}, service:{}, module:{}, userId:{}, appId:{}, operation:{}, description:{}, requestId:{}, url:{}, method:{}, argValue:{}, returnValue:{}, runStartTime:{}, runTime:{}ms, ip:{}, devicePlatform:{}, deviceDescription:{}",
                 level, service, module, userId, appId, operation, description, requestId, url, method, argValue, returnValue, ESDateTimeUtils.formatDate(runStartTime, "yyyy-MM-dd HH:mm:ss"), runTime, ip, devicePlatform, deviceDescription
         );
+        doRecordRequestLog(level, service, module, userId, appId, operation, description, requestId, url, method, argValue, returnValue, runStartTime, runTime, ip, devicePlatform, deviceDescription);
     }
 
     @Override
@@ -57,5 +58,8 @@ public abstract class AbstractRequestLoggerRecordService implements RequestLogge
                 "level:{}, service:{}, module:{}, userId:{}, appId:{}, operation:{}, description:{}, requestId:{}, url:{}, method:{}, argValue:{}, returnValue:{}, runStartTime:{}, runTime:{}ms, ip:{}, devicePlatform:{}, deviceDescription:{}",
                 level, service, module, userId, appId, operation, description, requestId, url, method, argValue, returnValue, ESDateTimeUtils.formatDate(runStartTime, "yyyy-MM-dd HH:mm:ss"), runTime, ip, devicePlatform, deviceDescription
         );
+        doRecordRequestLog(level, service, module, userId, appId, operation, description, requestId, url, method, argValue, returnValue, runStartTime, runTime, ip, devicePlatform, deviceDescription);
     }
+
+    public abstract void doRecordRequestLog(String level, String service, String module, String userId, String appId, String operation, String description, String requestId, String url, String method, String argValue, String returnValue, Long runStartTime, Long runTime, String ip, String devicePlatform, String deviceDescription);
 }
