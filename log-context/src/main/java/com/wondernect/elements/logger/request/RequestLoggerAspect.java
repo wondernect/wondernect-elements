@@ -47,28 +47,50 @@ public class RequestLoggerAspect {
             throw e;
         } finally {
             try {
-                if (!exception && !requestLogger.recordResponse()) {
-                    response = "";
+                if (!exception) {
+                    if (!requestLogger.recordResponse()) {
+                        response = "";
+                    }
+                    requestLoggerRecordService.recordRequestLog(
+                            requestLogger.level(),
+                            requestLogger.service(),
+                            requestLogger.module(),
+                            wondernectCommonContext.getAuthorizeData().getUserId(),
+                            wondernectCommonContext.getAuthorizeData().getAppId(),
+                            requestLogger.operation(),
+                            requestLogger.description(),
+                            wondernectCommonContext.getRequestId(),
+                            wondernectCommonContext.getRequestUrl(),
+                            wondernectCommonContext.getRequestMethod(),
+                            ESJSONObjectUtils.jsonObjectToJsonString(joinPoint.getArgs()),
+                            ESJSONObjectUtils.jsonObjectToJsonString(response),
+                            runStartTime,
+                            runTime,
+                            wondernectCommonContext.getRequestIp(),
+                            wondernectCommonContext.getDevicePlatform(),
+                            wondernectCommonContext.getRequestDevice()
+                    );
+                } else {
+                    requestLoggerRecordService.recordExceptionRequestLog(
+                            requestLogger.level(),
+                            requestLogger.service(),
+                            requestLogger.module(),
+                            wondernectCommonContext.getAuthorizeData().getUserId(),
+                            wondernectCommonContext.getAuthorizeData().getAppId(),
+                            requestLogger.operation(),
+                            requestLogger.description(),
+                            wondernectCommonContext.getRequestId(),
+                            wondernectCommonContext.getRequestUrl(),
+                            wondernectCommonContext.getRequestMethod(),
+                            ESJSONObjectUtils.jsonObjectToJsonString(joinPoint.getArgs()),
+                            ESJSONObjectUtils.jsonObjectToJsonString(response),
+                            runStartTime,
+                            runTime,
+                            wondernectCommonContext.getRequestIp(),
+                            wondernectCommonContext.getDevicePlatform(),
+                            wondernectCommonContext.getRequestDevice()
+                    );
                 }
-                requestLoggerRecordService.recordRequestLog(
-                        requestLogger.level(),
-                        requestLogger.service(),
-                        requestLogger.module(),
-                        wondernectCommonContext.getAuthorizeData().getUserId(),
-                        wondernectCommonContext.getAuthorizeData().getAppId(),
-                        requestLogger.operation(),
-                        requestLogger.description(),
-                        wondernectCommonContext.getRequestId(),
-                        wondernectCommonContext.getRequestUrl(),
-                        wondernectCommonContext.getRequestMethod(),
-                        ESJSONObjectUtils.jsonObjectToJsonString(joinPoint.getArgs()),
-                        ESJSONObjectUtils.jsonObjectToJsonString(response),
-                        runStartTime,
-                        runTime,
-                        wondernectCommonContext.getRequestIp(),
-                        wondernectCommonContext.getDevicePlatform(),
-                        wondernectCommonContext.getRequestDevice()
-                );
             } catch (Exception e) {
                 logger.error("请求日志记录写入异常", e);
             }
