@@ -18,17 +18,17 @@ public abstract class AbstractRequestLoggerRecordService implements RequestLogge
 
     @Override
     public String defaultRequestLogLevel() {
-        return "";
+        return "UNKNOWN";
     }
 
     @Override
     public String defaultExceptionRequestLogLevel() {
-        return "";
+        return "UNKNOWN_ERROR";
     }
 
     @Override
     public String defaultService() {
-        return "";
+        return "UNKNOWN_SERVICE";
     }
 
     @Override
