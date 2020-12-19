@@ -17,12 +17,6 @@
     <url>http://www.example.com</url>
 
     <dependencies>
-        <!-- data jpa -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
         <!-- property-source -->
         <dependency>
             <groupId>com.wondernect.elements</groupId>
