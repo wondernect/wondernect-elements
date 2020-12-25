@@ -55,6 +55,11 @@ public abstract class AbstractWondernectAuthorizeContext implements WondernectAu
 
     @Override
     public boolean authorizeAppSecret(String appId, String encryptSecret) {
-        return true;
+        return false;
+    }
+
+    @Override
+    public boolean authorizeStandAloneAppSecret(String appId, String encryptSecret) {
+        return false;
     }
 }

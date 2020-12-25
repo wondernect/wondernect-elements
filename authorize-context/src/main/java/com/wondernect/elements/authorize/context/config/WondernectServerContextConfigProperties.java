@@ -26,6 +26,8 @@ public class WondernectServerContextConfigProperties implements Serializable {
 
     private boolean enable = false; // 是否启用应用认证
 
+    private boolean standAlone = false; // 是否独立部署认证。是-则appId&appSecret必填，用来做独立请求认证使用；否-则任何参数都不用填写；
+
     private String requestPropertyName = "REQUESTID"; // 请求标识
 
     private String userPropertyName = "USERID"; // 用户标识
@@ -44,6 +46,14 @@ public class WondernectServerContextConfigProperties implements Serializable {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public boolean isStandAlone() {
+        return standAlone;
+    }
+
+    public void setStandAlone(boolean standAlone) {
+        this.standAlone = standAlone;
     }
 
     public String getRequestPropertyName() {

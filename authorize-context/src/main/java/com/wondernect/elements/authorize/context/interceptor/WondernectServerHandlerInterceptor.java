@@ -57,8 +57,14 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
             if (ESStringUtils.isBlank(encryptSecret)) {
                 throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
             }
-            if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
-                throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
+            if (wondernectServerContextConfigProperties.isStandAlone()) {
+                if (!wondernectAuthorizeContext.authorizeStandAloneAppSecret(appId, encryptSecret)) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
+                }
+            } else {
+                if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
+                }
             }
             wondernectCommonContext.getAuthorizeData().setAppSecret(encryptSecret);
             String requestId = request.getHeader(wondernectServerContextConfigProperties.getRequestPropertyName());

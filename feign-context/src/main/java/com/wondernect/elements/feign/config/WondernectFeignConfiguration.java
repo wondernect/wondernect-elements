@@ -22,13 +22,16 @@ import java.util.Enumeration;
  * Description:
  */
 @Configuration
-@EnableConfigurationProperties(WondernectFeignConfigProperties.class)
+@EnableConfigurationProperties(WondernectFeignHeaderConfigProperties.class)
 public class WondernectFeignConfiguration implements RequestInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(WondernectFeignConfiguration.class);
 
     @Autowired
-    private WondernectFeignConfigProperties wondernectFeignConfigProperties;
+    private WondernectFeignHeaderConfigProperties wondernectFeignHeaderConfigProperties;
+
+    @Autowired
+    private WondernectFeignHeaderContext wondernectFeignHeaderContext;
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
@@ -43,16 +46,7 @@ public class WondernectFeignConfiguration implements RequestInterceptor {
                     requestTemplate.header(name, value);
                 }
             }
-            Object requestId = request.getAttribute(wondernectFeignConfigProperties.getRequestIdPropertyName());
-            if (ESObjectUtils.isNotNull(requestId)) {
-                requestTemplate.header(wondernectFeignConfigProperties.getRequestIdPropertyName(), requestId.toString());
-            }
-            Object userId = request.getAttribute(wondernectFeignConfigProperties.getUserIdPropertyName());
-            if (ESObjectUtils.isNotNull(userId)) {
-                requestTemplate.header(wondernectFeignConfigProperties.getUserIdPropertyName(), userId.toString());
-            }
-            requestTemplate.header(wondernectFeignConfigProperties.getAppIdPropertyName(), wondernectFeignConfigProperties.getAppId());
-            requestTemplate.header(wondernectFeignConfigProperties.getAppSecretPropertyName(), wondernectFeignConfigProperties.getAppSecret());
+            wondernectFeignHeaderContext.extendFeignHeader(requestTemplate, request, wondernectFeignHeaderConfigProperties);
         }
     }
 }

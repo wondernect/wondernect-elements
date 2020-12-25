@@ -24,4 +24,6 @@ public interface WondernectAuthorizeContext {
     boolean authorizeUserRole(String userRole, List<String> validUserRoles);
 
     boolean authorizeAppSecret(String appId, String encryptSecret);
+
+    boolean authorizeStandAloneAppSecret(String appId, String encryptSecret);
 }

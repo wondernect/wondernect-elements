@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Primary
 @PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.stars.feign")
-public class WondernectFeignConfigProperties implements Serializable {
+public class WondernectFeignHeaderConfigProperties implements Serializable {
 
     private static final long serialVersionUID = -8120698783277706219L;
 
