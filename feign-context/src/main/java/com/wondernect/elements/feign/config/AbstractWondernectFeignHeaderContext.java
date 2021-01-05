@@ -24,7 +24,12 @@ public abstract class AbstractWondernectFeignHeaderContext implements Wondernect
         if (ESObjectUtils.isNotNull(userId)) {
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getUserIdPropertyName(), userId.toString());
         }
-        requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppIdPropertyName(), wondernectFeignHeaderConfigProperties.getAppId());
-        requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName(), wondernectFeignHeaderConfigProperties.getAppSecret());
+        Object appId = request.getAttribute(wondernectFeignHeaderConfigProperties.getAppIdPropertyName());
+        if (ESObjectUtils.isNotNull(appId)) {
+            requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppIdPropertyName(), appId.toString());
+        } else {
+            // 默认appId配置
+            requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppIdPropertyName(), wondernectFeignHeaderConfigProperties.getAppId());
+        }
     }
 }

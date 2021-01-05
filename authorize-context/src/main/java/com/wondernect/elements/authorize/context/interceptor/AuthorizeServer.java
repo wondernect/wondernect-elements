@@ -14,4 +14,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface AuthorizeServer {
 
+    AuthorizeAccessType accessType() default AuthorizeAccessType.READ;
 }

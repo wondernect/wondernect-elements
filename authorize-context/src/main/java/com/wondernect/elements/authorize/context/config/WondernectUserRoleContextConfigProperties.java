@@ -7,7 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,8 +33,6 @@ public class WondernectUserRoleContextConfigProperties implements Serializable {
     private List<String> pathPatterns; // 过滤路径
 
     private List<String> excludePathPatterns; // 排除路径
-
-    private List<String> localAuthValidRoles = new ArrayList<>(); // 本地角色验证配置
 
     public boolean isEnable() {
         return enable;
@@ -75,13 +72,5 @@ public class WondernectUserRoleContextConfigProperties implements Serializable {
 
     public void setExcludePathPatterns(List<String> excludePathPatterns) {
         this.excludePathPatterns = excludePathPatterns;
-    }
-
-    public List<String> getLocalAuthValidRoles() {
-        return localAuthValidRoles;
-    }
-
-    public void setLocalAuthValidRoles(List<String> localAuthValidRoles) {
-        this.localAuthValidRoles = localAuthValidRoles;
     }
 }

@@ -1,11 +1,13 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
-import com.wondernect.elements.authorize.context.WondernectAuthorizeContext;
+import com.wondernect.elements.authorize.context.AuthorizeData;
+import com.wondernect.elements.authorize.context.WondernectAuthorizeUserRoleContext;
 import com.wondernect.elements.authorize.context.config.WondernectServerContextConfigProperties;
 import com.wondernect.elements.authorize.context.config.WondernectUserRoleContextConfigProperties;
 import com.wondernect.elements.authorize.context.impl.DefaultWondernectCommonContext;
 import com.wondernect.elements.common.error.BusinessError;
 import com.wondernect.elements.common.exception.BusinessException;
+import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Copyright (C), 2017-2019, wondernect.com
@@ -38,7 +41,7 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
     private WondernectUserRoleContextConfigProperties wondernectAuthorizeContextConfigProperties;
 
     @Autowired
-    private WondernectAuthorizeContext wondernectAuthorizeContext;
+    private WondernectAuthorizeUserRoleContext wondernectAuthorizeUserRoleContext;
 
     @Autowired
     private DefaultWondernectCommonContext wondernectCommonContext;
@@ -57,6 +60,7 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
         if (null == authorizeUserRole) {
             return true;
         }
+        // 设置requestId
         request.setAttribute(wondernectServerContextConfigProperties.getRequestPropertyName(), wondernectCommonContext.getRequestId());
         String expiresToken;
         String unlimitedToken;
@@ -65,7 +69,7 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
             case EXPIRES_TOKEN:
             {
                 expiresToken = request.getHeader(wondernectAuthorizeContextConfigProperties.getExpiresTokenPropertyName());
-                if (ESStringUtils.isRealEmpty(expiresToken)) {
+                if (ESStringUtils.isBlank(expiresToken)) {
                     throw new BusinessException(BusinessError.AUTHORIZE_HEADER_IS_NULL);
                 }
                 authorizeExpiresToken(expiresToken);
@@ -74,7 +78,7 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
             case UNLIMITED_TOKEN:
             {
                 unlimitedToken = request.getHeader(wondernectAuthorizeContextConfigProperties.getUnlimitedTokenPropertyName());
-                if (ESStringUtils.isRealEmpty(unlimitedToken)) {
+                if (ESStringUtils.isBlank(unlimitedToken)) {
                     throw new BusinessException(BusinessError.AUTHORIZE_HEADER_IS_NULL);
                 }
                 authorizeUnlimitedToken(unlimitedToken);
@@ -85,41 +89,45 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
                 throw new BusinessException(BusinessError.AUTHORIZE_TYPE_IS_INVALID);
             }
         }
+        // 设置userId
         request.setAttribute(wondernectServerContextConfigProperties.getUserPropertyName(), wondernectCommonContext.getAuthorizeData().getUserId());
+        // 设置appId
+        request.setAttribute(wondernectServerContextConfigProperties.getAppPropertyName(), wondernectCommonContext.getAuthorizeData().getAppId());
+        // 权限验证
         AuthorizeRoleType authorizeRoleType = authorizeUserRole.authorizeRoleType();
         switch (authorizeRoleType) {
             case ONLY_AUTHORIZE:
             {
-                getUserRole();
                 break;
             }
             case CONFIG:
             {
-                if (ArrayUtils.isNotEmpty(authorizeUserRole.validUserRoles())) {
-                    if (!wondernectAuthorizeContext.authorizeUserRole(getUserRole(), Arrays.asList(authorizeUserRole.validUserRoles()))) {
-                        throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
-                    }
-                } else {
-                    if (CollectionUtils.isEmpty(wondernectAuthorizeContextConfigProperties.getLocalAuthValidRoles())) {
-                        logger.error("wondernectAuthorizeContextConfigProperties local auth valid roles is null !!!");
-                        throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
-                    }
-                    if (!wondernectAuthorizeContext.authorizeUserRole(getUserRole(), wondernectAuthorizeContextConfigProperties.getLocalAuthValidRoles())) {
-                        throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
-                    }
+                if (ArrayUtils.isEmpty(authorizeUserRole.validUserRoles())) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
+                }
+                if (wondernectAuthorizeUserRoleContext.authorizeUserRole(wondernectCommonContext.getAuthorizeData().getRole(), Arrays.asList(authorizeUserRole.validUserRoles()))) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
                 }
                 break;
             }
             case CUSTOM:
             {
-                if (!wondernectAuthorizeContext.authorizeUserRole(getUserRole(), wondernectAuthorizeContext.getCustomValidUserRoles())) {
+                List<String> validUserRoleList = wondernectAuthorizeUserRoleContext.getCustomValidUserRoles();
+                if (CollectionUtils.isEmpty(validUserRoleList)) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
+                }
+                if (wondernectAuthorizeUserRoleContext.authorizeUserRole(wondernectCommonContext.getAuthorizeData().getRole(), validUserRoleList)) {
                     throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
                 }
                 break;
             }
             case REQUEST:
             {
-                if (!wondernectAuthorizeContext.authorizeUserRole(getUserRole(), wondernectAuthorizeContext.getRequestValidUserRoles(request.getRequestURI(), request.getMethod()))) {
+                List<String> validUserRoleList = wondernectAuthorizeUserRoleContext.getRequestValidUserRoles(request.getRequestURI(), request.getMethod());
+                if (CollectionUtils.isEmpty(validUserRoleList)) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
+                }
+                if (wondernectAuthorizeUserRoleContext.authorizeUserRole(wondernectCommonContext.getAuthorizeData().getRole(), validUserRoleList)) {
                     throw new BusinessException(BusinessError.AUTHORIZE_USER_ROLE_INVALID);
                 }
                 break;
@@ -133,26 +141,28 @@ public class WondernectUserRoleHandlerInterceptor extends HandlerInterceptorAdap
     }
 
     private void authorizeExpiresToken(String expiresToken) {
-        String userId = wondernectAuthorizeContext.authorizeExpiresToken(expiresToken);
-        if (ESStringUtils.isRealEmpty(userId)) {
+        AuthorizeData authorizeData = wondernectAuthorizeUserRoleContext.authorizeExpiresToken(expiresToken);
+        if (ESObjectUtils.isNull(authorizeData) ||
+                ESStringUtils.isBlank(authorizeData.getUserId()) ||
+                ESStringUtils.isBlank(authorizeData.getAppId())) {
             throw new BusinessException(BusinessError.AUTHORIZE_TOKEN_INVALID);
         }
         wondernectCommonContext.getAuthorizeData().setToken(expiresToken);
-        wondernectCommonContext.getAuthorizeData().setUserId(userId);
+        wondernectCommonContext.getAuthorizeData().setUserId(authorizeData.getUserId());
+        wondernectCommonContext.getAuthorizeData().setAppId(authorizeData.getAppId());
+        wondernectCommonContext.getAuthorizeData().setRole(authorizeData.getRole());
     }
 
     private void authorizeUnlimitedToken(String unlimitedToken) {
-        String userId = wondernectAuthorizeContext.authorizeUnlimitedToken(unlimitedToken);
-        if (ESStringUtils.isRealEmpty(userId)) {
+        AuthorizeData authorizeData = wondernectAuthorizeUserRoleContext.authorizeUnlimitedToken(unlimitedToken);
+        if (ESObjectUtils.isNull(authorizeData) ||
+                ESStringUtils.isBlank(authorizeData.getUserId()) ||
+                ESStringUtils.isBlank(authorizeData.getAppId())) {
             throw new BusinessException(BusinessError.AUTHORIZE_TOKEN_INVALID);
         }
         wondernectCommonContext.getAuthorizeData().setToken(unlimitedToken);
-        wondernectCommonContext.getAuthorizeData().setUserId(userId);
-    }
-
-    private String getUserRole() {
-        String userRole = wondernectAuthorizeContext.getUserRole(wondernectCommonContext.getAuthorizeData().getUserId());
-        wondernectCommonContext.getAuthorizeData().setRole(userRole);
-        return userRole;
+        wondernectCommonContext.getAuthorizeData().setUserId(authorizeData.getUserId());
+        wondernectCommonContext.getAuthorizeData().setAppId(authorizeData.getAppId());
+        wondernectCommonContext.getAuthorizeData().setRole(authorizeData.getRole());
     }
 }

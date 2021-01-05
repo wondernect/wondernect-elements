@@ -1,8 +1,11 @@
 package com.wondernect.elements.authorize.context.impl;
 
-import com.wondernect.elements.authorize.context.WondernectAuthorizeContext;
+import com.wondernect.elements.authorize.context.AuthorizeData;
+import com.wondernect.elements.authorize.context.WondernectAuthorizeServerContext;
+import com.wondernect.elements.authorize.context.WondernectAuthorizeUserRoleContext;
+import com.wondernect.elements.authorize.context.interceptor.AuthorizeAccessType;
+import com.wondernect.elements.common.utils.ESObjectUtils;
 import com.wondernect.elements.common.utils.ESStringUtils;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +18,15 @@ import java.util.List;
  * Description: abstract wondernect authorize context
  * WondernectAuthorizeContext的抽象方法实现,用户使用时必须定义一个@Component/@Service类继承该抽象类,在继承类中可以复写指定方法
  */
-public abstract class AbstractWondernectAuthorizeContext implements WondernectAuthorizeContext {
+public abstract class AbstractWondernectAuthorizeContext implements WondernectAuthorizeUserRoleContext, WondernectAuthorizeServerContext {
 
     @Override
-    public String authorizeExpiresToken(String authorizeToken) {
+    public AuthorizeData authorizeExpiresToken(String authorizeToken) {
         return null;
     }
 
     @Override
-    public String authorizeUnlimitedToken(String authorizeToken) {
-        return null;
-    }
-
-    @Override
-    public String getUserRole(String userId) {
+    public AuthorizeData authorizeUnlimitedToken(String authorizeToken) {
         return null;
     }
 
@@ -44,18 +42,36 @@ public abstract class AbstractWondernectAuthorizeContext implements WondernectAu
 
     @Override
     public boolean authorizeUserRole(String userRole, List<String> validUserRoles) {
-        if (CollectionUtils.isEmpty(validUserRoles)) {
+        if (ESStringUtils.isBlank(userRole)) {
             return true;
         }
-        if (ESStringUtils.isBlank(userRole)) {
-            return false;
-        }
-        return validUserRoles.contains(userRole);
+        return !validUserRoles.contains(userRole);
     }
 
     @Override
-    public boolean authorizeAppSecret(String appId, String encryptSecret) {
-        return false;
+    public AuthorizeAccessType getAppAccessType(String appId, String userId) {
+        return null;
+    }
+
+    @Override
+    public boolean authorizeAppAccessType(AuthorizeAccessType accessType, AuthorizeAccessType validAppAccessType) {
+        if (ESObjectUtils.isNull(accessType)) {
+            return false;
+        }
+        switch (validAppAccessType) {
+            case READ:
+            {
+                return true;
+            }
+            case WRITE:
+            {
+                return accessType == AuthorizeAccessType.WRITE;
+            }
+            default:
+            {
+                return false;
+            }
+        }
     }
 
     @Override

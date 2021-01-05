@@ -31,10 +31,6 @@ public class WondernectFeignHeaderConfigProperties implements Serializable {
 
     private String appId; // 应用id
 
-    private String appSecretPropertyName = "APPSECRET"; // 传递加密内容的头部key
-
-    private String appSecret; // 密钥
-
     public String getRequestIdPropertyName() {
         return requestIdPropertyName;
     }
@@ -65,22 +61,6 @@ public class WondernectFeignHeaderConfigProperties implements Serializable {
 
     public void setAppId(String appId) {
         this.appId = appId;
-    }
-
-    public String getAppSecretPropertyName() {
-        return appSecretPropertyName;
-    }
-
-    public void setAppSecretPropertyName(String appSecretPropertyName) {
-        this.appSecretPropertyName = appSecretPropertyName;
-    }
-
-    public String getAppSecret() {
-        return appSecret;
-    }
-
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
     }
 }
 

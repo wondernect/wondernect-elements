@@ -50,6 +50,10 @@ public class SwaggerConfigProperties implements Serializable {
 
     private String appSecretPassAs = "header"; // 传递加密内容位置
 
+    private String userIdPropertyName = "USERID"; // 应用标识
+
+    private String userIdPassAs = "header"; // 应用标识传递位置
+
     private String authorizationPropertyName = "Authorization"; // 传递请求令牌的头部key
 
     private String authorizationPassAs = "header"; // 传递请求令牌位置
@@ -156,6 +160,22 @@ public class SwaggerConfigProperties implements Serializable {
 
     public void setAppSecretPassAs(String appSecretPassAs) {
         this.appSecretPassAs = appSecretPassAs;
+    }
+
+    public String getUserIdPropertyName() {
+        return userIdPropertyName;
+    }
+
+    public void setUserIdPropertyName(String userIdPropertyName) {
+        this.userIdPropertyName = userIdPropertyName;
+    }
+
+    public String getUserIdPassAs() {
+        return userIdPassAs;
+    }
+
+    public void setUserIdPassAs(String userIdPassAs) {
+        this.userIdPassAs = userIdPassAs;
     }
 
     public String getAuthorizationPropertyName() {

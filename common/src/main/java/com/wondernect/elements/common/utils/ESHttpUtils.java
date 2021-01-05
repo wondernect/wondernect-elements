@@ -33,33 +33,34 @@ public final class ESHttpUtils {
      */
     public static String getHttpRequestIP(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
-        logger.info("X-Forwarded-For头部请求ip地址为:" + ipAddress);
+        // logger.info("X-Forwarded-For头部请求ip地址为:" + ipAddress);
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
-            logger.info("Proxy-Client-IP头部请求ip地址为:" + ipAddress);
+            // logger.info("Proxy-Client-IP头部请求ip地址为:" + ipAddress);
         }
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
-            logger.info("WL-Proxy-Client-IP头部请求ip地址为:" + ipAddress);
+            // logger.info("WL-Proxy-Client-IP头部请求ip地址为:" + ipAddress);
         }
         if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
-            logger.info("getRemoteAddr头部请求ip地址为:" + ipAddress);
+            // logger.info("getRemoteAddr头部请求ip地址为:" + ipAddress);
             if(ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")){
                 //根据网卡取本机配置的IP
                 InetAddress inet;
                 try {
                     inet = InetAddress.getLocalHost();
                     ipAddress= inet.getHostAddress();
-                    logger.info("getHostAddress头部请求ip地址为:" + ipAddress);
+                    // logger.info("getHostAddress头部请求ip地址为:" + ipAddress);
                 } catch (UnknownHostException e) {
                     logger.error("ESHttpUtils get ip address failed", e);
                 }
             }
         }
         //对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
-        if(ipAddress != null && ipAddress.length() > 15){ //"***.***.***.***".length() = 15
-            logger.info("ipAddress多个请求ip地址为:" + ipAddress);
+        if(ipAddress != null && ipAddress.length() > 15){
+            //"***.***.***.***".length() = 15
+            // logger.info("ipAddress多个请求ip地址为:" + ipAddress);
             if(ipAddress.indexOf(",") > 0){
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }

@@ -9,21 +9,15 @@ import java.util.List;
  * Date: 2019/3/27 9:33
  * Description: wondernect authorize context
  */
-public interface WondernectAuthorizeContext {
+public interface WondernectAuthorizeUserRoleContext {
 
-    String authorizeExpiresToken(String authorizeToken);
+    AuthorizeData authorizeExpiresToken(String authorizeToken);
 
-    String authorizeUnlimitedToken(String authorizeToken);
-
-    String getUserRole(String userId);
+    AuthorizeData authorizeUnlimitedToken(String authorizeToken);
 
     List<String> getCustomValidUserRoles();
 
     List<String> getRequestValidUserRoles(String requestUrl, String requestMethod);
 
     boolean authorizeUserRole(String userRole, List<String> validUserRoles);
-
-    boolean authorizeAppSecret(String appId, String encryptSecret);
-
-    boolean authorizeStandAloneAppSecret(String appId, String encryptSecret);
 }

@@ -60,6 +60,7 @@ public class SwaggerConfig {
         List<ApiKey> apiKeyList = new ArrayList<>();
         apiKeyList.add(new ApiKey(swaggerConfigProperties.getAppIdPropertyName(), swaggerConfigProperties.getAppIdPropertyName(), swaggerConfigProperties.getAppIdPassAs()));
         apiKeyList.add(new ApiKey(swaggerConfigProperties.getAppSecretPropertyName(), swaggerConfigProperties.getAppSecretPropertyName(), swaggerConfigProperties.getAppSecretPassAs()));
+        apiKeyList.add(new ApiKey(swaggerConfigProperties.getUserIdPropertyName(), swaggerConfigProperties.getUserIdPropertyName(), swaggerConfigProperties.getUserIdPassAs()));
         apiKeyList.add(new ApiKey(swaggerConfigProperties.getAuthorizationPropertyName(), swaggerConfigProperties.getAuthorizationPropertyName(), swaggerConfigProperties.getAuthorizationPassAs()));
         return apiKeyList;
     }
@@ -71,6 +72,7 @@ public class SwaggerConfig {
         authorizationScopes[0] = authorizationScope;
         securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getAppIdPropertyName(), authorizationScopes));
         securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getAppSecretPropertyName(), authorizationScopes));
+        securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getUserIdPropertyName(), authorizationScopes));
         securityReferenceList.add(new SecurityReference(swaggerConfigProperties.getAuthorizationPropertyName(), authorizationScopes));
 
         List<SecurityContext> securityContextList = new ArrayList<>();

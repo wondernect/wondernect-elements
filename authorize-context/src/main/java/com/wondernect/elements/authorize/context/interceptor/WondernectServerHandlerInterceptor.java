@@ -1,6 +1,6 @@
 package com.wondernect.elements.authorize.context.interceptor;
 
-import com.wondernect.elements.authorize.context.WondernectAuthorizeContext;
+import com.wondernect.elements.authorize.context.WondernectAuthorizeServerContext;
 import com.wondernect.elements.authorize.context.config.WondernectServerContextConfigProperties;
 import com.wondernect.elements.authorize.context.impl.DefaultWondernectCommonContext;
 import com.wondernect.elements.common.error.BusinessError;
@@ -31,7 +31,7 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
     private WondernectServerContextConfigProperties wondernectServerContextConfigProperties;
 
     @Autowired
-    private WondernectAuthorizeContext wondernectAuthorizeContext;
+    private WondernectAuthorizeServerContext wondernectAuthorizeServerContext;
 
     @Autowired
     private DefaultWondernectCommonContext wondernectCommonContext;
@@ -46,34 +46,39 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-        AuthorizeServer authorizeAppSecret = method.getAnnotation(AuthorizeServer.class);
-        if (null != authorizeAppSecret) {
+        AuthorizeServer authorizeServer = method.getAnnotation(AuthorizeServer.class);
+        if (null != authorizeServer) {
+            // 获取requestId
+            String requestId = request.getHeader(wondernectServerContextConfigProperties.getRequestPropertyName());
+            if (ESStringUtils.isNotBlank(requestId)) {
+                wondernectCommonContext.setRequestId(requestId);
+            }
+            // 获取appId
             String appId = request.getHeader(wondernectServerContextConfigProperties.getAppPropertyName());
             if (ESStringUtils.isBlank(appId)) {
                 throw new BusinessException(BusinessError.AUTHORIZE_APPID_IS_NULL);
             }
             wondernectCommonContext.getAuthorizeData().setAppId(appId);
-            String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
-            if (ESStringUtils.isBlank(encryptSecret)) {
-                throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
-            }
-            if (wondernectServerContextConfigProperties.isStandAlone()) {
-                if (!wondernectAuthorizeContext.authorizeStandAloneAppSecret(appId, encryptSecret)) {
-                    throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
-                }
-            } else {
-                if (!wondernectAuthorizeContext.authorizeAppSecret(appId, encryptSecret)) {
-                    throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
-                }
-            }
-            wondernectCommonContext.getAuthorizeData().setAppSecret(encryptSecret);
-            String requestId = request.getHeader(wondernectServerContextConfigProperties.getRequestPropertyName());
-            if (ESStringUtils.isNotBlank(requestId)) {
-                wondernectCommonContext.setRequestId(requestId);
-            }
+            // 获取userId
             String userId = request.getHeader(wondernectServerContextConfigProperties.getUserPropertyName());
-            if (ESStringUtils.isNotBlank(userId)) {
-                wondernectCommonContext.getAuthorizeData().setUserId(userId);
+            if (ESStringUtils.isBlank(userId)) {
+                throw new BusinessException(BusinessError.AUTHORIZE_USERID_IS_NULL);
+            }
+            wondernectCommonContext.getAuthorizeData().setUserId(userId);
+            // 验证应用访问权限
+            AuthorizeAccessType authorizeAccessType = authorizeServer.accessType();
+            if (!wondernectAuthorizeServerContext.authorizeAppAccessType(wondernectAuthorizeServerContext.getAppAccessType(appId, userId), authorizeAccessType)) {
+                throw new BusinessException(BusinessError.AUTHORIZE_APP_ACCESS_TYPE_INVALID);
+            }
+            // 独立部署应用验证app密钥是否合法(后期会根据具体需求做调整)
+            if (wondernectServerContextConfigProperties.isStandAlone()) {
+                String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
+                if (ESStringUtils.isBlank(encryptSecret)) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
+                }
+                if (!wondernectAuthorizeServerContext.authorizeStandAloneAppSecret(appId, encryptSecret)) {
+                    throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
+                }
             }
         }
         return true;
