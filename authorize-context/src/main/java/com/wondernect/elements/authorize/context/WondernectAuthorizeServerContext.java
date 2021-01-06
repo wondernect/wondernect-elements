@@ -15,5 +15,5 @@ public interface WondernectAuthorizeServerContext {
 
     boolean authorizeAppAccessType(AuthorizeAccessType accessType, AuthorizeAccessType validAppAccessType);
 
-    boolean authorizeStandAloneAppSecret(String appId, String encryptSecret);
+    boolean authorizeStandAloneAppSecret(String appId, String appSecret, String userId);
 }

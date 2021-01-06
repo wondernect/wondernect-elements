@@ -72,11 +72,11 @@ public class WondernectServerHandlerInterceptor extends HandlerInterceptorAdapte
             }
             // 独立部署应用验证app密钥是否合法(后期会根据具体需求做调整)
             if (wondernectServerContextConfigProperties.isStandAlone()) {
-                String encryptSecret = request.getHeader(wondernectServerContextConfigProperties.getEncryptSecretPropertyName());
-                if (ESStringUtils.isBlank(encryptSecret)) {
+                String appSecret = request.getHeader(wondernectServerContextConfigProperties.getAppSecretPropertyName());
+                if (ESStringUtils.isBlank(appSecret)) {
                     throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_IS_NULL);
                 }
-                if (!wondernectAuthorizeServerContext.authorizeStandAloneAppSecret(appId, encryptSecret)) {
+                if (!wondernectAuthorizeServerContext.authorizeStandAloneAppSecret(appId, appSecret, userId)) {
                     throw new BusinessException(BusinessError.AUTHORIZE_APP_SECRET_INVALID);
                 }
             }

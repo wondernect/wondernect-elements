@@ -1,6 +1,7 @@
 package com.wondernect.elements.feign.config;
 
 import com.wondernect.elements.common.utils.ESObjectUtils;
+import com.wondernect.elements.common.utils.ESStringUtils;
 import feign.RequestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,13 @@ public abstract class AbstractWondernectFeignHeaderContext implements Wondernect
         } else {
             // 默认appId配置
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppIdPropertyName(), wondernectFeignHeaderConfigProperties.getAppId());
+        }
+        Object appSecret = request.getAttribute(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName());
+        if (ESObjectUtils.isNotNull(appSecret)) {
+            requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName(), appSecret.toString());
+        } else {
+            // 默认appSecret配置
+            requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName(), wondernectFeignHeaderConfigProperties.getAppSecret());
         }
     }
 }

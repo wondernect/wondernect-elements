@@ -34,7 +34,7 @@ public class WondernectServerContextConfigProperties implements Serializable {
 
     private String appPropertyName = "APPID"; // 应用标识
 
-    private String encryptSecretPropertyName = "APPSECRET"; // 传递加密内容的头部key
+    private String appSecretPropertyName = "APPSECRET"; // 传递加密内容的头部key
 
     private List<String> pathPatterns; // 过滤路径
 
@@ -80,12 +80,12 @@ public class WondernectServerContextConfigProperties implements Serializable {
         this.appPropertyName = appPropertyName;
     }
 
-    public String getEncryptSecretPropertyName() {
-        return encryptSecretPropertyName;
+    public String getAppSecretPropertyName() {
+        return appSecretPropertyName;
     }
 
-    public void setEncryptSecretPropertyName(String encryptSecretPropertyName) {
-        this.encryptSecretPropertyName = encryptSecretPropertyName;
+    public void setAppSecretPropertyName(String appSecretPropertyName) {
+        this.appSecretPropertyName = appSecretPropertyName;
     }
 
     public List<String> getPathPatterns() {
