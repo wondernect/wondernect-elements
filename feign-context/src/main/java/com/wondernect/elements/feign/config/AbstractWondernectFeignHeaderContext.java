@@ -16,25 +16,25 @@ public abstract class AbstractWondernectFeignHeaderContext implements Wondernect
 
     @Override
     public void extendFeignHeader(RequestTemplate requestTemplate, HttpServletRequest request, WondernectFeignHeaderConfigProperties wondernectFeignHeaderConfigProperties) {
-        Object requestId = request.getAttribute(wondernectFeignHeaderConfigProperties.getRequestIdPropertyName());
+        Object requestId = ESObjectUtils.isNotNull(request) ? request.getAttribute(wondernectFeignHeaderConfigProperties.getRequestIdPropertyName()) : null;
         if (ESObjectUtils.isNotNull(requestId)) {
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getRequestIdPropertyName(), requestId.toString());
         }
-        Object userId = request.getAttribute(wondernectFeignHeaderConfigProperties.getUserIdPropertyName());
+        Object userId = ESObjectUtils.isNotNull(request) ? request.getAttribute(wondernectFeignHeaderConfigProperties.getUserIdPropertyName()) : null;
         if (ESObjectUtils.isNotNull(userId)) {
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getUserIdPropertyName(), userId.toString());
         } else {
             // 默认userId配置
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getUserIdPropertyName(), wondernectFeignHeaderConfigProperties.getUserId());
         }
-        Object appId = request.getAttribute(wondernectFeignHeaderConfigProperties.getAppIdPropertyName());
+        Object appId = ESObjectUtils.isNotNull(request) ? request.getAttribute(wondernectFeignHeaderConfigProperties.getAppIdPropertyName()) : null;
         if (ESObjectUtils.isNotNull(appId)) {
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppIdPropertyName(), appId.toString());
         } else {
             // 默认appId配置
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppIdPropertyName(), wondernectFeignHeaderConfigProperties.getAppId());
         }
-        Object appSecret = request.getAttribute(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName());
+        Object appSecret = ESObjectUtils.isNotNull(request) ? request.getAttribute(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName()) : null;
         if (ESObjectUtils.isNotNull(appSecret)) {
             requestTemplate.header(wondernectFeignHeaderConfigProperties.getAppSecretPropertyName(), appSecret.toString());
         } else {

@@ -36,8 +36,8 @@ public class WondernectFeignConfiguration implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (ESObjectUtils.isNotNull(attributes)) {
-            HttpServletRequest request = attributes.getRequest();
+        HttpServletRequest request = ESObjectUtils.isNotNull(attributes) ? attributes.getRequest() : null;
+        if (ESObjectUtils.isNotNull(request)) {
             Enumeration<String> enumeration = request.getHeaderNames();
             if (ESObjectUtils.isNotNull(enumeration)) {
                 while (enumeration.hasMoreElements()) {
@@ -46,7 +46,7 @@ public class WondernectFeignConfiguration implements RequestInterceptor {
                     requestTemplate.header(name, value);
                 }
             }
-            wondernectFeignHeaderContext.extendFeignHeader(requestTemplate, request, wondernectFeignHeaderConfigProperties);
         }
+        wondernectFeignHeaderContext.extendFeignHeader(requestTemplate, request, wondernectFeignHeaderConfigProperties);
     }
 }
