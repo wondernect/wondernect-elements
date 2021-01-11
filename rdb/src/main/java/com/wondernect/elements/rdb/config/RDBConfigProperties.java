@@ -28,7 +28,9 @@ public class RDBConfigProperties implements Serializable {
 
     private List<String> tablePrefixBlackList; // 不添加表名称前缀的表名列表
 
-    private Boolean TableColumnDeal = true; // 是否处理表属性名
+    private Boolean tableColumnDeal = true; // 是否处理表属性名
+
+    private Boolean appFilter = true; // 是否按照创建app过滤
 
     private int initPageSize = 10; // 当用户传入page size为空时初始化size为initPageSize
 
@@ -55,11 +57,19 @@ public class RDBConfigProperties implements Serializable {
     }
 
     public Boolean getTableColumnDeal() {
-        return TableColumnDeal;
+        return tableColumnDeal;
     }
 
     public void setTableColumnDeal(Boolean tableColumnDeal) {
-        TableColumnDeal = tableColumnDeal;
+        this.tableColumnDeal = tableColumnDeal;
+    }
+
+    public Boolean getAppFilter() {
+        return appFilter;
+    }
+
+    public void setAppFilter(Boolean appFilter) {
+        this.appFilter = appFilter;
     }
 
     public int getInitPageSize() {

@@ -28,6 +28,9 @@ public class AppAspect {
     private static final Logger logger = LoggerFactory.getLogger(AppAspect.class);
 
     @Autowired
+    private RDBConfigProperties rdbConfigProperties;
+
+    @Autowired
     private WondernectCommonContext wondernectCommonContext;
 
     @Autowired
@@ -36,7 +39,7 @@ public class AppAspect {
     @Around(value = "@annotation(appFilter)")
     public Object enableAppFilter(ProceedingJoinPoint joinPoint, AppFilter appFilter) throws Throwable {
         try {
-            if (ESStringUtils.isNotBlank(wondernectCommonContext.getAuthorizeData().getAppId())) {
+            if (rdbConfigProperties.getAppFilter() && ESStringUtils.isNotBlank(wondernectCommonContext.getAuthorizeData().getAppId())) {
                 entityManager.unwrap(Session.class).enableFilter("appFilter").setParameter("create_app", wondernectCommonContext.getAuthorizeData().getAppId());
             }
             return joinPoint.proceed();
