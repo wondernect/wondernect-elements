@@ -32,7 +32,7 @@ public class ESExcelEnumItemHandler<ID extends Serializable> extends ESExcelItem
         if (ESObjectUtils.isNotNull(object)) {
             Object value = null;
             for (ID key : dictionary.keySet()) {
-                if (key == object) {
+                if (key.equals(object)) {
                     value = dictionary.get(key);
                     break;
                 }
