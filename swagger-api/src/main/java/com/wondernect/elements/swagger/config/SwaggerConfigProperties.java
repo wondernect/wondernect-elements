@@ -1,6 +1,5 @@
 package com.wondernect.elements.swagger.config;
 
-import com.wondernect.elements.common.utils.ESStringUtils;
 import com.wondernect.elements.property.source.WondernectPropertySourceFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
@@ -18,7 +17,7 @@ import java.io.Serializable;
  */
 @Component
 @Primary
-@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, encoding = "UTF-8", factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.elements.swagger")
 public class SwaggerConfigProperties implements Serializable {
 
@@ -79,7 +78,7 @@ public class SwaggerConfigProperties implements Serializable {
     }
 
     public void setTitle(String title) {
-        this.title = ESStringUtils.transformISOToUTF_8(title);
+        this.title = title;
     }
 
     public String getServiceUrl() {
@@ -95,7 +94,7 @@ public class SwaggerConfigProperties implements Serializable {
     }
 
     public void setContactName(String contactName) {
-        this.contactName = ESStringUtils.transformISOToUTF_8(contactName);
+        this.contactName = contactName;
     }
 
     public String getContactUrl() {
@@ -119,7 +118,7 @@ public class SwaggerConfigProperties implements Serializable {
     }
 
     public void setDescription(String description) {
-        this.description = ESStringUtils.transformISOToUTF_8(description);
+        this.description = description;
     }
 
     public String getVersion() {
