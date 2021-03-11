@@ -1,4 +1,4 @@
-package com.wondernect.elements.elasticsearch.config;
+package com.wondernect.elements.boot.application.config;
 
 import com.wondernect.elements.property.source.WondernectPropertySourceFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,33 +7,25 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
- * Created on 2017/10/20.
- * wondernect.com
- * @author sunbeam
+ * Copyright (C), 2017-2019, wondernect.com
+ * FileName: ServerConfigProperties
+ * Author: chenxun
+ * Date: 2019/12/1 15:08
+ * Description:
  */
 @Component
 @Primary
 @PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml", "classpath:bootstrap.yml", "classpath:bootstrap.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
-@ConfigurationProperties(prefix = "wondernect.elements.elasticsearch")
-public class ElasticsearchConfigProperties {
+@ConfigurationProperties(prefix = "spring.application")
+public class WondernectBootApplicationConfigProperties {
 
-    private String host = "127.0.0.1";
+    private String name;
 
-    private int port = 9200;
-
-    public String getHost() {
-        return host;
+    public String getName() {
+        return name;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void setName(String name) {
+        this.name = name;
     }
 }

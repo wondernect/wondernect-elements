@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 @Primary
-@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml", "classpath:bootstrap.yml", "classpath:bootstrap.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.elements.file-client")
 public class FileClientConfigProperties implements Serializable {
 

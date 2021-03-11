@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Component
 @Primary
-@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml", "classpath:bootstrap.yml", "classpath:bootstrap.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.elements.mail-client")
 public class MailClientConfigProperties implements Serializable {
 

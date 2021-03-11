@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(WondernectBootConfigProperties.class)
+@EnableConfigurationProperties(WondernectBootServerConfigProperties.class)
 public class WondernectBootConfig {
 
 }

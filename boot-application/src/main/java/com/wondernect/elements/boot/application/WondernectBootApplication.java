@@ -1,6 +1,7 @@
 package com.wondernect.elements.boot.application;
 
-import com.wondernect.elements.boot.application.config.WondernectBootConfigProperties;
+import com.wondernect.elements.boot.application.config.WondernectBootApplicationConfigProperties;
+import com.wondernect.elements.boot.application.config.WondernectBootServerConfigProperties;
 import com.wondernect.elements.boot.application.event.WondernectBootEvent;
 import com.wondernect.elements.boot.application.event.WondernectBootEventType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,16 @@ public abstract class WondernectBootApplication implements CommandLineRunner {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private WondernectBootConfigProperties wondernectBootConfigProperties;
+    private WondernectBootServerConfigProperties wondernectBootServerConfigProperties;
+
+    @Autowired
+    private WondernectBootApplicationConfigProperties wondernectBootApplicationConfigProperties;
 
     @Override
     public void run(String... args) throws Exception {
         initAfterBootFinished();
         applicationContext.publishEvent(new WondernectBootEvent(this, WondernectBootEventType.BOOT));
-        System.out.println("service start success at port " + wondernectBootConfigProperties.getPort() + " .....");
+        System.out.println("service " + wondernectBootApplicationConfigProperties.getName() + " start success at port " + wondernectBootServerConfigProperties.getPort() + " .....");
     }
 
     public abstract void initAfterBootFinished();

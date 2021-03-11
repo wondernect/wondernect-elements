@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @Component
 @Primary
-@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, encoding = "UTF-8", factory = WondernectPropertySourceFactory.class)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml", "classpath:bootstrap.yml", "classpath:bootstrap.yaml"}, ignoreResourceNotFound = true, encoding = "UTF-8", factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "wondernect.elements.swagger")
 public class SwaggerConfigProperties implements Serializable {
 

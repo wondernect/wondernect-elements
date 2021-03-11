@@ -17,6 +17,7 @@
     <url>http://www.example.com</url>
 
     <properties>
+        <metadata-extractor.version>2.15.0</metadata-extractor.version>
         <bcprov.version>1.46</bcprov.version>
         <zxing.core.version>3.4.0</zxing.core.version>
         <zxing.javase.version>3.4.0</zxing.javase.version>
@@ -35,6 +36,13 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor -->
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+            <version>${metadata-extractor.version}</version>
+        </dependency>
+
         <!-- 加解密工具包 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>

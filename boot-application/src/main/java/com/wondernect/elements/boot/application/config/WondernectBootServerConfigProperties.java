@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Primary
-@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
+@PropertySource(value = {"classpath:application.properties", "classpath:application.yml", "classpath:application.yaml", "classpath:bootstrap.yml", "classpath:bootstrap.yaml"}, ignoreResourceNotFound = true, factory = WondernectPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "server")
-public class WondernectBootConfigProperties {
+public class WondernectBootServerConfigProperties {
 
     private int port = 0;
 
