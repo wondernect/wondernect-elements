@@ -23,7 +23,7 @@
         <zxing.javase.version>3.4.0</zxing.javase.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
-        <fasterxml.jackson.version>2.11.0</fasterxml.jackson.version>
+        <fasterxml.jackson.version>2.13.4.1</fasterxml.jackson.version>
         <fastjson.version>1.2.72</fastjson.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.6</commons-lang3.version>
